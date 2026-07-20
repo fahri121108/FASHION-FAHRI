@@ -10,48 +10,44 @@
 <style>
 
 *{
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
-
 
 body{
 
-    margin:0;
+margin:0;
+min-height:100vh;
+color:white;
 
-    min-height:100vh;
-
-    color:white;
-
-    background:
-    radial-gradient(circle at top,#4338ca,transparent 40%),
-    linear-gradient(
-    135deg,
-    #050816,
-    #111827,
-    #1e1b4b
-    );
+background:
+radial-gradient(circle at top,#4338ca,transparent 35%),
+linear-gradient(
+135deg,
+#050816,
+#111827,
+#1e1b4b
+);
 
 }
 
 
-
 /* =================
- LOGIN PAGE
+LOGIN
 ================= */
 
 
 #authPage{
 
-    height:100vh;
+height:100vh;
 
-    display:flex;
+display:flex;
 
-    align-items:center;
+justify-content:center;
 
-    justify-content:center;
+align-items:center;
 
-    padding:20px;
+padding:20px;
 
 }
 
@@ -59,35 +55,25 @@ body{
 
 .login-panel{
 
-    width:380px;
+width:380px;
 
-    padding:35px;
+padding:35px;
 
-    border-radius:25px;
+border-radius:25px;
 
+background:
 
-    background:
+rgba(255,255,255,.08);
 
-    rgba(255,255,255,.08);
+backdrop-filter:blur(20px);
 
+border:
 
-    backdrop-filter:blur(20px);
+1px solid rgba(255,255,255,.15);
 
+box-shadow:
 
-    border:
-
-    1px solid
-
-    rgba(255,255,255,.15);
-
-
-
-    box-shadow:
-
-    0 0 40px
-
-    rgba(99,102,241,.5);
-
+0 0 40px rgba(99,102,241,.5);
 
 }
 
@@ -95,26 +81,23 @@ body{
 
 .logo{
 
-    text-align:center;
+text-align:center;
 
-    font-size:32px;
+font-size:32px;
 
-    font-weight:bold;
+font-weight:bold;
 
+background:
 
-    background:
+linear-gradient(
+90deg,
+#60a5fa,
+#c084fc
+);
 
-    linear-gradient(
-    90deg,
-    #60a5fa,
-    #c084fc
-    );
+-webkit-background-clip:text;
 
-
-    -webkit-background-clip:text;
-
-    color:transparent;
-
+color:transparent;
 
 }
 
@@ -122,11 +105,9 @@ body{
 
 .subtitle{
 
-    text-align:center;
+text-align:center;
 
-    color:#cbd5e1;
-
-    margin-bottom:25px;
+color:#cbd5e1;
 
 }
 
@@ -135,37 +116,27 @@ body{
 input,
 select{
 
+width:100%;
 
-    width:100%;
+padding:14px;
 
-    padding:14px;
+margin-top:12px;
 
-    margin-top:12px;
+border-radius:14px;
 
+border:none;
 
-    border-radius:14px;
+outline:none;
 
+background:
 
-    border:none;
+rgba(0,0,0,.35);
 
+color:white;
 
-    outline:none;
+border:
 
-
-    color:white;
-
-
-    background:
-
-    rgba(0,0,0,.35);
-
-
-    border:
-
-    1px solid
-
-    rgba(255,255,255,.15);
-
+1px solid rgba(255,255,255,.15);
 
 }
 
@@ -173,40 +144,32 @@ select{
 
 button{
 
+width:100%;
 
-    width:100%;
+padding:14px;
 
-    padding:14px;
+margin-top:15px;
 
-    margin-top:15px;
+border:none;
 
+border-radius:14px;
 
-    border:none;
+cursor:pointer;
 
+font-weight:bold;
 
-    border-radius:14px;
+color:white;
 
+background:
 
-    cursor:pointer;
-
-
-    font-weight:bold;
-
-
-    color:white;
-
-
-    background:
-
-    linear-gradient(
-    90deg,
-    #4f46e5,
-    #9333ea
-    );
+linear-gradient(
+90deg,
+#4f46e5,
+#9333ea
+);
 
 
-    transition:.3s;
-
+transition:.3s;
 
 }
 
@@ -214,13 +177,11 @@ button{
 
 button:hover{
 
-    transform:translateY(-2px);
+transform:translateY(-2px);
 
-    box-shadow:
+box-shadow:
 
-    0 0 20px
-
-    #9333ea;
+0 0 20px #9333ea;
 
 }
 
@@ -228,192 +189,89 @@ button:hover{
 
 #msg{
 
-    text-align:center;
-
-    color:#cbd5e1;
+text-align:center;
 
 }
 
 
 
-
-
 /* =================
- DASHBOARD
+GLOBAL PANEL
 ================= */
 
 
 #adminPage,
 #userPage{
 
-    display:none;
+display:none;
 
 }
 
 
 
-.sidebar{
+.header{
 
+padding:20px;
 
-    position:fixed;
+background:
 
+rgba(15,23,42,.8);
 
-    left:0;
+backdrop-filter:blur(15px);
 
+border-bottom:
 
-    top:0;
+1px solid rgba(255,255,255,.1);
 
-
-    width:250px;
-
-
-    height:100vh;
-
-
-    padding:25px;
-
-
-
-    background:
-
-    rgba(15,23,42,.85);
-
-
-    backdrop-filter:blur(15px);
-
-
-    border-right:
-
-    1px solid
-
-    rgba(255,255,255,.1);
-
+text-align:center;
 
 }
 
 
 
-.sidebar h2{
+.container{
 
-    text-align:center;
+max-width:1200px;
 
-}
+margin:auto;
 
-
-
-.menu button{
-
-    margin-top:15px;
+padding:25px;
 
 }
-
-
-
-
-
-.main{
-
-
-    margin-left:250px;
-
-
-    padding:30px;
-
-
-}
-
-
 
 
 
 .card{
 
+background:
 
-    background:
+rgba(255,255,255,.08);
 
-    rgba(255,255,255,.08);
+backdrop-filter:blur(15px);
 
+padding:20px;
 
-    backdrop-filter:blur(15px);
+border-radius:20px;
 
+margin-bottom:20px;
 
-    border-radius:20px;
+border:
 
-
-    padding:20px;
-
-
-    margin-bottom:20px;
-
-
-    border:
-
-    1px solid
-
-    rgba(255,255,255,.1);
-
+1px solid rgba(255,255,255,.1);
 
 }
 
 
 
+.grid{
 
+display:grid;
 
-.stats{
+grid-template-columns:
 
+repeat(auto-fill,minmax(220px,1fr));
 
-    display:grid;
-
-
-    grid-template-columns:
-
-    repeat(auto-fit,minmax(200px,1fr));
-
-
-    gap:20px;
-
-
-}
-
-
-
-.stat{
-
-
-    padding:25px;
-
-
-    border-radius:20px;
-
-
-    background:
-
-    linear-gradient(
-    135deg,
-    #1e293b,
-    #312e81
-    );
-
-
-}
-
-
-
-
-
-.products{
-
-
-    display:grid;
-
-
-    grid-template-columns:
-
-    repeat(auto-fill,minmax(220px,1fr));
-
-
-    gap:20px;
-
+gap:20px;
 
 }
 
@@ -421,57 +279,352 @@ button:hover{
 
 .product{
 
+background:
 
-    background:
+rgba(255,255,255,.08);
 
-    rgba(255,255,255,.08);
+padding:15px;
 
-
-    padding:15px;
-
-
-    border-radius:20px;
-
+border-radius:18px;
 
 }
-
-
 
 
 
 .product img{
 
+width:100%;
 
-    width:100%;
+height:250px;
 
+object-fit:cover;
 
-    height:260px;
-
-
-    object-fit:cover;
-
-
-    border-radius:15px;
-
+border-radius:15px;
 
 }
-
-
-</style>
+    </style>
 
 </head>
+
 
 <body>
 
 
-<!-- LANJUT BAGIAN 2 -->
-   
-<!-- AUTH & FIREBASE -->
+<!-- =================
+LOGIN PAGE
+================= -->
+
+<div id="authPage">
 
 
-<div id="firebaseArea"></div>
+<div class="login-panel">
 
 
+<h1 class="logo">
+👑 FAHRI STORE
+</h1>
+
+
+<p class="subtitle">
+Roblox Fashion Premium
+</p>
+
+
+<input id="email"
+placeholder="Email">
+
+
+<input id="password"
+type="password"
+placeholder="Password">
+
+
+
+<button onclick="login()">
+LOGIN
+</button>
+
+
+
+<button onclick="register()">
+DAFTAR
+</button>
+
+
+
+<p id="msg"></p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- =================
+ADMIN PAGE
+================= -->
+
+
+<div id="adminPage">
+
+
+
+<div class="header">
+
+
+<h1>
+👑 ADMIN DASHBOARD
+</h1>
+
+
+<button onclick="logout()">
+🚪 LOGOUT
+</button>
+
+
+</div>
+
+
+
+<div class="container">
+
+
+<div class="grid">
+
+
+
+<div class="card">
+
+<h3>
+📦 Produk
+</h3>
+
+<h1 id="totalProduk">
+0
+</h1>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>
+👥 User
+</h3>
+
+<h1 id="totalUser">
+0
+</h1>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>
+🛒 Order
+</h3>
+
+<h1 id="totalOrder">
+0
+</h1>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>
+👁️ Kunjungan
+</h3>
+
+<h1 id="totalVisit">
+0
+</h1>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+
+<h2>
+➕ Tambah / Edit Produk
+</h2>
+
+
+
+<input id="productId"
+type="hidden">
+
+
+
+<input id="namaProduk"
+placeholder="Nama Outfit">
+
+
+
+<select id="kategoriProduk">
+
+<option>Baju</option>
+
+<option>Celana</option>
+
+<option>Setelan</option>
+
+</select>
+
+
+
+<input id="hargaProduk"
+placeholder="Harga Robux">
+
+
+
+<input id="gambarProduk"
+placeholder="Link Thumbnail">
+
+
+
+<input id="linkProduk"
+placeholder="Link Roblox">
+
+
+
+<button onclick="saveProduct()">
+
+SIMPAN PRODUK
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+<div class="card">
+
+
+<h2>
+📦 Semua Produk
+</h2>
+
+
+<div id="adminProducts"
+class="grid">
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+
+<h2>
+🛒 Semua Order
+</h2>
+
+
+<div id="orderList">
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =================
+USER STORE
+================= -->
+
+
+<div id="userPage">
+
+
+
+<div class="header">
+
+
+<h1>
+🛍️ FAHRI FASHION STORE
+</h1>
+
+
+<button onclick="logout()">
+
+🚪 LOGOUT
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="container">
+
+
+
+<div class="card">
+
+
+<h2>
+🔥 Katalog Outfit
+</h2>
+
+
+
+<div id="userProducts"
+class="grid">
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
 <script type="module">
 
 
@@ -513,13 +666,13 @@ getDocs,
 
 doc,
 
-setDoc,
-
 getDoc,
 
-deleteDoc,
+setDoc,
 
-updateDoc
+updateDoc,
+
+deleteDoc
 
 }
 
@@ -582,8 +735,7 @@ getFirestore(app);
 
 
 
-/* ADMIN LOGIN */
-
+/* ADMIN */
 
 const ADMIN_EMAIL =
 "Fahri@admin.com";
@@ -591,6 +743,8 @@ const ADMIN_EMAIL =
 
 const ADMIN_PASSWORD =
 "Fahz121108";
+
+
 
 
 
@@ -609,10 +763,8 @@ let email =
 document.getElementById("email").value;
 
 
-
 let password =
 document.getElementById("password").value;
-
 
 
 
@@ -633,13 +785,9 @@ password
 await setDoc(
 
 doc(
-
 db,
-
 "users",
-
 user.user.uid
-
 ),
 
 {
@@ -648,18 +796,16 @@ email:email,
 
 role:"user",
 
-createdAt:
-new Date()
+tanggal:new Date()
 
 }
-
 
 );
 
 
 
 alert(
-"Daftar berhasil, silahkan login"
+"Akun berhasil dibuat"
 );
 
 
@@ -671,6 +817,7 @@ alert(e.message);
 
 
 }
+
 
 
 };
@@ -692,13 +839,10 @@ try{
 
 
 let email =
-
 document.getElementById("email").value;
 
 
-
 let password =
-
 document.getElementById("password").value;
 
 
@@ -715,6 +859,8 @@ password
 
 
 
+
+
 if(
 
 email === ADMIN_EMAIL &&
@@ -722,6 +868,7 @@ email === ADMIN_EMAIL &&
 password === ADMIN_PASSWORD
 
 ){
+
 
 
 document.getElementById("authPage")
@@ -736,6 +883,9 @@ document.getElementById("adminPage")
 
 loadAdminProducts();
 
+loadOrders();
+
+statistik();
 
 
 }
@@ -743,8 +893,10 @@ loadAdminProducts();
 else{
 
 
+
 document.getElementById("authPage")
 .style.display="none";
+
 
 
 document.getElementById("userPage")
@@ -770,9 +922,8 @@ alert(
 }
 
 
+
 };
-
-
 
 
 
@@ -792,263 +943,41 @@ location.reload();
 
 
 };
-   
-<!-- ADMIN PAGE -->
+    
 
 
-<div id="adminPage">
-
-
-<div class="sidebar">
-
-
-<h2>
-👑 FAHRI ADMIN
-</h2>
-
-
-<div class="menu">
-
-
-<button onclick="showAdminHome()">
-📊 Dashboard
-</button>
-
-
-<button onclick="showAdminProduct()">
-📦 Produk
-</button>
-
-
-<button onclick="logout()">
-🚪 Logout
-</button>
-
-
-</div>
-
-
-</div>
-
-
-
-<div class="main">
-
-
-<div class="card">
-
-
-<h1>
-Dashboard Admin
-</h1>
-
-
-<p>
-Selamat datang di FAHRI FASHION STORE
-</p>
-
-
-</div>
-
-
-
-
-<div class="stats">
-
-
-<div class="stat">
-
-<h3>
-Produk
-</h3>
-
-<h1 id="totalProduk">
-0
-</h1>
-
-</div>
-
-
-
-<div class="stat">
-
-<h3>
-User
-</h3>
-
-<h1 id="totalUser">
-0
-</h1>
-
-</div>
-
-
-
-<div class="stat">
-
-<h3>
-Order
-</h3>
-
-<h1 id="totalOrder">
-0
-</h1>
-
-</div>
-
-
-
-<div class="stat">
-
-<h3>
-Kunjungan
-</h3>
-
-<h1 id="totalVisit">
-0
-</h1>
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-➕ Tambah / Edit Produk
-</h2>
-
-
-
-<input id="productId" hidden>
-
-
-<input id="namaProduk"
-placeholder="Nama Outfit">
-
-
-
-<select id="kategoriProduk">
-
-
-<option>Baju</option>
-
-<option>Celana</option>
-
-<option>Setelan</option>
-
-
-</select>
-
-
-
-<input id="hargaProduk"
-placeholder="Harga Robux">
-
-
-
-<input id="gambarProduk"
-placeholder="Link Thumbnail">
-
-
-
-<input id="linkProduk"
-placeholder="Link Roblox">
-
-
-
-<button onclick="saveProduct()">
-SIMPAN PRODUK
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-<div class="card">
-
-
-<h2>
-📦 Semua Produk
-</h2>
-
-
-
-<div id="adminProducts" class="products">
-
-
-</div>
-
-
-</div>
-
-
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<script>
-
-
-/* SIMPAN PRODUK */
+// ======================
+// PRODUK ADMIN
+// ======================
 
 
 window.saveProduct = async function(){
 
 
 let id =
-
 document.getElementById("productId").value;
-
 
 
 let data = {
 
 
 nama:
-
 document.getElementById("namaProduk").value,
 
 
 kategori:
-
 document.getElementById("kategoriProduk").value,
 
 
 harga:
-
 document.getElementById("hargaProduk").value,
 
 
 gambar:
-
 document.getElementById("gambarProduk").value,
 
 
 link:
-
 document.getElementById("linkProduk").value
 
 
@@ -1057,9 +986,7 @@ document.getElementById("linkProduk").value
 
 
 
-
 if(id){
-
 
 
 await updateDoc(
@@ -1071,17 +998,10 @@ data
 );
 
 
-
-alert(
-"Produk berhasil diubah"
-);
+alert("Produk berhasil diubah");
 
 
-
-}
-
-else{
-
+}else{
 
 
 await addDoc(
@@ -1093,11 +1013,7 @@ data
 );
 
 
-
-alert(
-"Produk berhasil ditambah"
-);
-
+alert("Produk berhasil ditambah");
 
 
 }
@@ -1107,15 +1023,13 @@ alert(
 loadAdminProducts();
 
 
+
 };
 
 
 
 
 
-
-
-/* LOAD ADMIN PRODUK */
 
 
 window.loadAdminProducts = async function(){
@@ -1131,16 +1045,14 @@ collection(db,"products")
 
 let html="";
 
-
-let jumlah=0;
+let total=0;
 
 
 
 data.forEach(item=>{
 
 
-jumlah++;
-
+total++;
 
 
 let p=item.data();
@@ -1159,14 +1071,10 @@ html += `
 <h3>${p.nama}</h3>
 
 
-<p>
-${p.kategori}
-</p>
+<p>${p.kategori}</p>
 
 
-<p>
-💎 ${p.harga} Robux
-</p>
+<p>💎 ${p.harga} Robux</p>
 
 
 
@@ -1176,7 +1084,7 @@ ${p.kategori}
 
 
 <button onclick="hapusProduct('${item.id}')">
-🗑️ HAPUS
+🗑 HAPUS
 </button>
 
 
@@ -1194,7 +1102,7 @@ ${p.kategori}
 document.getElementById("adminProducts").innerHTML=html;
 
 
-document.getElementById("totalProduk").innerHTML=jumlah;
+document.getElementById("totalProduk").innerHTML=total;
 
 
 };
@@ -1203,13 +1111,12 @@ document.getElementById("totalProduk").innerHTML=jumlah;
 
 
 
-/* EDIT */
 
 
 window.editProduct = async function(id){
 
 
-let snap = await getDoc(
+let data = await getDoc(
 
 doc(db,"products",id)
 
@@ -1217,7 +1124,7 @@ doc(db,"products",id)
 
 
 
-let p=snap.data();
+let p=data.data();
 
 
 
@@ -1239,13 +1146,12 @@ document.getElementById("gambarProduk").value=p.gambar;
 document.getElementById("linkProduk").value=p.link;
 
 
+
 };
 
 
 
 
-
-/* HAPUS */
 
 
 window.hapusProduct = async function(id){
@@ -1269,57 +1175,6 @@ loadAdminProducts();
 
 
 };
-   
-<!-- USER PAGE -->
-
-
-<div id="userPage">
-
-
-<div class="header">
-
-
-<h1>
-🛍️ FAHRI FASHION STORE
-</h1>
-
-
-<button onclick="logout()">
-🚪 LOGOUT
-</button>
-
-
-</div>
-
-
-
-
-
-<div class="container">
-
-
-<div class="card">
-
-
-<h2>
-🔥 Katalog Outfit
-</h2>
-
-
-
-<div id="userProducts" class="products">
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
-
-</div>
 
 
 
@@ -1327,10 +1182,10 @@ loadAdminProducts();
 
 
 
-<script>
 
-
-/* LOAD PRODUK USER */
+// ======================
+// USER PRODUK
+// ======================
 
 
 window.loadUserProducts = async function(){
@@ -1364,33 +1219,21 @@ html += `
 <img src="${p.gambar}">
 
 
-<h3>
-${p.nama}
-</h3>
+<h3>${p.nama}</h3>
+
+
+<p>${p.kategori}</p>
+
+
+<p>💎 ${p.harga} Robux</p>
 
 
 
-<p>
-Kategori:
-${p.kategori}
-</p>
+<button onclick="order('${p.nama}','${p.harga}')">
 
-
-
-<p>
-💎 ${p.harga} Robux
-</p>
-
-
-
-<button onclick="orderProduct(
-'${item.id}',
-'${p.nama}',
-'${p.harga}'
-)">
 🛒 ORDER
-</button>
 
+</button>
 
 
 </div>
@@ -1415,14 +1258,13 @@ document.getElementById("userProducts").innerHTML=html;
 
 
 
-/* BUAT ORDER */
+
+// ======================
+// ORDER
+// ======================
 
 
-window.orderProduct = async function(
-id,
-nama,
-harga
-){
+window.order = async function(nama,harga){
 
 
 let user = auth.currentUser;
@@ -1436,30 +1278,19 @@ collection(db,"orders"),
 {
 
 
-user:
-
-user.email,
+user:user.email,
 
 
-produk:
-
-nama,
+produk:nama,
 
 
-harga:
-
-harga,
+harga:harga,
 
 
-status:
-
-"Pending",
+status:"Pending",
 
 
-tanggal:
-
-new Date()
-
+tanggal:new Date()
 
 
 }
@@ -1469,11 +1300,7 @@ new Date()
 
 
 
-alert(
-
-"Order berhasil dikirim"
-
-);
+alert("Order berhasil dibuat");
 
 
 };
@@ -1483,38 +1310,31 @@ alert(
 
 
 
-/* HITUNG USER */
 
 
-async function countUser(){
+// ======================
+// STATISTIK
+// ======================
 
 
-let data = await getDocs(
+async function statistik(){
+
+
+let produk = await getDocs(
+
+collection(db,"products")
+
+);
+
+
+let user = await getDocs(
 
 collection(db,"users")
 
 );
 
 
-
-document.getElementById("totalUser").innerHTML =
-data.size;
-
-
-}
-
-
-
-
-
-
-/* HITUNG ORDER */
-
-
-async function countOrder(){
-
-
-let data = await getDocs(
+let order = await getDocs(
 
 collection(db,"orders")
 
@@ -1522,8 +1342,17 @@ collection(db,"orders")
 
 
 
+document.getElementById("totalProduk").innerHTML =
+produk.size;
+
+
+document.getElementById("totalUser").innerHTML =
+user.size;
+
+
 document.getElementById("totalOrder").innerHTML =
-data.size;
+order.size;
+
 
 
 }
@@ -1531,34 +1360,20 @@ data.size;
 
 
 
-
-countUser();
-
-countOrder();
-
-
-</script>
-
-<script>
+// ======================
+// KUNJUNGAN
+// ======================
 
 
-/* =========================
-   TOTAL KUNJUNGAN
-========================= */
+async function visit(){
 
 
-async function addVisit(){
+let ref =
+doc(db,"stats","visit");
 
 
-let ref = doc(
-db,
-"stats",
-"website"
-);
-
-
-
-let data = await getDoc(ref);
+let data =
+await getDoc(ref);
 
 
 
@@ -1571,17 +1386,15 @@ ref,
 
 {
 
-visits:
-data.data().visits + 1
+jumlah:
+data.data().jumlah+1
 
 }
 
 );
 
 
-}
-
-else{
+}else{
 
 
 await setDoc(
@@ -1590,7 +1403,7 @@ ref,
 
 {
 
-visits:1
+jumlah:1
 
 }
 
@@ -1598,6 +1411,7 @@ visits:1
 
 
 }
+
 
 
 }
@@ -1607,13 +1421,10 @@ visits:1
 async function loadVisit(){
 
 
-let data = await getDoc(
+let data =
+await getDoc(
 
-doc(
-db,
-"stats",
-"website"
-)
+doc(db,"stats","visit")
 
 );
 
@@ -1622,9 +1433,8 @@ db,
 if(data.exists()){
 
 
-document.getElementById("totalVisit")
-.innerHTML =
-data.data().visits;
+document.getElementById("totalVisit").innerHTML =
+data.data().jumlah;
 
 
 }
@@ -1634,147 +1444,15 @@ data.data().visits;
 
 
 
-addVisit();
+visit();
 
 loadVisit();
-
-
-
-
-
-
-
-/* =========================
-   LIHAT ORDER ADMIN
-========================= */
-
-
-async function loadOrders(){
-
-
-let data = await getDocs(
-
-collection(db,"orders")
-
-);
-
-
-
-let html="";
-
-
-
-data.forEach(item=>{
-
-
-let o=item.data();
-
-
-
-html += `
-
-
-<div class="card">
-
-
-<h3>
-🛒 ORDER
-</h3>
-
-
-<p>
-User:
-${o.user}
-</p>
-
-
-<p>
-Produk:
-${o.produk}
-</p>
-
-
-<p>
-Harga:
-${o.harga} Robux
-</p>
-
-
-<p>
-Status:
-${o.status}
-</p>
-
-
-
-</div>
-
-
-`;
-
-
-
-});
-
-
-
-let area =
-document.getElementById("orders");
-
-
-
-if(area){
-
-area.innerHTML=html;
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-/* DASHBOARD LOAD */
-
-
-window.showAdminHome=function(){
-
-
-countUser();
-
-countOrder();
-
-loadVisit();
-
-loadOrders();
-
-
-};
-
-
-
-
-
-window.showAdminProduct=function(){
-
-
-loadAdminProducts();
-
-
-};
-
 
 
 
 </script>
 
 
-
 </body>
 
-   </html>
+</html>
