@@ -11,20 +11,26 @@
 
 <style>
 
+/* =====================
+GLOBAL
+===================== */
+
 *{
+margin:0;
+padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial, sans-serif;
 }
 
 
 body{
 
-margin:0;
 min-height:100vh;
+
 color:white;
 
 background:
-radial-gradient(circle at top,#7c3aed,transparent 35%),
+
 linear-gradient(
 135deg,
 #020617,
@@ -32,37 +38,74 @@ linear-gradient(
 #312e81
 );
 
+overflow-x:hidden;
+
 }
 
 
 
-/* =================
+/* =====================
+BACKGROUND CUSTOM
+===================== */
+
+
+.background{
+
+position:fixed;
+
+inset:0;
+
+background-image:
+
+linear-gradient(
+rgba(0,0,0,.55),
+rgba(0,0,0,.7)
+),
+
+url("ISI_BACKGROUND_GLOBAL");
+
+
+background-size:cover;
+
+background-position:center;
+
+z-index:-1;
+
+}
+
+
+
+/* =====================
 LOGIN REGISTER
-================= */
+===================== */
 
 
 .page{
 
-min-height:100vh;
+
+height:100vh;
 
 display:flex;
 
-align-items:center;
-
 justify-content:center;
 
+align-items:center;
+
 padding:20px;
+
 
 }
 
 
 
-.box{
+.login-box{
 
 
-width:380px;
+width:390px;
+
 
 padding:35px;
+
 
 border-radius:25px;
 
@@ -72,7 +115,10 @@ background:
 rgba(255,255,255,.08);
 
 
-backdrop-filter:blur(20px);
+backdrop-filter:
+
+blur(20px);
+
 
 
 border:
@@ -83,10 +129,12 @@ border:
 
 box-shadow:
 
-0 0 40px rgba(124,58,237,.5);
+
+0 0 50px rgba(168,85,247,.5);
 
 
 }
+
 
 
 
@@ -95,7 +143,9 @@ box-shadow:
 
 text-align:center;
 
+
 font-size:35px;
+
 
 font-weight:900;
 
@@ -104,12 +154,14 @@ background:
 
 linear-gradient(
 90deg,
-#38bdf8,
-#c084fc
+#22d3ee,
+#c084fc,
+#f472b6
 );
 
 
 -webkit-background-clip:text;
+
 
 color:transparent;
 
@@ -118,36 +170,46 @@ color:transparent;
 
 
 
-.text{
+
+.subtitle{
+
 
 text-align:center;
 
 color:#cbd5e1;
+
+margin:15px 0;
+
 
 }
 
 
 
 
-input,select{
+input{
 
 
 width:100%;
 
+
 padding:14px;
+
 
 margin-top:12px;
 
-border-radius:12px;
+
+border-radius:15px;
+
 
 border:none;
+
 
 outline:none;
 
 
 background:
 
-rgba(0,0,0,.4);
+rgba(0,0,0,.45);
 
 
 color:white;
@@ -163,13 +225,26 @@ button{
 
 width:100%;
 
+
 padding:14px;
+
 
 margin-top:15px;
 
-border:0;
 
-border-radius:12px;
+border-radius:15px;
+
+
+border:none;
+
+
+cursor:pointer;
+
+
+font-weight:bold;
+
+
+color:white;
 
 
 background:
@@ -177,26 +252,27 @@ background:
 linear-gradient(
 90deg,
 #2563eb,
-#9333ea
+#9333ea,
+#ec4899
 );
 
 
-color:white;
+box-shadow:
 
-font-weight:bold;
-
-cursor:pointer;
+0 0 20px rgba(236,72,153,.5);
 
 
 }
+
 
 
 
 button:hover{
 
-opacity:.8;
+transform:scale(1.03);
 
 }
+
 
 
 
@@ -205,9 +281,12 @@ opacity:.8;
 
 text-align:center;
 
-margin-top:15px;
 
-color:#a5b4fc;
+margin-top:18px;
+
+
+color:#93c5fd;
+
 
 cursor:pointer;
 
@@ -217,8 +296,8 @@ cursor:pointer;
 
 
 
-/* SEMBUNYIKAN HALAMAN LAIN */
 
+/* SEMUA HALAMAN */
 
 #loginPage,
 #registerPage,
@@ -233,40 +312,76 @@ display:none;
 
 
 
-/* UMUM */
+
+/* =====================
+HEADER
+===================== */
 
 
 .header{
 
 
-padding:20px;
+padding:25px;
+
 
 text-align:center;
 
 
 background:
 
-rgba(15,23,42,.8);
+rgba(15,23,42,.65);
 
 
-backdrop-filter:blur(15px);
+backdrop-filter:
+
+blur(15px);
 
 
 }
 
+
+
+
+
+.header img{
+
+
+width:90px;
+
+
+border-radius:50%;
+
+
+box-shadow:
+
+0 0 30px #38bdf8;
+
+
+}
+
+
+
+
+/* =====================
+CONTAINER
+===================== */
 
 
 .container{
 
 
-max-width:1200px;
+max-width:1300px;
+
 
 margin:auto;
+
 
 padding:25px;
 
 
 }
+
+
 
 
 
@@ -278,21 +393,173 @@ background:
 rgba(255,255,255,.08);
 
 
+border-radius:25px;
+
+
 padding:20px;
+
+
+margin-bottom:25px;
+
+
+backdrop-filter:
+
+blur(15px);
+
+
+border:
+
+1px solid rgba(255,255,255,.15);
+
+
+}
+
+
+
+
+
+
+/* =====================
+PRODUK NEON BORDER
+===================== */
+
+
+.product{
+
+
+position:relative;
+
+
+padding:3px;
+
+
+border-radius:22px;
+
+
+overflow:hidden;
+
+
+background:
+
+linear-gradient(
+90deg,
+red,
+orange,
+yellow,
+lime,
+cyan,
+blue,
+purple,
+red
+);
+
+
+background-size:400%;
+
+
+animation:
+
+borderMove 8s linear infinite;
+
+
+}
+
+
+
+
+.product::before{
+
+
+content:"";
+
+
+position:absolute;
+
+
+inset:3px;
+
+
+background:#111827;
 
 
 border-radius:20px;
 
 
-margin-bottom:20px;
-
-
-border:
-
-1px solid rgba(255,255,255,.1);
+z-index:0;
 
 
 }
+
+
+
+
+
+.product-content{
+
+
+position:relative;
+
+
+z-index:1;
+
+
+padding:15px;
+
+
+border-radius:20px;
+
+
+background:
+
+rgba(15,23,42,.8);
+
+
+}
+
+
+
+
+
+@keyframes borderMove{
+
+
+0%{
+
+background-position:0%;
+
+}
+
+
+100%{
+
+background-position:400%;
+
+}
+
+
+}
+
+
+
+
+
+.product img{
+
+
+width:100%;
+
+
+height:260px;
+
+
+object-fit:cover;
+
+
+border-radius:15px;
+
+
+}
+
 
 
 
@@ -305,7 +572,7 @@ display:grid;
 
 grid-template-columns:
 
-repeat(auto-fit,minmax(220px,1fr));
+repeat(auto-fit,minmax(230px,1fr));
 
 
 gap:20px;
@@ -316,42 +583,6 @@ gap:20px;
 
 
 
-.product{
-
-
-background:
-
-rgba(255,255,255,.08);
-
-
-padding:15px;
-
-
-border-radius:18px;
-
-
-}
-
-
-
-.product img{
-
-
-width:100%;
-
-
-height:250px;
-
-
-object-fit:cover;
-
-
-border-radius:15px;
-
-
-}
-
-
 </style>
 
 </head>
@@ -360,36 +591,48 @@ border-radius:15px;
 <body>
 
 
-
-<!-- =================
-HALAMAN LOGIN
-================= -->
+<div class="background"></div>
+<!-- =====================
+LOGIN PAGE
+===================== -->
 
 
 <div id="loginPage" class="page">
 
 
-<div class="box">
+<div class="login-box">
 
 
 <h1 class="logo">
+
 👑 FAHRI STORE
+
 </h1>
 
 
-<p class="text">
-Roblox Fashion Premium
+
+<p class="subtitle">
+
+LAYANAN TERPERCAYA • PROSES CEPAT
+
 </p>
 
 
 
+
 <input id="loginEmail"
+
 placeholder="Email">
 
 
+
 <input id="loginPassword"
+
 type="password"
+
 placeholder="Password">
+
+
 
 
 
@@ -401,7 +644,9 @@ LOGIN
 
 
 
+
 <div class="link"
+
 onclick="showRegister()">
 
 Belum punya akun? DAFTAR
@@ -413,45 +658,57 @@ Belum punya akun? DAFTAR
 <p id="loginMsg"></p>
 
 
-</div>
-
 
 </div>
 
 
+</div>
 
 
 
 
 
-<!-- =================
-HALAMAN DAFTAR
-================= -->
+
+
+<!-- =====================
+REGISTER PAGE
+===================== -->
 
 
 <div id="registerPage" class="page">
 
 
-<div class="box">
+<div class="login-box">
 
 
 <h1 class="logo">
+
 BUAT AKUN
+
 </h1>
 
 
 
+
 <input id="regUsername"
+
 placeholder="Username">
 
 
+
 <input id="regEmail"
+
 placeholder="Email">
 
 
+
 <input id="regPassword"
+
 type="password"
+
 placeholder="Password">
+
+
 
 
 
@@ -463,7 +720,9 @@ DAFTAR
 
 
 
+
 <div class="link"
+
 onclick="showLogin()">
 
 Sudah punya akun? LOGIN
@@ -481,9 +740,146 @@ Sudah punya akun? LOGIN
 
 </div>
 
-<!-- ======================
+
+
+
+
+
+
+
+
+<!-- =====================
+CONTOH TEMPLATE BANNER
+===================== -->
+
+
+<div id="bannerTemplate"
+
+style="display:none;">
+
+
+
+<div class="banner-track">
+
+
+
+<img src="ISI_LINK_BANNER_1">
+
+
+<img src="ISI_LINK_BANNER_2">
+
+
+<img src="ISI_LINK_BANNER_3">
+
+
+<img src="ISI_LINK_BANNER_4">
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<style>
+
+
+/* BANNER BERJALAN */
+
+
+.banner-area{
+
+
+width:100%;
+
+
+overflow:hidden;
+
+
+padding:20px 0;
+
+
+}
+
+
+
+.banner-track{
+
+
+display:flex;
+
+
+gap:20px;
+
+
+width:max-content;
+
+
+animation:
+
+jalanBanner 25s linear infinite;
+
+
+}
+
+
+
+
+.banner-track img{
+
+
+width:350px;
+
+
+height:150px;
+
+
+object-fit:cover;
+
+
+border-radius:20px;
+
+
+box-shadow:
+
+0 0 25px rgba(56,189,248,.5);
+
+
+}
+
+
+
+@keyframes jalanBanner{
+
+
+from{
+
+transform:translateX(0);
+
+}
+
+
+to{
+
+transform:translateX(-50%);
+
+}
+
+
+}
+
+
+
+    </style>
+    <!-- =====================
 ADMIN DASHBOARD
-====================== -->
+===================== -->
 
 
 <div id="adminPage">
@@ -491,13 +887,25 @@ ADMIN DASHBOARD
 
 <div class="header">
 
+
+<img src="ISI_LINK_LOGO">
+
+
 <h1>
 👑 FAHRI ADMIN PANEL
 </h1>
 
 
+<p>
+MANAGEMENT STORE
+</p>
+
+
+
 <button onclick="logout()">
-🚪 LOGOUT
+
+LOGOUT
+
 </button>
 
 
@@ -506,8 +914,45 @@ ADMIN DASHBOARD
 
 
 
+
+
 <div class="container">
 
+
+
+<!-- BANNER ADMIN -->
+
+
+<div class="card">
+
+
+<div class="banner-area">
+
+<div class="banner-track">
+
+
+<img src="ISI_LINK_BANNER_1">
+
+<img src="ISI_LINK_BANNER_2">
+
+<img src="ISI_LINK_BANNER_3">
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- STATISTIK -->
 
 
 <div class="grid">
@@ -515,23 +960,16 @@ ADMIN DASHBOARD
 
 <div class="card">
 
-<h3>📦 PRODUK</h3>
-
-<h1 id="totalProduct">
-0
-</h1>
-
-</div>
-
-
-
-<div class="card">
-
-<h3>👥 USER</h3>
+<h3>
+👥 USER
+</h3>
 
 <h1 id="totalUser">
+
 0
+
 </h1>
+
 
 </div>
 
@@ -539,44 +977,70 @@ ADMIN DASHBOARD
 
 <div class="card">
 
-<h3>🛒 ORDER</h3>
+<h3>
+📦 PRODUK
+</h3>
+
+<h1 id="totalProduct">
+
+0
+
+</h1>
+
+
+</div>
+
+
+
+
+<div class="card">
+
+<h3>
+🛒 ORDER
+</h3>
 
 <h1 id="totalOrder">
+
 0
+
 </h1>
 
+
 </div>
+
 
 
 
 <div class="card">
 
-<h3>👁️ VISITOR</h3>
+<h3>
+👁️ PENGUNJUNG
+</h3>
 
-<h1 id="totalVisit">
+<h1 id="totalVisitor">
+
 0
+
 </h1>
 
-</div>
-
 
 </div>
 
 
 
+</div>
 
 
 
 
 
-<!-- TAMBAH PRODUK -->
 
 
 <div class="card">
 
 
 <h2>
-📦 Kelola Produk
+📦 KELOLA PRODUK
 </h2>
 
 
@@ -591,20 +1055,13 @@ placeholder="Nama Produk">
 
 
 
-<select id="productType">
-
-<option>Baju</option>
-
-<option>Celana</option>
-
-<option>Setelan</option>
-
-</select>
+<input id="productCategory"
+placeholder="Kategori Contoh: KATALOG BAJU">
 
 
 
 <input id="productPrice"
-placeholder="Harga Robux">
+placeholder="Harga">
 
 
 
@@ -614,7 +1071,7 @@ placeholder="Link Gambar">
 
 
 <input id="productLink"
-placeholder="Link Pembelian Roblox">
+placeholder="Link Order">
 
 
 
@@ -625,8 +1082,8 @@ SIMPAN PRODUK
 </button>
 
 
-</div>
 
+</div>
 
 
 
@@ -638,12 +1095,11 @@ SIMPAN PRODUK
 
 
 <h2>
-📦 Semua Produk
+🛒 ORDER USER
 </h2>
 
 
-<div id="adminProducts"
-class="grid">
+<div id="orderAdmin">
 
 </div>
 
@@ -653,23 +1109,27 @@ class="grid">
 
 
 
-
-
-
-
-<!-- ORDER -->
 
 
 <div class="card">
 
 
 <h2>
-🛒 Semua Order
+👥 USER
+
 </h2>
 
 
+<div id="userAdmin">
 
-<div id="orders">
+</div>
+
+
+</div>
+
+
+
+
 
 </div>
 
@@ -683,62 +1143,41 @@ class="grid">
 
 
 
-<!-- USER -->
 
-
-<div class="card">
-
-
-<h2>
-👥 Semua User
-</h2>
-
-
-<div id="users">
-
-</div>
-
-
-</div>
-
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- ======================
+<!-- =====================
 USER STORE
-====================== -->
+===================== -->
 
 
 <div id="userPage">
 
 
-
 <div class="header">
 
 
+<img src="ISI_LINK_LOGO">
+
+
+
 <h1>
-🛍️ FAHRI FASHION STORE
+
+FAHRI FASHION STORE
+
 </h1>
+
+
+
+<p>
+
+ROBUX OUTFIT PREMIUM
+
+</p>
 
 
 
 <button onclick="logout()">
 
-🚪 LOGOUT
+LOGOUT
 
 </button>
 
@@ -749,35 +1188,96 @@ USER STORE
 
 
 
+
 <div class="container">
+
+
+
+
+
+<!-- BANNER USER -->
+
+
+<div class="card">
+
+
+<div class="banner-area">
+
+
+<div class="banner-track">
+
+
+<img src="ISI_LINK_BANNER_1">
+
+
+<img src="ISI_LINK_BANNER_2">
+
+
+<img src="ISI_LINK_BANNER_3">
+
+
+<img src="ISI_LINK_BANNER_4">
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
 
 
 <div class="card">
 
 
 <h2>
-🔥 KATALOG OUTFIT
+
+👁️ TOTAL PENGUNJUNG
+
 </h2>
 
 
+<h1 id="visitorUser">
 
-<div id="products"
-class="grid">
+0
+
+</h1>
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- KATALOG OTOMATIS -->
+
+
+<div id="catalogArea">
+
 
 </div>
 
 
 
+
+
+
 </div>
-
-
-</div>
-
 
 
     </div>
-    
-<script type="module">
+    <script type="module">
 
 
 import { initializeApp }
@@ -803,6 +1303,7 @@ signOut
 from
 
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 
 
@@ -834,6 +1335,11 @@ from
 
 
 
+
+
+// =====================
+// FIREBASE
+// =====================
 
 
 const firebaseConfig = {
@@ -870,7 +1376,6 @@ measurementId:
 
 
 
-
 const app =
 initializeApp(firebaseConfig);
 
@@ -890,9 +1395,9 @@ getFirestore(app);
 
 
 
-// =================
-// ADMIN ACCOUNT
-// =================
+// =====================
+// ADMIN LOGIN
+// =====================
 
 
 const ADMIN_EMAIL =
@@ -909,9 +1414,10 @@ const ADMIN_PASSWORD =
 
 
 
-// =================
+
+// =====================
 // PINDAH HALAMAN
-// =================
+// =====================
 
 
 
@@ -924,7 +1430,16 @@ loginPage.style.display="flex";
 registerPage.style.display="none";
 
 
+adminPage.style.display="none";
+
+
+userPage.style.display="none";
+
+
 };
+
+
+
 
 
 
@@ -943,6 +1458,7 @@ registerPage.style.display="flex";
 
 
 
+
 showLogin();
 
 
@@ -952,29 +1468,15 @@ showLogin();
 
 
 
-// =================
-// REGISTER
-// =================
+// =====================
+// REGISTER USER
+// =====================
 
 
-
-window.register = async function(){
+window.register=async function(){
 
 
 try{
-
-
-let username =
-regUsername.value;
-
-
-let email =
-regEmail.value;
-
-
-let password =
-regPassword.value;
-
 
 
 let akun =
@@ -983,11 +1485,12 @@ await createUserWithEmailAndPassword(
 
 auth,
 
-email,
+regEmail.value,
 
-password
+regPassword.value
 
 );
+
 
 
 
@@ -1008,16 +1511,24 @@ akun.user.uid
 {
 
 
-username:username,
+username:
+
+regUsername.value,
 
 
-email:email,
+email:
+
+regEmail.value,
 
 
-role:"user",
+role:
+
+"user",
 
 
-created:new Date()
+tanggal:
+
+new Date()
 
 
 }
@@ -1027,21 +1538,24 @@ created:new Date()
 
 
 
+
 alert(
+
 "Akun berhasil dibuat"
+
 );
 
 
 
 
+userPage.style.display="block";
+
 
 registerPage.style.display="none";
 
 
-userPage.style.display="block";
 
-
-loadProducts();
+loadStore();
 
 
 
@@ -1064,35 +1578,24 @@ alert(e.message);
 
 
 
-// =================
+// =====================
 // LOGIN
-// =================
+// =====================
 
 
-
-window.login = async function(){
+window.login=async function(){
 
 
 try{
-
-
-let email =
-loginEmail.value;
-
-
-let password =
-loginPassword.value;
-
-
 
 
 await signInWithEmailAndPassword(
 
 auth,
 
-email,
+loginEmail.value,
 
-password
+loginPassword.value
 
 );
 
@@ -1100,13 +1603,13 @@ password
 
 
 
-
-
 if(
 
-email===ADMIN_EMAIL &&
+loginEmail.value === ADMIN_EMAIL
 
-password===ADMIN_PASSWORD
+&&
+
+loginPassword.value === ADMIN_PASSWORD
 
 ){
 
@@ -1131,16 +1634,13 @@ loadStatistics();
 else{
 
 
-
 loginPage.style.display="none";
 
 
 userPage.style.display="block";
 
 
-
-loadProducts();
-
+loadStore();
 
 
 }
@@ -1151,11 +1651,11 @@ loadProducts();
 }catch(e){
 
 
-
 alert(
-"Login gagal : "+e.message
-);
 
+"Login gagal : "+e.message
+
+);
 
 
 }
@@ -1170,14 +1670,12 @@ alert(
 
 
 
-
-// =================
+// =====================
 // LOGOUT
-// =================
+// =====================
 
 
-
-window.logout = async function(){
+window.logout=async function(){
 
 
 await signOut(auth);
@@ -1187,7 +1685,7 @@ location.reload();
 
 
 };
-    
+        
 // =======================
 // SIMPAN PRODUK ADMIN
 // =======================
@@ -1207,8 +1705,8 @@ nama:
 productName.value,
 
 
-tipe:
-productType.value,
+kategori:
+productCategory.value,
 
 
 harga:
@@ -1223,7 +1721,9 @@ link:
 productLink.value
 
 
+
 };
+
 
 
 
@@ -1244,7 +1744,9 @@ data
 alert("Produk berhasil diubah");
 
 
-}else{
+}
+
+else{
 
 
 await addDoc(
@@ -1264,20 +1766,8 @@ alert("Produk berhasil ditambah");
 
 
 
-
-productId.value="";
-
-productName.value="";
-
-productPrice.value="";
-
-productImage.value="";
-
-productLink.value="";
-
-
-
 loadAdmin();
+
 
 
 };
@@ -1290,7 +1780,7 @@ loadAdmin();
 
 
 // =======================
-// TAMPIL PRODUK ADMIN
+// LOAD PRODUK ADMIN
 // =======================
 
 
@@ -1317,34 +1807,34 @@ let p=item.data();
 
 
 
-html+=`
+html += `
 
 
 <div class="product">
 
 
+<div class="product-content">
+
+
 <img src="${p.gambar}">
 
 
-<h3>
-${p.nama}
-</h3>
+<h3>${p.nama}</h3>
 
 
 <p>
-${p.tipe}
+${p.kategori}
 </p>
 
 
 <p>
-💎 ${p.harga} Robux
+💎 ${p.harga}
 </p>
-
 
 
 <button onclick="editProduct('${item.id}')">
 
-✏️ Edit
+EDIT
 
 </button>
 
@@ -1352,16 +1842,19 @@ ${p.tipe}
 
 <button onclick="hapusProduct('${item.id}')">
 
-🗑 Hapus
+HAPUS
 
 </button>
 
+
+</div>
 
 
 </div>
 
 
 `;
+
 
 
 });
@@ -1381,99 +1874,14 @@ adminProducts.innerHTML=html;
 
 
 
-// =======================
-// EDIT PRODUK
-// =======================
-
-
-window.editProduct = async function(id){
-
-
-let data = await getDoc(
-
-doc(db,"products",id)
-
-);
-
-
-
-let p=data.data();
-
-
-
-productId.value=id;
-
-
-productName.value=p.nama;
-
-
-productType.value=p.tipe;
-
-
-productPrice.value=p.harga;
-
-
-productImage.value=p.gambar;
-
-
-productLink.value=p.link;
-
-
-
-};
-
-
-
-
-
-
 
 
 // =======================
-// HAPUS PRODUK
+// USER STORE
 // =======================
 
 
-
-window.hapusProduct = async function(id){
-
-
-
-if(confirm("Hapus produk ini?")){
-
-
-await deleteDoc(
-
-doc(db,"products",id)
-
-);
-
-
-
-loadAdmin();
-
-
-
-}
-
-
-
-};
-
-
-
-
-
-
-
-
-// =======================
-// STORE USER
-// =======================
-
-
-
-window.loadProducts = async function(){
+window.loadStore = async function(){
 
 
 let data = await getDocs(
@@ -1484,7 +1892,7 @@ collection(db,"products")
 
 
 
-let html="";
+let kategori={};
 
 
 
@@ -1495,13 +1903,74 @@ let p=item.data();
 
 
 
-html+=`
+if(!kategori[p.kategori]){
+
+
+kategori[p.kategori]=[];
+
+}
+
+
+
+kategori[p.kategori].push(p);
+
+
+
+});
+
+
+
+
+
+let html="";
+
+
+
+
+
+for(let k in kategori){
+
+
+
+html += `
+
+
+<div class="card">
+
+
+<h2>
+
+${k}
+
+</h2>
+
+
+
+<div class="grid">
+
+
+`;
+
+
+
+
+
+kategori[k].forEach(p=>{
+
+
+html += `
+
 
 
 <div class="product">
 
 
+<div class="product-content">
+
+
+
 <img src="${p.gambar}">
+
 
 
 <h3>
@@ -1511,21 +1980,11 @@ ${p.nama}
 </h3>
 
 
-
 <p>
 
-${p.tipe}
+💎 ${p.harga}
 
 </p>
-
-
-
-<p>
-
-💎 ${p.harga} Robux
-
-</p>
-
 
 
 
@@ -1535,13 +1994,13 @@ ${p.tipe}
 '${p.link}'
 )">
 
-
 🛒 ORDER
-
 
 </button>
 
 
+
+</div>
 
 
 </div>
@@ -1556,10 +2015,33 @@ ${p.tipe}
 
 
 
-products.innerHTML=html;
+
+
+html += `
+
+
+</div>
+
+
+</div>
+
+
+`;
+
+
+
+}
+
+
+
+
+
+catalogArea.innerHTML=html;
+
 
 
 };
+
 
 
 
@@ -1576,9 +2058,13 @@ products.innerHTML=html;
 
 
 window.orderProduct = async function(
+
 nama,
+
 harga,
+
 link
+
 ){
 
 
@@ -1595,23 +2081,32 @@ collection(db,"orders"),
 {
 
 
-user:user.email,
+user:
+
+user.email,
 
 
-produk:nama,
+produk:
+
+nama,
 
 
-harga:harga,
+harga:
+
+harga,
 
 
-status:"Pending",
+status:
+
+"Pending",
 
 
-tanggal:new Date()
+tanggal:
+
+new Date()
 
 
 }
-
 
 );
 
@@ -1620,14 +2115,15 @@ tanggal:new Date()
 
 
 alert(
-"Order berhasil dibuat, status Pending"
+
+"Order berhasil dibuat\nStatus: Pending"
+
 );
 
 
 
 
-
-// LANGSUNG ARAH LINK
+// LANGSUNG KE LINK
 
 window.open(
 
@@ -1640,8 +2136,7 @@ link,
 
 
 };
-    
-// =======================
+        // =======================
 // STATISTIK ADMIN
 // =======================
 
@@ -1649,38 +2144,39 @@ link,
 window.loadStatistics = async function(){
 
 
-let produk = await getDocs(
-collection(db,"products")
-);
+let users =
+await getDocs(collection(db,"users"));
 
 
-let user = await getDocs(
-collection(db,"users")
-);
+let products =
+await getDocs(collection(db,"products"));
 
 
-let order = await getDocs(
-collection(db,"orders")
-);
+let orders =
+await getDocs(collection(db,"orders"));
+
+
+
+totalUser.innerHTML =
+users.size;
 
 
 
 totalProduct.innerHTML =
-produk.size;
+products.size;
 
-
-totalUser.innerHTML =
-user.size;
 
 
 totalOrder.innerHTML =
-order.size;
+orders.size;
 
 
 
 loadOrders();
 
+
 loadUsers();
+
 
 loadVisitor();
 
@@ -1695,7 +2191,7 @@ loadVisitor();
 
 
 // =======================
-// DAFTAR ORDER ADMIN
+// DATA ORDER ADMIN
 // =======================
 
 
@@ -1721,7 +2217,7 @@ let o=item.data();
 
 
 
-html+=`
+html += `
 
 
 <div class="card">
@@ -1732,23 +2228,21 @@ html+=`
 </h3>
 
 
+
 <p>
-👤 User:
-${o.user}
+👤 ${o.user}
 </p>
 
 
 
 <p>
-📦 Produk:
-${o.produk}
+📦 ${o.produk}
 </p>
 
 
 
 <p>
-💎 Harga:
-${o.harga} Robux
+💎 ${o.harga}
 </p>
 
 
@@ -1760,7 +2254,7 @@ Status:
 
 
 
-<button onclick="ubahStatus('${item.id}','Sukses')">
+<button onclick="changeStatus('${item.id}','Sukses')">
 
 ✅ SUKSES
 
@@ -1768,7 +2262,7 @@ Status:
 
 
 
-<button onclick="ubahStatus('${item.id}','Batal')">
+<button onclick="changeStatus('${item.id}','Batal')">
 
 ❌ BATAL
 
@@ -1787,7 +2281,7 @@ Status:
 
 
 
-orders.innerHTML=html;
+orderAdmin.innerHTML=html;
 
 
 }
@@ -1798,7 +2292,8 @@ orders.innerHTML=html;
 
 
 
-window.ubahStatus = async function(id,status){
+
+window.changeStatus = async function(id,status){
 
 
 await updateDoc(
@@ -1807,7 +2302,9 @@ doc(db,"orders",id),
 
 {
 
+
 status:status
+
 
 }
 
@@ -1829,8 +2326,9 @@ loadOrders();
 
 
 // =======================
-// DAFTAR USER ADMIN
+// DATA USER ADMIN
 // =======================
+
 
 
 async function loadUsers(){
@@ -1855,7 +2353,7 @@ let u=item.data();
 
 
 
-html+=`
+html += `
 
 
 <div class="card">
@@ -1880,6 +2378,14 @@ ${u.role}
 
 
 
+<button onclick="deleteUserData('${item.id}')">
+
+HAPUS DATA
+
+</button>
+
+
+
 </div>
 
 
@@ -1891,7 +2397,7 @@ ${u.role}
 
 
 
-users.innerHTML=html;
+userAdmin.innerHTML=html;
 
 
 
@@ -1906,8 +2412,43 @@ users.innerHTML=html;
 
 
 // =======================
-// TOTAL KUNJUNGAN
+// HAPUS DATA USER
 // =======================
+
+
+window.deleteUserData = async function(id){
+
+
+if(confirm("Hapus data user?")){
+
+
+await deleteDoc(
+
+doc(db,"users",id)
+
+);
+
+
+
+loadUsers();
+
+
+}
+
+
+};
+
+
+
+
+
+
+
+
+// =======================
+// TOTAL PENGUNJUNG
+// =======================
+
 
 
 async function addVisitor(){
@@ -1938,8 +2479,11 @@ ref,
 
 {
 
+
 jumlah:
-data.data().jumlah+1
+
+data.data().jumlah + 1
+
 
 }
 
@@ -1947,7 +2491,9 @@ data.data().jumlah+1
 
 
 
-}else{
+}
+
+else{
 
 
 await setDoc(
@@ -1956,7 +2502,9 @@ ref,
 
 {
 
+
 jumlah:1
+
 
 }
 
@@ -1988,19 +2536,132 @@ doc(db,"stats","visitor")
 if(data.exists()){
 
 
-totalVisit.innerHTML =
+totalVisitor.innerHTML =
 data.data().jumlah;
 
 
-}
+
+visitorUser.innerHTML =
+data.data().jumlah;
 
 
 
 }
+
+
+
+}
+
+
 
 
 
 addVisitor();
+        // =======================
+// EDIT PRODUK
+// =======================
+
+
+window.editProduct = async function(id){
+
+
+let data = await getDoc(
+
+doc(db,"products",id)
+
+);
+
+
+
+let p=data.data();
+
+
+
+productId.value=id;
+
+
+productName.value=p.nama;
+
+
+productCategory.value=p.kategori;
+
+
+productPrice.value=p.harga;
+
+
+productImage.value=p.gambar;
+
+
+productLink.value=p.link;
+
+
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+
+};
+
+
+
+
+
+
+
+
+// =======================
+// HAPUS PRODUK
+// =======================
+
+
+window.hapusProduct = async function(id){
+
+
+
+if(confirm("Hapus produk ini?")){
+
+
+await deleteDoc(
+
+doc(db,"products",id)
+
+);
+
+
+
+loadAdmin();
+
+
+}
+
+
+};
+
+
+
+
+
+
+
+// =======================
+// LOAD AWAL
+// =======================
+
+
+
+window.onload=function(){
+
+
+showLogin();
+
+
+};
+
 
 
 
