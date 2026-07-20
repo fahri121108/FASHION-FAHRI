@@ -1448,7 +1448,54 @@ visit();
 
 loadVisit();
 
+async function loadOrders(){
 
+    let data = await getDocs(
+        collection(db,"orders")
+    );
+
+    let html = "";
+
+    data.forEach(item=>{
+
+        let o = item.data();
+
+        html += `
+
+        <div class="product">
+
+        <h3>🛒 Order</h3>
+
+        <p>
+        👤 User:
+        ${o.user}
+        </p>
+
+        <p>
+        📦 Produk:
+        ${o.produk}
+        </p>
+
+        <p>
+        💎 Harga:
+        ${o.harga} Robux
+        </p>
+
+        <p>
+        Status:
+        ${o.status}
+        </p>
+
+        </div>
+
+        `;
+
+    });
+
+
+    document.getElementById("orderList").innerHTML = html;
+
+    }
 
 </script>
 
