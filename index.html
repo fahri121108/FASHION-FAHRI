@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>FAHRI FASHION STORE</title>
+
 
 <style>
 
@@ -14,14 +16,18 @@ box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
 
+
 body{
 
 margin:0;
+
 min-height:100vh;
+
 color:white;
 
 background:
-radial-gradient(circle at top,#4338ca,transparent 35%),
+
+radial-gradient(circle at top,#6366f1,transparent 35%),
 linear-gradient(
 135deg,
 #050816,
@@ -32,12 +38,9 @@ linear-gradient(
 }
 
 
-/* =================
-LOGIN
-================= */
+/* LOGIN REGISTER */
 
-
-#authPage{
+.page{
 
 height:100vh;
 
@@ -53,7 +56,7 @@ padding:20px;
 
 
 
-.login-panel{
+.panel{
 
 width:380px;
 
@@ -103,11 +106,13 @@ color:transparent;
 
 
 
-.subtitle{
+.desc{
 
 text-align:center;
 
 color:#cbd5e1;
+
+margin-bottom:20px;
 
 }
 
@@ -116,13 +121,14 @@ color:#cbd5e1;
 input,
 select{
 
+
 width:100%;
 
 padding:14px;
 
 margin-top:12px;
 
-border-radius:14px;
+border-radius:12px;
 
 border:none;
 
@@ -134,15 +140,12 @@ rgba(0,0,0,.35);
 
 color:white;
 
-border:
-
-1px solid rgba(255,255,255,.15);
-
 }
 
 
 
 button{
+
 
 width:100%;
 
@@ -152,13 +155,14 @@ margin-top:15px;
 
 border:none;
 
-border-radius:14px;
+border-radius:12px;
 
 cursor:pointer;
 
 font-weight:bold;
 
 color:white;
+
 
 background:
 
@@ -169,37 +173,37 @@ linear-gradient(
 );
 
 
-transition:.3s;
-
 }
 
 
 
 button:hover{
 
-transform:translateY(-2px);
-
-box-shadow:
-
-0 0 20px #9333ea;
+opacity:.85;
 
 }
 
 
 
-#msg{
+.switch{
 
 text-align:center;
 
+margin-top:15px;
+
+color:#a5b4fc;
+
+cursor:pointer;
+
 }
 
 
 
-/* =================
-GLOBAL PANEL
-================= */
 
+/* DASHBOARD */
 
+#loginPage,
+#registerPage,
 #adminPage,
 #userPage{
 
@@ -213,17 +217,13 @@ display:none;
 
 padding:20px;
 
+text-align:center;
+
 background:
 
 rgba(15,23,42,.8);
 
 backdrop-filter:blur(15px);
-
-border-bottom:
-
-1px solid rgba(255,255,255,.1);
-
-text-align:center;
 
 }
 
@@ -231,11 +231,11 @@ text-align:center;
 
 .container{
 
+padding:25px;
+
 max-width:1200px;
 
 margin:auto;
-
-padding:25px;
 
 }
 
@@ -246,8 +246,6 @@ padding:25px;
 background:
 
 rgba(255,255,255,.08);
-
-backdrop-filter:blur(15px);
 
 padding:20px;
 
@@ -263,17 +261,19 @@ border:
 
 
 
+
 .grid{
 
 display:grid;
 
 grid-template-columns:
 
-repeat(auto-fill,minmax(220px,1fr));
+repeat(auto-fit,minmax(220px,1fr));
 
 gap:20px;
 
 }
+
 
 
 
@@ -302,7 +302,28 @@ object-fit:cover;
 border-radius:15px;
 
 }
-    </style>
+
+
+
+.stat{
+
+background:
+
+linear-gradient(
+135deg,
+#1e293b,
+#312e81
+);
+
+padding:20px;
+
+border-radius:20px;
+
+}
+
+
+
+</style>
 
 </head>
 
@@ -310,14 +331,13 @@ border-radius:15px;
 <body>
 
 
-<!-- =================
-LOGIN PAGE
-================= -->
-
-<div id="authPage">
+<!-- LOGIN -->
 
 
-<div class="login-panel">
+<div id="loginPage" class="page">
+
+
+<div class="panel">
 
 
 <h1 class="logo">
@@ -325,59 +345,115 @@ LOGIN PAGE
 </h1>
 
 
-<p class="subtitle">
+<p class="desc">
 Roblox Fashion Premium
 </p>
 
 
-<input id="email"
+
+<input id="loginEmail"
 placeholder="Email">
 
 
-<input id="password"
+
+<input id="loginPassword"
 type="password"
 placeholder="Password">
 
 
 
 <button onclick="login()">
+
 LOGIN
+
 </button>
+
+
+
+<p class="switch"
+onclick="showRegister()">
+
+Belum punya akun? DAFTAR
+
+</p>
+
+
+
+<p id="loginMsg"></p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- REGISTER -->
+
+
+<div id="registerPage" class="page">
+
+
+<div class="panel">
+
+
+<h1 class="logo">
+DAFTAR AKUN
+</h1>
+
+
+
+<input id="regUsername"
+placeholder="Username">
+
+
+
+<input id="regEmail"
+placeholder="Email">
+
+
+
+<input id="regPassword"
+type="password"
+placeholder="Password">
 
 
 
 <button onclick="register()">
-DAFTAR
+
+BUAT AKUN
+
 </button>
 
 
 
-<p id="msg"></p>
+<p class="switch"
+onclick="showLogin()">
+
+Sudah punya akun? LOGIN
+
+</p>
+
+
+
+<p id="regMsg"></p>
 
 
 </div>
-
-
-</div>
-
-
-
-
-
-<!-- =================
+<!-- =====================
 ADMIN PAGE
-================= -->
-
+===================== -->
 
 <div id="adminPage">
 
 
-
 <div class="header">
 
-
 <h1>
-👑 ADMIN DASHBOARD
+👑 FAHRI ADMIN PANEL
 </h1>
 
 
@@ -396,14 +472,13 @@ ADMIN PAGE
 <div class="grid">
 
 
-
-<div class="card">
+<div class="stat">
 
 <h3>
 📦 Produk
 </h3>
 
-<h1 id="totalProduk">
+<h1 id="statProduct">
 0
 </h1>
 
@@ -411,13 +486,13 @@ ADMIN PAGE
 
 
 
-<div class="card">
+<div class="stat">
 
 <h3>
 👥 User
 </h3>
 
-<h1 id="totalUser">
+<h1 id="statUser">
 0
 </h1>
 
@@ -425,13 +500,13 @@ ADMIN PAGE
 
 
 
-<div class="card">
+<div class="stat">
 
 <h3>
 🛒 Order
 </h3>
 
-<h1 id="totalOrder">
+<h1 id="statOrder">
 0
 </h1>
 
@@ -439,13 +514,13 @@ ADMIN PAGE
 
 
 
-<div class="card">
+<div class="stat">
 
 <h3>
 👁️ Kunjungan
 </h3>
 
-<h1 id="totalVisit">
+<h1 id="statVisit">
 0
 </h1>
 
@@ -456,28 +531,30 @@ ADMIN PAGE
 
 
 
+
+
+<!-- PRODUK -->
 
 
 <div class="card">
 
 
 <h2>
-➕ Tambah / Edit Produk
+📦 Kelola Produk
 </h2>
 
 
-
-<input id="productId"
+<input id="editId"
 type="hidden">
 
 
 
-<input id="namaProduk"
+<input id="productName"
 placeholder="Nama Outfit">
 
 
 
-<select id="kategoriProduk">
+<select id="productType">
 
 <option>Baju</option>
 
@@ -489,18 +566,18 @@ placeholder="Nama Outfit">
 
 
 
-<input id="hargaProduk"
+<input id="productPrice"
 placeholder="Harga Robux">
 
 
 
-<input id="gambarProduk"
-placeholder="Link Thumbnail">
+<input id="productImage"
+placeholder="Link Gambar">
 
 
 
-<input id="linkProduk"
-placeholder="Link Roblox">
+<input id="productLink"
+placeholder="Link Pembelian">
 
 
 
@@ -517,16 +594,15 @@ SIMPAN PRODUK
 
 
 
-
 <div class="card">
 
 
 <h2>
-📦 Semua Produk
+📦 Daftar Produk
 </h2>
 
 
-<div id="adminProducts"
+<div id="adminProductList"
 class="grid">
 
 </div>
@@ -538,11 +614,14 @@ class="grid">
 
 
 
+<!-- ORDER -->
+
+
 <div class="card">
 
 
 <h2>
-🛒 Semua Order
+🛒 Daftar Order
 </h2>
 
 
@@ -555,6 +634,28 @@ class="grid">
 
 
 
+
+
+<!-- USER -->
+
+
+<div class="card">
+
+
+<h2>
+👥 Daftar User
+</h2>
+
+
+<div id="userList">
+
+</div>
+
+
+</div>
+
+
+
 </div>
 
 
@@ -566,13 +667,12 @@ class="grid">
 
 
 
-<!-- =================
+<!-- =====================
 USER STORE
-================= -->
+===================== -->
 
 
 <div id="userPage">
-
 
 
 <div class="header">
@@ -583,11 +683,13 @@ USER STORE
 </h1>
 
 
+
 <button onclick="logout()">
 
 🚪 LOGOUT
 
 </button>
+
 
 
 </div>
@@ -599,23 +701,20 @@ USER STORE
 <div class="container">
 
 
-
 <div class="card">
 
 
 <h2>
-🔥 Katalog Outfit
+🔥 KATALOG OUTFIT
 </h2>
 
 
-
-<div id="userProducts"
+<div id="storeList"
 class="grid">
 
 </div>
 
 
-
 </div>
 
 
@@ -623,9 +722,8 @@ class="grid">
 </div>
 
 
-
-</div>
-<script type="module">
+    </div>
+    <script type="module">
 
 
 import { initializeApp }
@@ -666,9 +764,9 @@ getDocs,
 
 doc,
 
-getDoc,
-
 setDoc,
+
+getDoc,
 
 updateDoc,
 
@@ -714,6 +812,7 @@ appId:
 measurementId:
 "G-4491S31VK2"
 
+
 };
 
 
@@ -735,7 +834,7 @@ getFirestore(app);
 
 
 
-/* ADMIN */
+// AKUN ADMIN
 
 const ADMIN_EMAIL =
 "Fahri@admin.com";
@@ -750,21 +849,75 @@ const ADMIN_PASSWORD =
 
 
 
-/* REGISTER */
+
+// TAMPIL LOGIN
 
 
-window.register = async function(){
+window.showLogin=function(){
+
+document.getElementById("loginPage")
+.style.display="flex";
+
+
+document.getElementById("registerPage")
+.style.display="none";
+
+
+};
+
+
+
+
+
+// TAMPIL REGISTER
+
+
+window.showRegister=function(){
+
+document.getElementById("loginPage")
+.style.display="none";
+
+
+document.getElementById("registerPage")
+.style.display="flex";
+
+
+};
+
+
+
+
+
+showLogin();
+
+
+
+
+
+
+
+// REGISTER
+
+
+window.register=async function(){
 
 
 try{
 
 
+let username =
+document.getElementById("regUsername").value;
+
+
+
 let email =
-document.getElementById("email").value;
+document.getElementById("regEmail").value;
+
 
 
 let password =
-document.getElementById("password").value;
+document.getElementById("regPassword").value;
+
 
 
 
@@ -782,21 +935,31 @@ password
 
 
 
+
+
 await setDoc(
 
 doc(
+
 db,
+
 "users",
+
 user.user.uid
+
 ),
 
 {
+
+
+username:username,
 
 email:email,
 
 role:"user",
 
-tanggal:new Date()
+createdAt:new Date()
+
 
 }
 
@@ -810,6 +973,20 @@ alert(
 
 
 
+// langsung masuk user store
+
+document.getElementById("registerPage")
+.style.display="none";
+
+
+document.getElementById("userPage")
+.style.display="block";
+
+
+loadStore();
+
+
+
 }catch(e){
 
 
@@ -817,7 +994,6 @@ alert(e.message);
 
 
 }
-
 
 
 };
@@ -828,22 +1004,25 @@ alert(e.message);
 
 
 
+// LOGIN
 
-/* LOGIN */
 
-
-window.login = async function(){
+window.login=async function(){
 
 
 try{
 
 
 let email =
-document.getElementById("email").value;
+
+document.getElementById("loginEmail").value;
+
 
 
 let password =
-document.getElementById("password").value;
+
+document.getElementById("loginPassword").value;
+
 
 
 
@@ -870,22 +1049,17 @@ password === ADMIN_PASSWORD
 ){
 
 
-
-document.getElementById("authPage")
+document.getElementById("loginPage")
 .style.display="none";
-
 
 
 document.getElementById("adminPage")
 .style.display="block";
 
 
+loadAdmin();
 
-loadAdminProducts();
-
-loadOrders();
-
-statistik();
+loadStatistics();
 
 
 }
@@ -893,18 +1067,15 @@ statistik();
 else{
 
 
-
-document.getElementById("authPage")
+document.getElementById("loginPage")
 .style.display="none";
-
 
 
 document.getElementById("userPage")
 .style.display="block";
 
 
-
-loadUserProducts();
+loadStore();
 
 
 }
@@ -922,7 +1093,6 @@ alert(
 }
 
 
-
 };
 
 
@@ -930,10 +1100,11 @@ alert(
 
 
 
-/* LOGOUT */
+
+// LOGOUT
 
 
-window.logout = async function(){
+window.logout=async function(){
 
 
 await signOut(auth);
@@ -943,42 +1114,42 @@ location.reload();
 
 
 };
-    
-
-
-// ======================
+        
+// =======================
 // PRODUK ADMIN
-// ======================
+// =======================
 
 
 window.saveProduct = async function(){
 
 
 let id =
-document.getElementById("productId").value;
+
+document.getElementById("editId").value;
+
 
 
 let data = {
 
 
 nama:
-document.getElementById("namaProduk").value,
+document.getElementById("productName").value,
 
 
-kategori:
-document.getElementById("kategoriProduk").value,
+type:
+document.getElementById("productType").value,
 
 
 harga:
-document.getElementById("hargaProduk").value,
+document.getElementById("productPrice").value,
 
 
 gambar:
-document.getElementById("gambarProduk").value,
+document.getElementById("productImage").value,
 
 
 link:
-document.getElementById("linkProduk").value
+document.getElementById("productLink").value
 
 
 };
@@ -998,10 +1169,13 @@ data
 );
 
 
+
 alert("Produk berhasil diubah");
 
 
-}else{
+}
+
+else{
 
 
 await addDoc(
@@ -1013,6 +1187,7 @@ data
 );
 
 
+
 alert("Produk berhasil ditambah");
 
 
@@ -1020,8 +1195,7 @@ alert("Produk berhasil ditambah");
 
 
 
-loadAdminProducts();
-
+loadAdmin();
 
 
 };
@@ -1031,8 +1205,7 @@ loadAdminProducts();
 
 
 
-
-window.loadAdminProducts = async function(){
+window.loadAdmin = async function(){
 
 
 let data = await getDocs(
@@ -1045,14 +1218,8 @@ collection(db,"products")
 
 let html="";
 
-let total=0;
-
-
 
 data.forEach(item=>{
-
-
-total++;
 
 
 let p=item.data();
@@ -1071,7 +1238,7 @@ html += `
 <h3>${p.nama}</h3>
 
 
-<p>${p.kategori}</p>
+<p>${p.type}</p>
 
 
 <p>💎 ${p.harga} Robux</p>
@@ -1079,13 +1246,19 @@ html += `
 
 
 <button onclick="editProduct('${item.id}')">
+
 ✏️ EDIT
+
 </button>
 
 
-<button onclick="hapusProduct('${item.id}')">
-🗑 HAPUS
+
+<button onclick="deleteProduct('${item.id}')">
+
+🗑️ HAPUS
+
 </button>
+
 
 
 </div>
@@ -1099,13 +1272,13 @@ html += `
 
 
 
-document.getElementById("adminProducts").innerHTML=html;
+document.getElementById("adminProductList")
+.innerHTML=html;
 
-
-document.getElementById("totalProduk").innerHTML=total;
 
 
 };
+
 
 
 
@@ -1128,22 +1301,22 @@ let p=data.data();
 
 
 
-document.getElementById("productId").value=id;
+document.getElementById("editId").value=id;
 
 
-document.getElementById("namaProduk").value=p.nama;
+document.getElementById("productName").value=p.nama;
 
 
-document.getElementById("kategoriProduk").value=p.kategori;
+document.getElementById("productType").value=p.type;
 
 
-document.getElementById("hargaProduk").value=p.harga;
+document.getElementById("productPrice").value=p.harga;
 
 
-document.getElementById("gambarProduk").value=p.gambar;
+document.getElementById("productImage").value=p.gambar;
 
 
-document.getElementById("linkProduk").value=p.link;
+document.getElementById("productLink").value=p.link;
 
 
 
@@ -1154,7 +1327,8 @@ document.getElementById("linkProduk").value=p.link;
 
 
 
-window.hapusProduct = async function(id){
+
+window.deleteProduct = async function(id){
 
 
 if(confirm("Hapus produk ini?")){
@@ -1168,10 +1342,11 @@ doc(db,"products",id)
 
 
 
-loadAdminProducts();
+loadAdmin();
 
 
 }
+
 
 
 };
@@ -1183,12 +1358,13 @@ loadAdminProducts();
 
 
 
-// ======================
-// USER PRODUK
-// ======================
+
+// =======================
+// STORE USER
+// =======================
 
 
-window.loadUserProducts = async function(){
+window.loadStore = async function(){
 
 
 let data = await getDocs(
@@ -1222,18 +1398,19 @@ html += `
 <h3>${p.nama}</h3>
 
 
-<p>${p.kategori}</p>
+<p>${p.type}</p>
 
 
 <p>💎 ${p.harga} Robux</p>
 
 
 
-<button onclick="order('${p.nama}','${p.harga}')">
+<button onclick="orderProduct('${p.nama}','${p.harga}','${p.link}')">
 
 🛒 ORDER
 
 </button>
+
 
 
 </div>
@@ -1247,7 +1424,8 @@ html += `
 
 
 
-document.getElementById("userProducts").innerHTML=html;
+document.getElementById("storeList")
+.innerHTML=html;
 
 
 };
@@ -1259,12 +1437,17 @@ document.getElementById("userProducts").innerHTML=html;
 
 
 
-// ======================
+// =======================
 // ORDER
-// ======================
+// =======================
 
 
-window.order = async function(nama,harga){
+window.orderProduct = async function(
+nama,
+harga,
+link
+){
+
 
 
 let user = auth.currentUser;
@@ -1295,12 +1478,239 @@ tanggal:new Date()
 
 }
 
+);
+
+
+
+
+alert(
+"Order berhasil, status Pending"
+);
+
+
+
+window.open(
+
+link,
+
+"_blank"
 
 );
 
 
 
-alert("Order berhasil dibuat");
+};
+        
+
+    </div>
+    
+// =======================
+// STATISTIK ADMIN
+// =======================
+
+
+async function loadStatistics(){
+
+
+let products = await getDocs(
+
+collection(db,"products")
+
+);
+
+
+
+let users = await getDocs(
+
+collection(db,"users")
+
+);
+
+
+
+let orders = await getDocs(
+
+collection(db,"orders")
+
+);
+
+
+
+document.getElementById("statProduct")
+.innerHTML =
+products.size;
+
+
+
+document.getElementById("statUser")
+.innerHTML =
+users.size;
+
+
+
+document.getElementById("statOrder")
+.innerHTML =
+orders.size;
+
+
+
+loadOrders();
+
+loadUsers();
+
+loadVisit();
+
+
+}
+
+
+
+
+
+
+
+// =======================
+// ORDER ADMIN
+// =======================
+
+
+async function loadOrders(){
+
+
+let data = await getDocs(
+
+collection(db,"orders")
+
+);
+
+
+
+let html="";
+
+
+
+data.forEach(item=>{
+
+
+let o=item.data();
+
+
+
+html += `
+
+
+<div class="card">
+
+
+<p>
+👤 User:
+${o.user}
+</p>
+
+
+<p>
+📦 Produk:
+${o.produk}
+</p>
+
+
+<p>
+💎 Harga:
+${o.harga} Robux
+</p>
+
+
+<p>
+Status:
+<b>${o.status}</b>
+</p>
+
+
+
+<button onclick="successOrder('${item.id}')">
+
+✅ SUKSES
+
+</button>
+
+
+
+<button onclick="cancelOrder('${item.id}')">
+
+❌ BATAL
+
+</button>
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+
+document.getElementById("orderList")
+.innerHTML=html;
+
+
+
+}
+
+
+
+
+
+
+
+window.successOrder = async function(id){
+
+
+await updateDoc(
+
+doc(db,"orders",id),
+
+{
+
+status:"Sukses"
+
+}
+
+);
+
+
+
+loadOrders();
+
+
+};
+
+
+
+
+
+
+window.cancelOrder = async function(id){
+
+
+await updateDoc(
+
+doc(db,"orders",id),
+
+{
+
+status:"Batal"
+
+}
+
+);
+
+
+
+loadOrders();
 
 
 };
@@ -1311,47 +1721,69 @@ alert("Order berhasil dibuat");
 
 
 
-
-// ======================
-// STATISTIK
-// ======================
-
-
-async function statistik(){
+// =======================
+// DATA USER ADMIN
+// =======================
 
 
-let produk = await getDocs(
-
-collection(db,"products")
-
-);
+async function loadUsers(){
 
 
-let user = await getDocs(
+let data = await getDocs(
 
 collection(db,"users")
 
 );
 
 
-let order = await getDocs(
 
-collection(db,"orders")
-
-);
+let html="";
 
 
 
-document.getElementById("totalProduk").innerHTML =
-produk.size;
+data.forEach(item=>{
 
 
-document.getElementById("totalUser").innerHTML =
-user.size;
+let u=item.data();
 
 
-document.getElementById("totalOrder").innerHTML =
-order.size;
+
+html += `
+
+
+<div class="card">
+
+
+<p>
+👤 ${u.username}
+</p>
+
+
+<p>
+📧 ${u.email}
+</p>
+
+
+<p>
+Role:
+${u.role}
+</p>
+
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+
+document.getElementById("userList")
+.innerHTML=html;
 
 
 
@@ -1360,20 +1792,31 @@ order.size;
 
 
 
-// ======================
-// KUNJUNGAN
-// ======================
 
 
-async function visit(){
 
 
-let ref =
-doc(db,"stats","visit");
+// =======================
+// TOTAL KUNJUNGAN
+// =======================
 
 
-let data =
-await getDoc(ref);
+async function addVisit(){
+
+
+let ref = doc(
+
+db,
+
+"stats",
+
+"visitor"
+
+);
+
+
+
+let data = await getDoc(ref);
 
 
 
@@ -1387,7 +1830,7 @@ ref,
 {
 
 jumlah:
-data.data().jumlah+1
+data.data().jumlah + 1
 
 }
 
@@ -1418,13 +1861,13 @@ jumlah:1
 
 
 
+
 async function loadVisit(){
 
 
-let data =
-await getDoc(
+let data = await getDoc(
 
-doc(db,"stats","visit")
+doc(db,"stats","visitor")
 
 );
 
@@ -1433,7 +1876,8 @@ doc(db,"stats","visit")
 if(data.exists()){
 
 
-document.getElementById("totalVisit").innerHTML =
+document.getElementById("statVisit")
+.innerHTML =
 data.data().jumlah;
 
 
@@ -1444,58 +1888,12 @@ data.data().jumlah;
 
 
 
-visit();
 
-loadVisit();
-
-async function loadOrders(){
-
-    let data = await getDocs(
-        collection(db,"orders")
-    );
-
-    let html = "";
-
-    data.forEach(item=>{
-
-        let o = item.data();
-
-        html += `
-
-        <div class="product">
-
-        <h3>🛒 Order</h3>
-
-        <p>
-        👤 User:
-        ${o.user}
-        </p>
-
-        <p>
-        📦 Produk:
-        ${o.produk}
-        </p>
-
-        <p>
-        💎 Harga:
-        ${o.harga} Robux
-        </p>
-
-        <p>
-        Status:
-        ${o.status}
-        </p>
-
-        </div>
-
-        `;
-
-    });
+addVisit();
 
 
-    document.getElementById("orderList").innerHTML = html;
 
-    }
+
 
 </script>
 
