@@ -11,119 +11,282 @@
 
 *{
 box-sizing:border-box;
+font-family:Arial, sans-serif;
 }
+
 
 body{
+
 margin:0;
+
 background:
-linear-gradient(135deg,#080b16,#111936,#210d36);
+linear-gradient(
+135deg,
+#080b16,
+#111936,
+#210d36
+);
+
 color:white;
-font-family:Arial,sans-serif;
+
 }
 
-header{
-padding:30px;
-text-align:center;
+
+
+/* LOGIN */
+
+.login-page{
+
+height:100vh;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
+
+.login-box{
+
+width:350px;
+
 background:
-rgba(15,20,45,.9);
-border-bottom:1px solid #6366f1;
-box-shadow:0 0 30px #6366f1;
-}
+rgba(25,30,55,.9);
 
-header h1{
-font-size:32px;
-margin:0;
-background:
-linear-gradient(90deg,#60a5fa,#c084fc);
--webkit-background-clip:text;
-color:transparent;
-}
+padding:25px;
 
-header p{
-color:#aaa;
-}
-
-
-.container{
-max-width:1200px;
-margin:auto;
-padding:20px;
-}
-
-
-.card{
-background:
-rgba(25,30,55,.85);
-padding:20px;
 border-radius:20px;
-margin-bottom:20px;
-border:1px solid rgba(255,255,255,.1);
-box-shadow:0 0 25px rgba(0,0,0,.3);
-backdrop-filter:blur(10px);
+
+box-shadow:
+0 0 30px rgba(99,102,241,.4);
+
 }
 
 
-input,select{
+
+h1{
+
+text-align:center;
+
+background:
+linear-gradient(
+90deg,
+#60a5fa,
+#c084fc
+);
+
+-webkit-background-clip:text;
+
+color:transparent;
+
+}
+
+
+
+input,
+select{
+
 width:100%;
+
 padding:13px;
+
 margin-top:10px;
-border-radius:12px;
+
 border:none;
+
+border-radius:12px;
+
 background:#0b1224;
+
 color:white;
-border:1px solid #334155;
+
 }
+
 
 
 button{
+
 width:100%;
+
 padding:13px;
+
 margin-top:10px;
+
 border:none;
+
 border-radius:12px;
+
 cursor:pointer;
+
 font-weight:bold;
+
 color:white;
+
 background:
-linear-gradient(90deg,#4f46e5,#9333ea);
-transition:.3s;
+linear-gradient(
+90deg,
+#4f46e5,
+#9333ea
+);
+
 }
+
 
 
 button:hover{
-transform:scale(1.03);
-box-shadow:0 0 20px #9333ea;
+
+opacity:.8;
+
 }
 
 
-.grid{
-display:grid;
-grid-template-columns:
-repeat(auto-fill,minmax(220px,1fr));
-gap:20px;
+
+/* DASHBOARD */
+
+
+#dashboard{
+
+display:none;
+
 }
 
 
-.item{
+
+.sidebar{
+
+position:fixed;
+
+width:240px;
+
+height:100vh;
+
+background:
+rgba(15,20,45,.95);
+
+padding:20px;
+
+border-right:
+1px solid #6366f1;
+
+}
+
+
+
+.sidebar h2{
+
+text-align:center;
+
+}
+
+
+
+.menu button{
+
+margin-top:15px;
+
+}
+
+
+
+.main{
+
+margin-left:240px;
+
+padding:25px;
+
+}
+
+
+
+.card{
+
 background:
 rgba(25,30,55,.9);
-padding:15px;
+
+padding:20px;
+
 border-radius:20px;
-border:1px solid rgba(255,255,255,.1);
+
+margin-bottom:20px;
+
+border:
+1px solid rgba(255,255,255,.1);
+
 }
 
 
-.item img{
+
+.stats{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(200px,1fr));
+
+gap:20px;
+
+}
+
+
+
+.stat{
+
+background:
+linear-gradient(
+135deg,
+#1e293b,
+#312e81
+);
+
+padding:20px;
+
+border-radius:20px;
+
+}
+
+
+
+.products{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fill,minmax(220px,1fr));
+
+gap:20px;
+
+}
+
+
+
+.product{
+
+background:
+rgba(25,30,55,.9);
+
+padding:15px;
+
+border-radius:18px;
+
+}
+
+
+
+.product img{
+
 width:100%;
-height:260px;
+
+height:250px;
+
 object-fit:cover;
+
 border-radius:15px;
+
 }
 
-
-a{
-text-decoration:none;
-}
 
 
 </style>
@@ -134,30 +297,34 @@ text-decoration:none;
 <body>
 
 
-<header>
 
-<h1>FAHRI FASHION STORE</h1>
-
-<p>🔥 Roblox Outfit Premium Catalog 🔥</p>
-
-</header>
+<!-- LOGIN -->
 
 
-<div class="container">
+<div class="login-page" id="loginPage">
 
 
-<div class="card">
-
-<h2>🔐 Login / Register</h2>
-
-<input id="email" placeholder="Email">
-
-<input id="password" type="password" placeholder="Password">
+<div class="login-box">
 
 
-<button onclick="register()">
-DAFTAR
-</button>
+<h1>
+FAHRI STORE
+</h1>
+
+
+<p>
+Admin Login
+</p>
+
+
+<input id="email"
+placeholder="Email Admin">
+
+
+<input id="password"
+type="password"
+placeholder="Password">
+
 
 
 <button onclick="login()">
@@ -165,28 +332,143 @@ LOGIN
 </button>
 
 
-<button onclick="logout()">
-LOGOUT
-</button>
 
+<p id="loginStatus"></p>
 
-<p id="status">
-Belum Login
-</p>
 
 </div>
 
 
-<div id="adminPanel" class="card" style="display:none;">
+</div>
 
 
-<h2>👑 ADMIN PANEL</h2>
 
 
-<input id="nama" placeholder="Nama Outfit">
+
+<!-- DASHBOARD -->
 
 
-<select id="tipe">
+<div id="dashboard">
+
+
+
+<div class="sidebar">
+
+
+<h2>
+👑 FAHRI STORE
+</h2>
+
+
+
+<div class="menu">
+
+
+<button onclick="showHome()">
+🏠 Dashboard
+</button>
+
+
+<button onclick="showProduct()">
+📦 Produk
+</button>
+
+
+<button onclick="logout()">
+🚪 Logout
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="main">
+
+
+<div class="card">
+
+
+<h1>
+Dashboard Admin
+</h1>
+
+
+<p>
+Selamat datang di FAHRI FASHION STORE
+</p>
+
+
+</div>
+
+
+
+<div class="stats">
+
+
+<div class="stat">
+
+<h3>
+Total Produk
+</h3>
+
+<h1 id="totalProduk">
+0
+</h1>
+
+</div>
+
+
+
+<div class="stat">
+
+<h3>
+Kategori
+</h3>
+
+<h1>
+3
+</h1>
+
+</div>
+
+
+
+<div class="stat">
+
+<h3>
+Status
+</h3>
+
+<h1>
+ONLINE
+</h1>
+
+</div>
+
+
+</div>
+<br>
+
+<div class="card" id="productSection">
+
+
+<h2>
+📦 Tambah Produk Outfit
+</h2>
+
+
+
+<input id="namaProduk"
+placeholder="Nama Outfit">
+
+
+
+<select id="kategori">
 
 <option>Baju</option>
 
@@ -197,180 +479,263 @@ Belum Login
 </select>
 
 
-<input id="harga" placeholder="Harga Robux">
+
+<input id="hargaProduk"
+placeholder="Harga Robux">
 
 
-<input id="gambar" placeholder="Link Thumbnail">
+
+<input id="gambarProduk"
+placeholder="Link Gambar">
 
 
-<input id="link" placeholder="Link Roblox Item">
+
+<input id="linkProduk"
+placeholder="Link Roblox">
 
 
-<button onclick="tambah()">
-+ TAMBAH OUTFIT
+
+<button onclick="tambahProduk()">
+
++ Tambah Produk
+
 </button>
 
 
 </div>
 
 
-<h2>🔥 KATALOG OUTFIT</h2>
 
 
-<div id="list" class="grid"></div>
+
+<div class="card">
+
+
+<h2>
+🔥 Semua Produk
+</h2>
+
+
+<div id="produkList" class="products">
+
+</div>
 
 
 </div>
 
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
 <script type="module">
 
+
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+
 
 import {
+
 getAuth,
-createUserWithEmailAndPassword,
+
 signInWithEmailAndPassword,
+
 signOut
+
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
 
 import {
+
 getFirestore,
+
 collection,
+
 addDoc,
+
 getDocs
+
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 
-/* FIREBASE CONFIG */
+
+
+/* FIREBASE */
+
 
 const firebaseConfig = {
+
 
 apiKey:
 "AIzaSyDuQmsUHotG-lW9tm5LKabUyw_ARwt_W2I",
 
+
 authDomain:
 "fashion-fahri-39262.firebaseapp.com",
+
 
 projectId:
 "fashion-fahri-39262",
 
+
 storageBucket:
 "fashion-fahri-39262.firebasestorage.app",
+
 
 messagingSenderId:
 "647011821518",
 
+
 appId:
 "1:647011821518:web:279811ff7821e75bf32d9f",
 
+
 measurementId:
 "G-4491S31VK2"
+
 
 };
 
 
 
-const app = initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const app =
+initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+
+
+const auth =
+getAuth(app);
+
+
+
+const db =
+getFirestore(app);
+
+
+
 
 
 
 /* ADMIN */
 
-const ADMIN_EMAIL = "Fahri@admin.com";
 
-const ADMIN_PASSWORD = "Fahz121108";
+const ADMIN_EMAIL =
+"Fahri@admin.com";
 
 
 
-/* REGISTER */
+const ADMIN_PASSWORD =
+"Fahz121108";
 
-window.register = async function(){
 
-try{
 
-await createUserWithEmailAndPassword(
-auth,
-document.getElementById("email").value,
-document.getElementById("password").value
-);
-
-alert("Akun berhasil dibuat");
-
-}catch(e){
-
-alert(e.message);
-
-}
-
-};
 
 
 
 
 /* LOGIN */
 
-window.login = async function(){
+
+window.login =
+async function(){
+
 
 try{
+
+
+let email =
+document.getElementById("email").value;
+
+
+
+let password =
+document.getElementById("password").value;
+
+
 
 
 await signInWithEmailAndPassword(
 
 auth,
 
-document.getElementById("email").value,
+email,
 
-document.getElementById("password").value
+password
 
 );
 
 
 
-let user = auth.currentUser;
 
-
-document.getElementById("status").innerHTML =
-"✅ Login Berhasil";
+if(email === ADMIN_EMAIL){
 
 
 
-if(
-
-user.email === ADMIN_EMAIL &&
-
-document.getElementById("password").value === ADMIN_PASSWORD
-
-){
+document.getElementById("loginPage")
+.style.display="none";
 
 
-document.getElementById("adminPanel").style.display =
-"block";
+
+document.getElementById("dashboard")
+.style.display="block";
 
 
-document.getElementById("status").innerHTML =
-"👑 ADMIN AKTIF";
+
+loadProduk();
+
+
+
+}else{
+
+
+alert("Bukan akun admin");
 
 
 }
+
 
 
 
 }catch(e){
 
-alert(e.message);
+
+
+alert(
+"Login gagal : "+e.message
+);
+
+
 
 }
 
 
+
 };
+
+
 
 
 
@@ -378,19 +743,16 @@ alert(e.message);
 
 /* LOGOUT */
 
-window.logout = async function(){
+
+window.logout =
+async function(){
 
 
 await signOut(auth);
 
 
 
-document.getElementById("status").innerHTML =
-"Belum Login";
-
-
-document.getElementById("adminPanel").style.display =
-"none";
+location.reload();
 
 
 };
@@ -400,63 +762,77 @@ document.getElementById("adminPanel").style.display =
 
 
 
-/* TAMBAH OUTFIT */
 
-window.tambah = async function(){
+/* TAMBAH PRODUK */
+
+
+window.tambahProduk =
+async function(){
 
 
 await addDoc(
 
-collection(db,"outfits"),
+collection(
+db,
+"outfits"
+),
+
 
 {
 
+
 nama:
-document.getElementById("nama").value,
+document.getElementById("namaProduk").value,
 
 
-tipe:
-document.getElementById("tipe").value,
+kategori:
+document.getElementById("kategori").value,
 
 
 harga:
-document.getElementById("harga").value,
+document.getElementById("hargaProduk").value,
 
 
 gambar:
-document.getElementById("gambar").value,
+document.getElementById("gambarProduk").value,
 
 
 link:
-document.getElementById("link").value
+document.getElementById("linkProduk").value
+
+
 
 }
+
+
 
 );
 
 
 
-alert("Outfit berhasil ditambahkan");
+alert(
+"Produk berhasil ditambahkan"
+);
 
 
-loadData();
+
+loadProduk();
 
 
 };
+   
+/* LOAD PRODUK */
+
+async function loadProduk(){
 
 
+const data =
+await getDocs(
 
-
-
-
-/* LOAD KATALOG */
-
-async function loadData(){
-
-
-const data = await getDocs(
-
-collection(db,"outfits")
+collection(
+db,
+"outfits"
+)
 
 );
 
@@ -464,38 +840,59 @@ collection(db,"outfits")
 
 let html = "";
 
+let jumlah = 0;
+
 
 
 data.forEach(doc=>{
 
 
-let o = doc.data();
+let p = doc.data();
+
+
+jumlah++;
 
 
 
 html += `
 
-<div class="item">
 
-<img src="${o.gambar}">
-
-<h3>${o.nama}</h3>
-
-<p>Kategori : ${o.tipe}</p>
-
-<p>💎 ${o.harga} Robux</p>
+<div class="product">
 
 
-<a href="${o.link}" target="_blank">
+<img src="${p.gambar}">
+
+
+<h3>
+${p.nama}
+</h3>
+
+
+<p>
+Kategori : ${p.kategori}
+</p>
+
+
+<p>
+💎 ${p.harga} Robux
+</p>
+
+
+<a href="${p.link}" target="_blank">
+
 
 <button>
-BELI SEKARANG
+BELI ROBLOX
 </button>
+
 
 </a>
 
 
+
 </div>
+
+
 
 `;
 
@@ -505,17 +902,55 @@ BELI SEKARANG
 
 
 
-document.getElementById("list").innerHTML = html;
+document.getElementById("produkList").innerHTML =
+html;
+
+
+
+document.getElementById("totalProduk").innerHTML =
+jumlah;
+
 
 
 }
 
 
 
-loadData();
+
+
+
+/* MENU DASHBOARD */
+
+
+window.showHome =
+function(){
+
+
+document.getElementById("productSection")
+.style.display="none";
+
+
+}
+
+
+
+window.showProduct =
+function(){
+
+
+document.getElementById("productSection")
+.style.display="block";
+
+
+}
+
+
+
 
 
 </script>
+
+
 
 </body>
 
