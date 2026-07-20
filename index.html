@@ -580,7 +580,122 @@ gap:20px;
 
 }
 
+/* =====================
+KATALOG PRODUK
+===================== */
 
+.category-box{
+
+margin-bottom:25px;
+
+}
+
+
+.category-title{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:18px;
+
+border-radius:18px;
+
+cursor:pointer;
+
+background:
+
+rgba(255,255,255,.08);
+
+border:
+
+1px solid rgba(255,255,255,.15);
+
+font-size:20px;
+
+font-weight:bold;
+
+}
+
+
+
+.arrow{
+
+font-size:25px;
+
+animation:arrowMove 1s infinite;
+
+}
+
+
+
+@keyframes arrowMove{
+
+
+50%{
+
+transform:translateY(8px);
+
+}
+
+
+}
+
+
+
+.product-row{
+
+display:flex;
+
+gap:15px;
+
+overflow-x:auto;
+
+padding:15px 5px;
+
+}
+
+
+
+.product-row::-webkit-scrollbar{
+
+height:7px;
+
+}
+
+
+
+.product-row .product{
+
+min-width:170px;
+
+max-width:170px;
+
+}
+
+
+
+.product-row img{
+
+height:170px;
+
+}
+
+
+
+.hint{
+
+text-align:center;
+
+font-size:14px;
+
+color:#cbd5e1;
+
+margin:10px;
+
+    }
 
 
 </style>
@@ -1879,8 +1994,6 @@ adminProducts.innerHTML=html;
 // =======================
 // USER STORE
 // =======================
-
-
 window.loadStore = async function(){
 
 
@@ -1905,11 +2018,9 @@ let p=item.data();
 
 if(!kategori[p.kategori]){
 
-
 kategori[p.kategori]=[];
 
 }
-
 
 
 kategori[p.kategori].push(p);
@@ -1920,38 +2031,50 @@ kategori[p.kategori].push(p);
 
 
 
-
-
 let html="";
-
-
 
 
 
 for(let k in kategori){
 
 
+let idKategori =
+k.replace(/\s/g,"");
+
+
 
 html += `
 
 
-<div class="card">
+<div class="category-box">
 
 
-<h2>
+<div class="category-title"
+
+onclick="bukaKategori('${idKategori}')">
+
 
 ${k}
 
-</h2>
+
+<span class="arrow">
+▼
+</span>
+
+
+</div>
 
 
 
-<div class="grid">
+<div class="product-row"
+
+id="${idKategori}"
+
+style="display:none;">
+
 
 
 `;
-
-
 
 
 
@@ -1968,22 +2091,17 @@ html += `
 <div class="product-content">
 
 
-
 <img src="${p.gambar}">
 
 
-
 <h3>
-
 ${p.nama}
-
 </h3>
 
 
+
 <p>
-
-💎 ${p.harga}
-
+💎 ${p.harga} Robux
 </p>
 
 
@@ -2015,12 +2133,19 @@ ${p.nama}
 
 
 
-
-
 html += `
 
 
 </div>
+
+
+
+<p class="hint">
+
+👈 Geser kiri kanan untuk lihat produk lain 👉
+
+</p>
+
 
 
 </div>
@@ -2031,8 +2156,6 @@ html += `
 
 
 }
-
-
 
 
 
@@ -2048,6 +2171,32 @@ catalogArea.innerHTML=html;
 
 
 
+window.bukaKategori=function(id){
+
+
+let box =
+document.getElementById(id);
+
+
+
+if(box.style.display==="none"){
+
+
+box.style.display="flex";
+
+
+}
+
+else{
+
+
+box.style.display="none";
+
+
+}
+
+
+};
 
 
 
@@ -2375,7 +2524,19 @@ html += `
 Role:
 ${u.role}
 </p>
+<button onclick="editUsername('${item.id}')">
 
+✏️ EDIT USERNAME
+
+</button>
+
+
+
+<button onclick="deleteUserData('${item.id}')">
+
+🗑 HAPUS USER
+
+</button>
 
 
 <button onclick="deleteUserData('${item.id}')">
@@ -2431,6 +2592,41 @@ doc(db,"users",id)
 
 
 loadUsers();
+    window.editUsername = async function(id){
+
+
+let baru =
+prompt("Masukkan username baru");
+
+
+
+if(baru){
+
+
+await updateDoc(
+
+doc(db,"users",id),
+
+{
+
+username:baru
+
+}
+
+);
+
+
+
+alert("Username berhasil diubah");
+
+
+loadUsers();
+
+
+}
+
+
+};
 
 
 }
