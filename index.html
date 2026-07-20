@@ -221,51 +221,31 @@ Belum Login
 
 
 </div>
+
 <script type="module">
 
 import { initializeApp }
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-
 getAuth,
-
 createUserWithEmailAndPassword,
-
 signInWithEmailAndPassword,
-
 signOut
-
 }
-
-from
-
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-
 getFirestore,
-
 collection,
-
 addDoc,
-
 getDocs
-
 }
-
-from
-
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 
-/* =========================
-   FIREBASE CONFIG
-========================= */
+/* FIREBASE CONFIG */
 
 const firebaseConfig = {
 
@@ -294,56 +274,35 @@ measurementId:
 
 
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
+const auth = getAuth(app);
 
-const auth =
-getAuth(app);
-
-
-const db =
-getFirestore(app);
+const db = getFirestore(app);
 
 
 
-/* =========================
-   ADMIN ACCOUNT
-========================= */
+/* ADMIN */
 
-const ADMIN_EMAIL =
-"Fahri@admin.com";
+const ADMIN_EMAIL = "Fahri@admin.com";
 
-
-const ADMIN_PASSWORD =
-"Fahz121108";
+const ADMIN_PASSWORD = "Fahz121108";
 
 
 
-/* =========================
-   REGISTER
-========================= */
+/* REGISTER */
 
 window.register = async function(){
 
 try{
 
-
 await createUserWithEmailAndPassword(
-
 auth,
-
-email.value,
-
-password.value
-
+document.getElementById("email").value,
+document.getElementById("password").value
 );
 
-
-alert(
-"Akun berhasil dibuat"
-);
-
+alert("Akun berhasil dibuat");
 
 }catch(e){
 
@@ -351,16 +310,12 @@ alert(e.message);
 
 }
 
-
-}
-
+};
 
 
 
 
-/* =========================
-   LOGIN
-========================= */
+/* LOGIN */
 
 window.login = async function(){
 
@@ -371,40 +326,36 @@ await signInWithEmailAndPassword(
 
 auth,
 
-email.value,
+document.getElementById("email").value,
 
-password.value
+document.getElementById("password").value
 
 );
 
 
 
-const user =
-auth.currentUser;
+let user = auth.currentUser;
 
 
-
-status.innerHTML =
-"✅ Login berhasil";
+document.getElementById("status").innerHTML =
+"✅ Login Berhasil";
 
 
 
 if(
 
-user.email === ADMIN_EMAIL
+user.email === ADMIN_EMAIL &&
 
-&&
-
-password.value === ADMIN_PASSWORD
+document.getElementById("password").value === ADMIN_PASSWORD
 
 ){
 
 
-adminPanel.style.display =
+document.getElementById("adminPanel").style.display =
 "block";
 
 
-status.innerHTML =
+document.getElementById("status").innerHTML =
 "👑 ADMIN AKTIF";
 
 
@@ -414,22 +365,18 @@ status.innerHTML =
 
 }catch(e){
 
-
 alert(e.message);
 
-
 }
 
 
-}
+};
 
 
 
 
 
-/* =========================
-   LOGOUT
-========================= */
+/* LOGOUT */
 
 window.logout = async function(){
 
@@ -437,95 +384,79 @@ window.logout = async function(){
 await signOut(auth);
 
 
-status.innerHTML =
+
+document.getElementById("status").innerHTML =
 "Belum Login";
 
 
-adminPanel.style.display =
+document.getElementById("adminPanel").style.display =
 "none";
 
 
-}
+};
 
 
 
 
 
-/* =========================
-   TAMBAH OUTFIT
-========================= */
+
+/* TAMBAH OUTFIT */
 
 window.tambah = async function(){
 
 
 await addDoc(
 
-collection(
-
-db,
-
-"outfits"
-
-),
-
+collection(db,"outfits"),
 
 {
 
 nama:
-nama.value,
+document.getElementById("nama").value,
 
 
 tipe:
-tipe.value,
+document.getElementById("tipe").value,
 
 
 harga:
-harga.value,
+document.getElementById("harga").value,
 
 
 gambar:
-gambar.value,
+document.getElementById("gambar").value,
 
 
 link:
-link.value
-
+document.getElementById("link").value
 
 }
 
-
 );
 
 
 
-alert(
-"Outfit berhasil ditambahkan"
-);
-
+alert("Outfit berhasil ditambahkan");
 
 
 loadData();
 
 
-}
-     
-/* =========================
-   LOAD KATALOG
-========================= */
+};
+
+
+
+
+
+
+/* LOAD KATALOG */
 
 async function loadData(){
 
 
-const data =
-await getDocs(
+const data = await getDocs(
 
-collection(
-
-db,
-
-"outfits"
-
-)
+collection(db,"outfits")
 
 );
 
@@ -538,75 +469,53 @@ let html = "";
 data.forEach(doc=>{
 
 
-const o =
-doc.data();
+let o = doc.data();
 
 
 
 html += `
 
-
 <div class="item">
-
 
 <img src="${o.gambar}">
 
+<h3>${o.nama}</h3>
 
-<h3>
-${o.nama}
-</h3>
+<p>Kategori : ${o.tipe}</p>
 
-
-<p>
-Kategori : ${o.tipe}
-</p>
-
-
-<p>
-💎 ${o.harga} Robux
-</p>
-
+<p>💎 ${o.harga} Robux</p>
 
 
 <a href="${o.link}" target="_blank">
-
 
 <button>
 BELI SEKARANG
 </button>
 
-
 </a>
-
 
 
 </div>
 
-
 `;
+
 
 
 });
 
 
 
-list.innerHTML =
-html;
-
+document.getElementById("list").innerHTML = html;
 
 
 }
 
 
 
-/* LOAD DATA SAAT WEBSITE DIBUKA */
-
 loadData();
 
 
-
 </script>
-
 
 </body>
 
