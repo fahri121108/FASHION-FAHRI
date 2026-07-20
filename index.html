@@ -1,107 +1,174 @@
-isi dev<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>FAHRI FASHION STORE</title>
 
 <style>
+
+*{
+box-sizing:border-box;
+}
+
 body{
-    margin:0;
-    background:#0f1117;
-    color:white;
-    font-family:Arial;
+margin:0;
+background:
+linear-gradient(135deg,#080b16,#111936,#210d36);
+color:white;
+font-family:Arial,sans-serif;
 }
 
 header{
-    background:#171c29;
-    padding:20px;
-    text-align:center;
+padding:30px;
+text-align:center;
+background:
+rgba(15,20,45,.9);
+border-bottom:1px solid #6366f1;
+box-shadow:0 0 30px #6366f1;
 }
+
+header h1{
+font-size:32px;
+margin:0;
+background:
+linear-gradient(90deg,#60a5fa,#c084fc);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+header p{
+color:#aaa;
+}
+
 
 .container{
-    padding:20px;
-    max-width:1200px;
-    margin:auto;
+max-width:1200px;
+margin:auto;
+padding:20px;
 }
+
 
 .card{
-    background:#1b2130;
-    padding:20px;
-    border-radius:15px;
-    margin-bottom:20px;
+background:
+rgba(25,30,55,.85);
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+border:1px solid rgba(255,255,255,.1);
+box-shadow:0 0 25px rgba(0,0,0,.3);
+backdrop-filter:blur(10px);
 }
+
 
 input,select{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border:none;
-    border-radius:10px;
-    box-sizing:border-box;
+width:100%;
+padding:13px;
+margin-top:10px;
+border-radius:12px;
+border:none;
+background:#0b1224;
+color:white;
+border:1px solid #334155;
 }
+
 
 button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
+width:100%;
+padding:13px;
+margin-top:10px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+color:white;
+background:
+linear-gradient(90deg,#4f46e5,#9333ea);
+transition:.3s;
 }
+
+
+button:hover{
+transform:scale(1.03);
+box-shadow:0 0 20px #9333ea;
+}
+
 
 .grid{
-    display:grid;
-    grid-template-columns:
-    repeat(auto-fill,minmax(220px,1fr));
-    gap:15px;
+display:grid;
+grid-template-columns:
+repeat(auto-fill,minmax(220px,1fr));
+gap:20px;
 }
+
 
 .item{
-    background:#1b2130;
-    border-radius:15px;
-    padding:15px;
+background:
+rgba(25,30,55,.9);
+padding:15px;
+border-radius:20px;
+border:1px solid rgba(255,255,255,.1);
 }
+
 
 .item img{
-    width:100%;
-    height:260px;
-    object-fit:cover;
-    border-radius:10px;
+width:100%;
+height:260px;
+object-fit:cover;
+border-radius:15px;
 }
+
+
+a{
+text-decoration:none;
+}
+
+
 </style>
+
 </head>
+
+
 <body>
 
+
 <header>
+
 <h1>FAHRI FASHION STORE</h1>
-<p>Roblox Outfit Catalog</p>
+
+<p>🔥 Roblox Outfit Premium Catalog 🔥</p>
+
 </header>
+
 
 <div class="container">
 
+
 <div class="card">
 
-<h2>Login / Register</h2>
+<h2>🔐 Login / Register</h2>
 
-<input id="email"
-placeholder="Email">
+<input id="email" placeholder="Email">
 
-<input id="password"
-type="password"
-placeholder="Password">
+<input id="password" type="password" placeholder="Password">
+
 
 <button onclick="register()">
-Daftar
+DAFTAR
 </button>
+
 
 <button onclick="login()">
-Login
+LOGIN
 </button>
 
+
 <button onclick="logout()">
-Logout
+LOGOUT
 </button>
+
 
 <p id="status">
 Belum Login
@@ -109,304 +176,438 @@ Belum Login
 
 </div>
 
-<div id="adminPanel"
-class="card"
-style="display:none;">
 
-<h2>Panel Admin</h2>
+<div id="adminPanel" class="card" style="display:none;">
 
-<input id="nama"
-placeholder="Nama Outfit">
+
+<h2>👑 ADMIN PANEL</h2>
+
+
+<input id="nama" placeholder="Nama Outfit">
+
 
 <select id="tipe">
 
 <option>Baju</option>
+
 <option>Celana</option>
+
 <option>Setelan</option>
 
 </select>
 
-<input id="harga"
-placeholder="Harga Robux">
 
-<input id="gambar"
-placeholder="Link Thumbnail">
+<input id="harga" placeholder="Harga Robux">
 
-<input id="link"
-placeholder="Link Roblox Item">
+
+<input id="gambar" placeholder="Link Thumbnail">
+
+
+<input id="link" placeholder="Link Roblox Item">
+
 
 <button onclick="tambah()">
-Tambah Outfit
++ TAMBAH OUTFIT
 </button>
 
-</div>
-
-<h2>Katalog Outfit</h2>
-
-<div id="list"
-class="grid"></div>
 
 </div>
 
+
+<h2>🔥 KATALOG OUTFIT</h2>
+
+
+<div id="list" class="grid"></div>
+
+
+</div>
 <script type="module">
 
 import { initializeApp }
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import {
- getAuth,
- createUserWithEmailAndPassword,
- signInWithEmailAndPassword,
- signOut
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
- getFirestore,
- collection,
- addDoc,
- getDocs
+
+getAuth,
+
+createUserWithEmailAndPassword,
+
+signInWithEmailAndPassword,
+
+signOut
+
 }
+
 from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+import {
+
+getFirestore,
+
+collection,
+
+addDoc,
+
+getDocs
+
+}
+
+from
+
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-/* ===========================
-ISI CONFIG FIREBASE DISINI
-=========================== */
+
+/* =========================
+   FIREBASE CONFIG
+========================= */
 
 const firebaseConfig = {
 
- apiKey:
- "ISI_SENDIRI",
+apiKey:
+"AIzaSyDuQmsUHotG-lW9tm5LKabUyw_ARwt_W2I",
 
- authDomain:
- "ISI_SENDIRI",
+authDomain:
+"fashion-fahri-39262.firebaseapp.com",
 
- projectId:
- "ISI_SENDIRI",
+projectId:
+"fashion-fahri-39262",
 
- storageBucket:
- "ISI_SENDIRI",
+storageBucket:
+"fashion-fahri-39262.firebasestorage.app",
 
- messagingSenderId:
- "ISI_SENDIRI",
+messagingSenderId:
+"647011821518",
 
- appId:
- "ISI_SENDIRI"
+appId:
+"1:647011821518:web:279811ff7821e75bf32d9f",
+
+measurementId:
+"G-4491S31VK2"
 
 };
 
-/* ======================= */
+
 
 const app =
 initializeApp(firebaseConfig);
 
+
 const auth =
 getAuth(app);
+
 
 const db =
 getFirestore(app);
 
 
-/* ===========================
-ISI EMAIL ADMIN DISINI
-=========================== */
+
+/* =========================
+   ADMIN ACCOUNT
+========================= */
 
 const ADMIN_EMAIL =
-"ISI_EMAIL_ADMIN";
-
-/* ===========================
-ISI DEVICE ADMIN DISINI
-contoh:
-FAHRI_HP_2026
-=========================== */
-
-const ADMIN_DEVICE =
-"ISI_DEVICE";
+"Fahri@admin.com";
 
 
-window.register =
-async function(){
-
-    try{
-
-        await
-        createUserWithEmailAndPassword(
-            auth,
-            email.value,
-            password.value
-        );
-
-        alert(
-        "Akun berhasil dibuat"
-        );
-
-    }catch(e){
-
-        alert(e.message);
-
-    }
-
-}
+const ADMIN_PASSWORD =
+"Fahz121108";
 
 
-window.login =
-async function(){
 
-    try{
+/* =========================
+   REGISTER
+========================= */
 
-        await
-        signInWithEmailAndPassword(
-            auth,
-            email.value,
-            password.value
-        );
+window.register = async function(){
 
-        status.innerText =
-        "Login Berhasil";
+try{
 
-        const user =
-        auth.currentUser;
 
-        const device =
-        localStorage.getItem(
-            "admin_device"
-        );
+await createUserWithEmailAndPassword(
 
-        if(
-            user.email
-            ===
-            ADMIN_EMAIL
+auth,
 
-            &&
+email.value,
 
-            device
-            ===
-            ADMIN_DEVICE
-        ){
+password.value
 
-            adminPanel.style.display =
-            "block";
+);
 
-        }
 
-    }catch(e){
+alert(
+"Akun berhasil dibuat"
+);
 
-        alert(e.message);
 
-    }
+}catch(e){
+
+alert(e.message);
 
 }
 
 
-window.logout =
-async function(){
+}
 
-    await signOut(auth);
 
-    status.innerText =
-    "Belum Login";
 
-    adminPanel.style.display =
-    "none";
+
+
+/* =========================
+   LOGIN
+========================= */
+
+window.login = async function(){
+
+try{
+
+
+await signInWithEmailAndPassword(
+
+auth,
+
+email.value,
+
+password.value
+
+);
+
+
+
+const user =
+auth.currentUser;
+
+
+
+status.innerHTML =
+"✅ Login berhasil";
+
+
+
+if(
+
+user.email === ADMIN_EMAIL
+
+&&
+
+password.value === ADMIN_PASSWORD
+
+){
+
+
+adminPanel.style.display =
+"block";
+
+
+status.innerHTML =
+"👑 ADMIN AKTIF";
+
 
 }
 
 
-window.tambah =
-async function(){
 
-    await addDoc(
+}catch(e){
 
-        collection(
-            db,
-            "outfits"
-        ),
 
-        {
+alert(e.message);
 
-            nama:
-            nama.value,
-
-            tipe:
-            tipe.value,
-
-            harga:
-            harga.value,
-
-            gambar:
-            gambar.value,
-
-            link:
-            link.value
-
-        }
-
-    );
-
-    loadData();
 
 }
 
 
-async function loadData(){
+}
 
-    const query =
-    await getDocs(
 
-        collection(
-            db,
-            "outfits"
-        )
 
-    );
 
-    let html = "";
 
-    query.forEach(doc=>{
+/* =========================
+   LOGOUT
+========================= */
 
-        const o =
-        doc.data();
+window.logout = async function(){
 
-        html += `
 
-        <div class="item">
+await signOut(auth);
 
-        <img src="${o.gambar}">
 
-        <h3>${o.nama}</h3>
+status.innerHTML =
+"Belum Login";
 
-        <p>${o.tipe}</p>
 
-        <p>${o.harga} Robux</p>
+adminPanel.style.display =
+"none";
 
-        <a
-        href="${o.link}"
-        target="_blank">
-
-        <button>
-        Beli di Roblox
-        </button>
-
-        </a>
-
-        </div>
-
-        `;
-
-    });
-
-    list.innerHTML =
-    html;
 
 }
+
+
+
+
+
+/* =========================
+   TAMBAH OUTFIT
+========================= */
+
+window.tambah = async function(){
+
+
+await addDoc(
+
+collection(
+
+db,
+
+"outfits"
+
+),
+
+
+{
+
+nama:
+nama.value,
+
+
+tipe:
+tipe.value,
+
+
+harga:
+harga.value,
+
+
+gambar:
+gambar.value,
+
+
+link:
+link.value
+
+
+}
+
+
+);
+
+
+
+alert(
+"Outfit berhasil ditambahkan"
+);
+
+
 
 loadData();
 
+
+}
+     
+/* =========================
+   LOAD KATALOG
+========================= */
+
+async function loadData(){
+
+
+const data =
+await getDocs(
+
+collection(
+
+db,
+
+"outfits"
+
+)
+
+);
+
+
+
+let html = "";
+
+
+
+data.forEach(doc=>{
+
+
+const o =
+doc.data();
+
+
+
+html += `
+
+
+<div class="item">
+
+
+<img src="${o.gambar}">
+
+
+<h3>
+${o.nama}
+</h3>
+
+
+<p>
+Kategori : ${o.tipe}
+</p>
+
+
+<p>
+💎 ${o.harga} Robux
+</p>
+
+
+
+<a href="${o.link}" target="_blank">
+
+
+<button>
+BELI SEKARANG
+</button>
+
+
+</a>
+
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+
+list.innerHTML =
+html;
+
+
+
+}
+
+
+
+/* LOAD DATA SAAT WEBSITE DIBUKA */
+
+loadData();
+
+
+
 </script>
 
+
 </body>
+
 </html>
