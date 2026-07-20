@@ -4,207 +4,939 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FAHRI FASHION STORE</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#0f1117;color:#fff}
-.page{display:none;min-height:100vh;padding:20px;background-size:cover}
-.show{display:block}
-.panel,.card{background:rgba(20,20,30,.85);border-radius:20px;padding:15px;margin-bottom:15px}
-input,button,select{width:100%;padding:12px;border:none;border-radius:12px;margin-top:8px}
-.banner-wrap{display:flex;overflow:hidden;gap:15px}
-.banner{min-width:250px;height:120px;background:#222;border-radius:20px;display:flex;align-items:center;justify-content:center;animation:slide 15s linear infinite}
-@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-300px)}}
-.category-title,.admin-title{padding:15px;background:#222;border-radius:15px;cursor:pointer;margin-top:10px;display:flex;justify-content:space-between}
-.product-row,.admin-content{display:none}
-.product-row{overflow-x:auto;gap:12px;padding:12px}
-.product{min-width:170px;background:#1c2230;padding:10px;border-radius:15px;border:2px solid #5ff}
-.hint{text-align:center;font-size:13px;color:#bbb}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f1117;
+color:#fff;
+}
+
+.page{
+display:none;
+min-height:100vh;
+padding:20px;
+background-size:cover;
+}
+
+.show{
+display:block;
+}
+
+.panel,
+.card{
+background:rgba(20,20,30,.90);
+border-radius:20px;
+padding:15px;
+margin-bottom:15px;
+}
+
+input,
+button,
+select{
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+margin-top:8px;
+font-size:15px;
+}
+
+button{
+cursor:pointer;
+background:#00c3ff;
+color:#fff;
+font-weight:bold;
+transition:.3s;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.banner-wrap{
+display:flex;
+overflow:hidden;
+gap:15px;
+margin-bottom:15px;
+}
+
+.banner{
+min-width:250px;
+height:120px;
+background:#222;
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+font-weight:bold;
+animation:slide 15s linear infinite;
+}
+
+@keyframes slide{
+from{
+transform:translateX(0);
+}
+to{
+transform:translateX(-300px);
+}
+}
+
+.category-title,
+.admin-title{
+padding:15px;
+background:#222;
+border-radius:15px;
+cursor:pointer;
+margin-top:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-weight:bold;
+}
+
+.product-row{
+display:none;
+overflow-x:auto;
+gap:12px;
+padding:12px;
+}
+
+.admin-content{
+display:none;
+}
+
+.product{
+position:relative;
+min-width:170px;
+background:#1c2230;
+padding:10px;
+border-radius:15px;
+overflow:hidden;
+z-index:1;
+}
+
+.product::before{
+content:"";
+position:absolute;
+top:-50%;
+left:-50%;
+width:200%;
+height:200%;
+background:conic-gradient(
+red,
+orange,
+yellow,
+lime,
+cyan,
+blue,
+purple,
+magenta,
+red
+);
+animation:borderRGB 3s linear infinite;
+z-index:-2;
+}
+
+.product::after{
+content:"";
+position:absolute;
+inset:3px;
+background:#1c2230;
+border-radius:12px;
+z-index:-1;
+}
+
+@keyframes borderRGB{
+100%{
+transform:rotate(360deg);
+}
+}
+
+.product img{
+width:100%;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.hint{
+text-align:center;
+font-size:13px;
+color:#bbb;
+padding:10px;
+}
+
+::-webkit-scrollbar{
+height:6px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#00c3ff;
+border-radius:20px;
+}
 </style>
 </head>
+
 <body>
 
 <div id="loginPage" class="page show">
+
 <div class="panel">
+
 <h2>Login</h2>
+
 <input id="email" placeholder="Email">
-<input id="password" placeholder="Password">
+
+<input id="password" type="password" placeholder="Password">
+
 <button onclick="login()">LOGIN</button>
+
 <button onclick="showRegister()">DAFTAR</button>
+
 </div>
+
 </div>
 
 <div id="registerPage" class="page">
+
 <div class="panel">
+
 <h2>Daftar</h2>
+
 <input id="regUser" placeholder="Username">
+
 <input id="regEmail" placeholder="Email">
-<input id="regPass" placeholder="Password">
+
+<input id="regPass" type="password" placeholder="Password">
+
 <button onclick="register()">BUAT AKUN</button>
+
 <button onclick="showLogin()">Kembali Login</button>
-</div>
+
 </div>
 
-<div id="userPage" class="page">
+  </div>
+  <div id="userPage" class="page">
+
 <div class="banner-wrap">
 <div class="banner">BANNER 1</div>
 <div class="banner">BANNER 2</div>
 <div class="banner">BANNER 3</div>
 </div>
 
-<div class="card">👀 Total Pengunjung : <span id="visitor">0</span></div>
+<div class="card">
+👀 Total Pengunjung :
+<span id="visitor">0</span>
+</div>
 
 <div id="catalog"></div>
-<button onclick="logout()">LOGOUT</button>
+
+<button onclick="logout()">
+LOGOUT
+</button>
+
 </div>
 
 <div id="adminPage" class="page">
-<div class="card">👥 User: <span id="sUser">0</span> | 📦 Produk: <span id="sProduk">0</span></div>
 
-<div class="admin-title" onclick="toggle('produkBox')">📦 PRODUK <span>▼</span></div>
-<div id="produkBox" class="admin-content">
-<input id="pNama" placeholder="Nama Produk">
-<input id="pKategori" placeholder="Kategori">
-<input id="pHarga" placeholder="Harga">
-<input id="pGambar" placeholder="Link Gambar">
-<input id="pLink" placeholder="Link Order">
-<button onclick="saveProduct()">Tambah Produk</button>
-<div id="adminProduk"></div>
+<div class="card">
+👥 User:
+<span id="sUser">0</span>
+
+|
+
+📦 Produk:
+<span id="sProduk">0</span>
 </div>
 
-<div class="admin-title" onclick="toggle('userBox')">👥 USER <span>▼</span></div>
+<div class="admin-title" onclick="toggle('kategoriBox')">
+📂 KATEGORI
+<span>▼</span>
+</div>
+
+<div id="kategoriBox" class="admin-content">
+
+<input
+id="namaKategori"
+placeholder="Nama Kategori Baru">
+
+<button onclick="buatKategori()">
+Tambah Kategori
+</button>
+
+<div id="listKategori"></div>
+
+</div>
+
+<div class="admin-title" onclick="toggle('produkBox')">
+📦 PRODUK
+<span>▼</span>
+</div>
+
+<div id="produkBox" class="admin-content">
+
+<input
+id="pNama"
+placeholder="Nama Produk">
+
+<select id="pKategori">
+</select>
+
+<input
+id="pHarga"
+placeholder="Harga">
+
+<input
+id="pGambar"
+placeholder="Link Gambar">
+
+<input
+id="pLink"
+placeholder="Link Order">
+
+<button onclick="saveProduct()">
+Tambah Produk
+</button>
+
+<div id="adminProduk"></div>
+
+</div>
+
+<div class="admin-title"
+onclick="toggle('userBox')">
+👥 USER
+<span>▼</span>
+</div>
+
 <div id="userBox" class="admin-content">
 <div id="adminUsers"></div>
 </div>
 
-<div class="admin-title" onclick="toggle('orderBox')">🛒 ORDER <span>▼</span></div>
+<div class="admin-title"
+onclick="toggle('orderBox')">
+🛒 ORDER
+<span>▼</span>
+</div>
+
 <div id="orderBox" class="admin-content">
 <div id="adminOrders"></div>
 </div>
 
-<button onclick="logout()">LOGOUT</button>
+<button onclick="logout()">
+LOGOUT
+</button>
+
 </div>
 
 <script>
+
 const ADMIN_EMAIL="admin@fahri.com";
 const ADMIN_PASSWORD="123456";
 
-let users=JSON.parse(localStorage.users||"[]");
-let products=JSON.parse(localStorage.products||"[]");
-let orders=JSON.parse(localStorage.orders||"[]");
-let visit=Number(localStorage.visit||0)+1;
+let users=
+JSON.parse(localStorage.users||"[]");
+
+let products=
+JSON.parse(localStorage.products||"[]");
+
+let orders=
+JSON.parse(localStorage.orders||"[]");
+
+let kategoriAdmin=
+JSON.parse(localStorage.kategori||"[]");
+
+let visit=
+Number(localStorage.visit||0)+1;
+
 localStorage.visit=visit;
+
 visitor.innerText=visit;
 
-function showLogin(){hide();loginPage.classList.add("show")}
-function showRegister(){hide();registerPage.classList.add("show")}
-function hide(){document.querySelectorAll('.page').forEach(x=>x.classList.remove('show'))}
+function hide(){
+
+document
+.querySelectorAll(".page")
+.forEach(x=>x.classList.remove("show"));
+
+}
+
+function showLogin(){
+
+hide();
+
+loginPage.classList.add("show");
+
+}
+
+function showRegister(){
+
+hide();
+
+registerPage.classList.add("show");
+
+}
 
 function register(){
-users.push({u:regUser.value,e:regEmail.value,p:regPass.value});
-localStorage.users=JSON.stringify(users);
-localStorage.current=regEmail.value;
+
+users.push({
+
+u:regUser.value,
+e:regEmail.value,
+p:regPass.value
+
+});
+
+localStorage.users=
+JSON.stringify(users);
+
+localStorage.current=
+regEmail.value;
+
 loadUser();
+
 }
 
 function login(){
-if(email.value===ADMIN_EMAIL&&password.value===ADMIN_PASSWORD){
-hide();adminPage.classList.add("show");loadAdmin();return;
-}
-let u=users.find(x=>x.e===email.value&&x.p===password.value);
-if(!u)return alert("Login gagal");
-localStorage.current=u.e;
-loadUser();
+
+if(
+email.value===ADMIN_EMAIL
+&&
+password.value===ADMIN_PASSWORD
+){
+
+hide();
+
+adminPage.classList.add("show");
+
+loadAdmin();
+
+return;
+
 }
 
-function logout(){localStorage.removeItem("current");location.reload()}
+let u=
+users.find(x=>
+
+x.e===email.value
+&&
+x.p===password.value
+
+);
+
+if(!u){
+
+alert("Login gagal");
+
+return;
+
+}
+
+localStorage.current=u.e;
+
+loadUser();
+
+}
+
+function logout(){
+
+localStorage.removeItem("current");
+
+location.reload();
+
+}
 
 function toggle(id){
+
 let e=document.getElementById(id);
-e.style.display=e.style.display==="block"||e.style.display==="flex"?"none":"block";
+
+e.style.display=
+e.style.display==="block"
+?
+"none"
+:
+"block";
+
+}
+  function buatKategori(){
+
+if(!namaKategori.value)return;
+
+kategoriAdmin.push(namaKategori.value);
+
+localStorage.kategori=
+JSON.stringify(kategoriAdmin);
+
+namaKategori.value="";
+
+loadAdmin();
+
 }
 
 function loadUser(){
-hide();userPage.classList.add("show");
-let kategori={"KATALOG BAJU":[],"KATALOG CELANA":[],"KATALOG SETELAN":[],"KATALOG JOKI":[]};
+
+hide();
+
+userPage.classList.add("show");
+
+let kategori={};
+
+kategoriAdmin.forEach(x=>{
+
+kategori[x]=[];
+
+});
+
 products.forEach(p=>{
-if(!kategori[p.k])kategori[p.k]=[];
+
+if(!kategori[p.k]){
+
+kategori[p.k]=[];
+
+}
+
 kategori[p.k].push(p);
+
 });
-let html="";
-for(let k in kategori){
-let id=k.replace(/\s/g,'');
-html+=`<div class='card'>
-<div class='category-title' onclick="openCat('${id}')">${k}<span>▼</span></div>
-<div id='${id}' class='product-row'>`;
-if(kategori[k].length===0){
-html+=`<div class='hint'>Produk belum tersedia.</div>`;
-}else{
-kategori[k].forEach(p=>{
-html+=`<div class='product'>
-<img src='${p.g}' style='width:100%;border-radius:10px'>
-<h4>${p.n}</h4>
-<p>💎 ${p.h}</p>
-<button onclick="order('${p.n}','${p.l}')">ORDER</button>
+
+if(Object.keys(kategori).length===0){
+
+catalog.innerHTML=`
+<div class="card">
+Belum ada kategori.
+Silakan tambahkan kategori melalui Panel Admin.
 </div>`;
+
+return;
+
+}
+
+let html="";
+
+for(let k in kategori){
+
+let id=k.replace(/\s/g,'');
+
+html+=`
+<div class="card">
+
+<div
+class="category-title"
+onclick="openCat('${id}')">
+
+${k}
+
+<span>▼</span>
+
+</div>
+
+<div
+id="${id}"
+class="product-row">
+`;
+
+if(kategori[k].length===0){
+
+html+=`
+
+<div class="hint">
+
+Belum ada produk.
+
+</div>
+
+`;
+
+}else{
+
+kategori[k].forEach(p=>{
+
+html+=`
+
+<div class="product">
+
+<img src="${p.g}">
+
+<h4>${p.n}</h4>
+
+<p>💎 ${p.h}</p>
+
+<button onclick="order('${p.n}','${p.l}')">
+
+ORDER
+
+</button>
+
+</div>
+
+`;
+
 });
+
 }
-html+=`</div><div id='h${id}' class='hint' style='display:none'>👈 Geser kiri/kanan untuk melihat produk lainnya 👉</div></div>`;
+
+html+=`
+
+</div>
+
+<div
+id="h${id}"
+class="hint"
+style="display:none">
+
+👈 Geser kiri / kanan untuk melihat produk 👉
+
+</div>
+
+</div>
+
+`;
+
 }
+
 catalog.innerHTML=html;
+
 }
 
 function openCat(id){
+
 let a=document.getElementById(id);
-let h=document.getElementById('h'+id);
-a.style.display=a.style.display==='flex'?'none':'flex';
-h.style.display=h.style.display==='block'?'none':'block';
+
+let h=document.getElementById("h"+id);
+
+if(a.style.display==="flex"){
+
+a.style.display="none";
+
+h.style.display="none";
+
+}else{
+
+a.style.display="flex";
+
+h.style.display="block";
+
+}
+
 }
 
 function saveProduct(){
-products.push({n:pNama.value,k:pKategori.value,h:pHarga.value,g:pGambar.value,l:pLink.value});
-localStorage.products=JSON.stringify(products);
-loadAdmin();
-}
 
-function loadAdmin(){
-hide();adminPage.classList.add("show");
+products.push({
+
+n:pNama.value,
+
+k:pKategori.value,
+
+h:pHarga.value,
+
+g:pGambar.value,
+
+l:pLink.value
+
+});
+
+localStorage.products=
+JSON.stringify(products);
+
+loadAdmin();
+
+  }
+  function loadAdmin(){
+
+hide();
+
+adminPage.classList.add("show");
+
 sUser.innerText=users.length;
+
 sProduk.innerText=products.length;
 
-adminProduk.innerHTML=products.map((p,i)=>`
-<div class='card'>
-${p.n}<br>${p.k}<br>
-<button onclick='editP(${i})'>EDIT</button>
-<button onclick='delP(${i})'>HAPUS</button>
-</div>`).join("");
+/* ====== KATEGORI ====== */
 
-adminUsers.innerHTML=users.map((u,i)=>`
-<div class='card'>
-👤 ${u.u}<br>${u.e}
-<button onclick='editUser(${i})'>Edit Username</button>
-<button onclick='delUser(${i})'>Hapus Data</button>
-</div>`).join("");
+pKategori.innerHTML="";
 
-adminOrders.innerHTML=orders.map((o,i)=>`
-<div class='card'>
+listKategori.innerHTML="";
+
+kategoriAdmin.forEach((k,i)=>{
+
+pKategori.innerHTML+=`
+<option value="${k}">
+${k}
+</option>
+`;
+
+listKategori.innerHTML+=`
+
+<div class="card">
+
+<b>${k}</b>
+
+<br><br>
+
+<button onclick="editKategori(${i})">
+EDIT
+</button>
+
+<button onclick="hapusKategori(${i})">
+HAPUS
+</button>
+
+</div>
+
+`;
+
+});
+
+/* ====== PRODUK ====== */
+
+adminProduk.innerHTML=
+products.map((p,i)=>`
+
+<div class="card">
+
+<b>${p.n}</b>
+
+<br>
+
+Kategori : ${p.k}
+
+<br>
+
+Harga : ${p.h}
+
+<br><br>
+
+<button onclick="editP(${i})">
+EDIT
+</button>
+
+<button onclick="delP(${i})">
+HAPUS
+</button>
+
+</div>
+
+`).join("");
+
+/* ===== USER ===== */
+
+adminUsers.innerHTML=
+users.map((u,i)=>`
+
+<div class="card">
+
+👤 ${u.u}
+
+<br>
+
+${u.e}
+
+<br><br>
+
+<button onclick="editUser(${i})">
+
+Edit Username
+
+</button>
+
+<button onclick="delUser(${i})">
+
+Hapus User
+
+</button>
+
+</div>
+
+`).join("");
+
+/* ===== ORDER ===== */
+
+adminOrders.innerHTML=
+orders.map((o,i)=>`
+
+<div class="card">
+
 ${o}
-<button onclick='delOrder(${i})'>Hapus</button>
-</div>`).join("");
+
+<br><br>
+
+<button onclick="delOrder(${i})">
+
+Hapus
+
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+function editKategori(i){
+
+let n=
+prompt(
+"Nama kategori baru",
+kategoriAdmin[i]
+);
+
+if(!n)return;
+
+kategoriAdmin[i]=n;
+
+localStorage.kategori=
+JSON.stringify(kategoriAdmin);
+
+products.forEach(p=>{
+
+if(p.k===kategoriAdmin[i]){
+
+p.k=n;
+
+}
+
+});
+
+localStorage.products=
+JSON.stringify(products);
+
+loadAdmin();
+
+}
+
+function hapusKategori(i){
+
+let nama=
+kategoriAdmin[i];
+
+kategoriAdmin.splice(i,1);
+
+products=
+products.filter(p=>p.k!==nama);
+
+localStorage.kategori=
+JSON.stringify(kategoriAdmin);
+
+localStorage.products=
+JSON.stringify(products);
+
+loadAdmin();
+
 }
 
 function editP(i){
+
 let p=products[i];
-pNama.value=p.n;pKategori.value=p.k;pHarga.value=p.h;pGambar.value=p.g;pLink.value=p.l;
+
+pNama.value=p.n;
+
+pKategori.value=p.k;
+
+pHarga.value=p.h;
+
+pGambar.value=p.g;
+
+pLink.value=p.l;
+
 products.splice(i,1);
-localStorage.products=JSON.stringify(products);
+
+localStorage.products=
+JSON.stringify(products);
+
+loadAdmin();
+
 }
-function delP(i){products.splice(i,1);localStorage.products=JSON.stringify(products);loadAdmin()}
-function editUser(i){
-let n=prompt("Username baru",users[i].u);
-if(n){users[i].u=n;localStorage.users=JSON.stringify(users);loadAdmin();}
+
+function delP(i){
+
+products.splice(i,1);
+
+localStorage.products=
+JSON.stringify(products);
+
+loadAdmin();
+
+  }
+  function editUser(i){
+
+let n=
+prompt(
+"Username baru",
+users[i].u
+);
+
+if(n){
+
+users[i].u=n;
+
+localStorage.users=
+JSON.stringify(users);
+
+loadAdmin();
+
 }
-function delUser(i){users.splice(i,1);localStorage.users=JSON.stringify(users);loadAdmin();}
-function order(n,l){orders.push(n);localStorage.orders=JSON.stringify(orders);if(l)window.open(l)}
-function delOrder(i){orders.splice(i,1);localStorage.orders=JSON.stringify(orders);loadAdmin()}
+
+}
+
+
+function delUser(i){
+
+users.splice(i,1);
+
+localStorage.users=
+JSON.stringify(users);
+
+loadAdmin();
+
+}
+
+
+function order(n,l){
+
+orders.push(n);
+
+localStorage.orders=
+JSON.stringify(orders);
+
+if(l){
+
+window.open(l);
+
+}
+
+}
+
+
+function delOrder(i){
+
+orders.splice(i,1);
+
+localStorage.orders=
+JSON.stringify(orders);
+
+loadAdmin();
+
+}
+
+
+/* AUTO LOAD JIKA SUDAH LOGIN */
+
+if(localStorage.current){
+
+loadUser();
+
+}
+
 </script>
+
 </body>
 </html>
+  
+  
