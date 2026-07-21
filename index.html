@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FAHRI STORE PANEL</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#080c14;
+color:white;
+}
+
+
+/* LOGIN */
+
+#loginPage{
+
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+
+}
+
+
+.login-box{
+
+width:380px;
+background:#121927;
+padding:30px;
+border-radius:20px;
+
+box-shadow:
+0 0 30px rgba(0,200,255,.25);
+
+}
+
+
+.login-box h1{
+
+text-align:center;
+margin-bottom:25px;
+
+}
+
+
+input{
+
+width:100%;
+padding:15px;
+
+margin-top:15px;
+
+border:none;
+outline:none;
+
+border-radius:12px;
+
+background:#080c14;
+
+color:white;
+
+}
+
+
+.btn{
+
+width:100%;
+
+padding:15px;
+
+margin-top:15px;
+
+border:none;
+
+border-radius:12px;
+
+background:#008cff;
+
+color:white;
+
+font-size:16px;
+
+cursor:pointer;
+
+}
+
+
+
+/* DASHBOARD */
+
+#dashboard{
+
+display:none;
+
+}
+
+
+.sidebar{
+
+position:fixed;
+
+width:250px;
+
+height:100vh;
+
+background:#121927;
+
+padding:20px;
+
+}
+
+
+
+.logo{
+
+font-size:25px;
+
+font-weight:bold;
+
+margin-bottom:30px;
+
+}
+
+
+.menu button{
+
+width:100%;
+
+padding:14px;
+
+margin-top:10px;
+
+background:#080c14;
+
+border:none;
+
+border-radius:12px;
+
+color:white;
+
+cursor:pointer;
+
+}
+
+
+.content{
+
+margin-left:270px;
+
+padding:30px;
+
+}
+
+
+
+.card{
+
+background:#121927;
+
+padding:20px;
+
+border-radius:20px;
+
+margin-bottom:20px;
+
+}
+
+
+
+.stats{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(200px,1fr));
+
+gap:20px;
+
+}
+
+
+
+/* PAGE */
+
+
+.page{
+
+display:none;
+
+}
+
+
+/* PRODUK */
+
+
+.product{
+
+background:#121927;
+
+border-radius:20px;
+
+overflow:hidden;
+
+margin-top:20px;
+
+}
+
+
+
+.product img{
+
+width:100%;
+
+height:200px;
+
+object-fit:cover;
+
+}
+
+
+.product-info{
+
+padding:20px;
+
+}
+
+
+
+/* ADMIN */
+
+
+#adminMenu{
+
+display:none;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- LOGIN -->
+
+
+<div id="loginPage">
+
+
+<div class="login-box">
+
+
+<h1>
+FAHRI STORE
+</h1>
+
+
+<input
+id="email"
+placeholder="Email">
+
+
+<input
+id="password"
+type="password"
+placeholder="Password">
+
+
+<button class="btn"
+onclick="login()">
+
+LOGIN
+
+</button>
+
+
+<button class="btn"
+onclick="register()">
+
+DAFTAR
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- DASHBOARD -->
+
+
+<div id="dashboard">
+
+
+<div class="sidebar">
+
+
+<div class="logo">
+
+FAHRI PANEL
+
+</div>
+
+
+<div class="menu">
+
+
+<button onclick="openPage('home')">
+
+🏠 Dashboard
+
+</button>
+
+
+<button onclick="openPage('produk')">
+
+📦 Produk
+
+</button>
+
+
+<button onclick="openPage('order')">
+
+🛒 Order
+
+</button>
+
+
+
+<div id="adminMenu">
+
+
+<button onclick="openPage('admin')">
+
+👑 Admin Panel
+
+</button>
+
+
+</div>
+
+
+
+<button onclick="logout()">
+
+🚪 Logout
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<div class="content">
+
+
+<!-- HOME -->
+
+
+<div id="home"
+class="page"
+style="display:block;">
+
+
+<div class="stats">
+
+
+<div class="card">
+
+<h3>Total Produk</h3>
+
+<h1 id="jumlahProduk">
+
+0
+
+</h1>
+
+</div>
+
+
+<div class="card">
+
+<h3>Total Order</h3>
+
+<h1 id="jumlahOrder">
+
+0
+
+</h1>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- PRODUK -->
+
+
+<div id="produk"
+class="page">
+
+
+<h1>
+PRODUK
+</h1>
+<input
+id="searchProduk"
+onkeyup="searchProduk()"
+placeholder="Cari produk...">
+
+<div id="productList">
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- ORDER -->
+
+
+<div id="order"
+class="page">
+
+
+<h1>
+ORDER SAYA
+</h1>
+
+
+<div id="orderList">
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- ADMIN -->
+
+
+<div id="admin"
+class="page">
+
+
+<h1>
+ADMIN PANEL
+</h1>
+
+
+<div class="card">
+
+
+<h2>
+Tambah Produk
+</h2>
+
+
+<input
+id="namaProduk"
+placeholder="Nama Produk">
+
+
+<input
+id="hargaProduk"
+placeholder="Harga">
+
+
+<input
+id="gambarProduk"
+placeholder="Link Gambar">
+
+
+<input
+id="deskripsiProduk"
+placeholder="Deskripsi">
+
+
+
+<button class="btn"
+onclick="tambahProduk()">
+
+Tambah Produk
+
+</button>
+
+
+</div>
+
+
+
+<div id="adminProductList">
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- FIREBASE SCRIPT -->
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+
+<script>
+
+
+// GANTI DENGAN CONFIG FIREBASE KAMU
+
+const firebaseConfig = {
+
+apiKey:"ISI_API_KEY",
+
+authDomain:"NAMA_PROJECT.firebaseapp.com",
+
+projectId:"NAMA_PROJECT",
+
+storageBucket:"NAMA_PROJECT.appspot.com",
+
+messagingSenderId:"ISI_MESSAGING_ID",
+
+appId:"ISI_APP_ID"
+
+};
+
+
+
+firebase.initializeApp(firebaseConfig);
+
+
+
+const auth = firebase.auth();
+
+const db = firebase.firestore();
+
+
+
+
+
+// =================
+// REGISTER
+// =================
+
+
+async function register(){
+
+
+let email =
+document.getElementById("email").value;
+
+
+let password =
+document.getElementById("password").value;
+
+
+
+if(!email || !password){
+
+alert("Email dan password wajib diisi");
+
+return;
+
+}
+
+
+
+try{
+
+
+let user = await
+
+auth.createUserWithEmailAndPassword(
+
+email,
+
+password
+
+);
+
+
+
+await db.collection("users")
+
+.doc(user.user.uid)
+
+.set({
+
+email:email,
+
+role:"user",
+
+saldo:0,
+
+createdAt:Date.now()
+
+});
+
+
+
+alert("Berhasil daftar");
+
+
+
+}
+
+catch(error){
+
+
+alert(error.message);
+
+
+}
+
+
+}
+
+
+
+
+
+
+// =================
+// LOGIN
+// =================
+
+
+async function login(){
+
+
+let email =
+
+document.getElementById("email").value;
+
+
+
+let password =
+
+document.getElementById("password").value;
+
+
+
+try{
+
+
+await auth.signInWithEmailAndPassword(
+
+email,
+
+password
+
+);
+
+
+
+}
+
+catch(error){
+
+
+alert(error.message);
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+// =================
+// LOGOUT
+// =================
+
+
+function logout(){
+
+
+auth.signOut();
+
+
+}
+
+
+
+
+
+
+
+
+// =================
+// CEK USER LOGIN
+// =================
+
+
+auth.onAuthStateChanged(async(user)=>{
+
+
+
+if(user){
+
+
+
+document.getElementById("loginPage")
+.style.display="none";
+
+
+
+document.getElementById("dashboard")
+.style.display="block";
+
+
+
+
+let data = await db.collection("users")
+
+.doc(user.uid)
+
+.get();
+
+
+
+
+if(data.exists){
+
+
+
+let userData=data.data();
+
+
+
+if(userData.role=="admin"){
+
+
+
+document.getElementById("adminMenu")
+
+.style.display="block";
+
+
+
+}else{
+
+
+document.getElementById("adminMenu")
+
+.style.display="none";
+
+
+}
+
+
+
+}
+
+
+
+loadProduk();
+loadOrderUser();
+loadOrderAdmin();
+
+
+
+}else{
+
+
+document.getElementById("loginPage")
+
+.style.display="flex";
+
+
+document.getElementById("dashboard")
+
+.style.display="none";
+
+
+}
+
+
+
+});
+
+
+
+
+
+
+
+
+// =================
+// PINDAH HALAMAN
+// =================
+
+
+function openPage(page){
+
+
+
+document.querySelectorAll(".page")
+
+.forEach(function(e){
+
+
+e.style.display="none";
+
+
+});
+
+
+
+document.getElementById(page)
+
+.style.display="block";
+
+
+}
+
+
+
+</script>
+
+<script>
+
+
+// =========================
+// LOAD PRODUK
+// =========================
+
+
+function loadProduk(){
+
+
+db.collection("products")
+
+.orderBy("createdAt","desc")
+
+.onSnapshot((snapshot)=>{
+
+
+let userHTML="";
+
+let adminHTML="";
+
+
+
+snapshot.forEach((doc)=>{
+
+
+let p = doc.data();
+
+
+
+userHTML += `
+
+<div class="product">
+
+
+<img src="${p.gambar || 
+'https://via.placeholder.com/400'}">
+
+
+<div class="product-info">
+
+
+<h2>${p.nama}</h2>
+
+
+<h3>
+Rp ${p.harga}
+</h3>
+
+
+<p>
+${p.deskripsi || ""}
+</p>
+
+
+
+<button class="btn"
+onclick="buatOrder('${doc.id}')">
+
+Beli
+
+</button>
+
+
+</div>
+
+
+</div>
+
+`;
+
+
+
+
+
+adminHTML += `
+
+<div class="card">
+
+
+<h2>${p.nama}</h2>
+
+
+<p>
+Harga : Rp ${p.harga}
+</p>
+
+
+
+<button class="btn"
+onclick="editProduk('${doc.id}')">
+
+EDIT
+
+</button>
+
+
+<button 
+onclick="hapusProduk('${doc.id}')"
+style="
+width:100%;
+padding:15px;
+margin-top:15px;
+background:red;
+color:white;
+border:none;
+border-radius:12px;
+">
+
+HAPUS
+
+</button>
+
+
+
+</div>
+
+`;
+
+
+
+});
+
+
+
+
+document.getElementById(
+"productList"
+).innerHTML=userHTML;
+
+
+
+document.getElementById(
+"adminProductList"
+).innerHTML=adminHTML;
+
+
+
+document.getElementById(
+"jumlahProduk"
+).innerText=snapshot.size;
+
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// TAMBAH PRODUK
+// =========================
+
+
+
+async function tambahProduk(){
+
+
+
+let nama =
+document.getElementById(
+"namaProduk"
+).value;
+
+
+
+let harga =
+document.getElementById(
+"hargaProduk"
+).value;
+
+
+
+let gambar =
+document.getElementById(
+"gambarProduk"
+).value;
+
+
+
+let deskripsi =
+document.getElementById(
+"deskripsiProduk"
+).value;
+
+
+
+
+if(!nama || !harga){
+
+alert("Nama dan harga wajib diisi");
+
+return;
+
+}
+
+
+
+
+
+await db.collection("products")
+
+.add({
+
+nama:nama,
+
+harga:Number(harga),
+
+gambar:gambar,
+
+deskripsi:deskripsi,
+
+createdAt:Date.now()
+
+});
+
+
+
+alert("Produk berhasil ditambah");
+
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// EDIT PRODUK
+// =========================
+
+
+
+async function editProduk(id){
+
+
+
+let ref =
+db.collection("products")
+.doc(id);
+
+
+
+let data =
+await ref.get();
+
+
+
+let p=data.data();
+
+
+
+let namaBaru =
+prompt(
+"Nama Produk",
+p.nama
+);
+
+
+
+let hargaBaru =
+prompt(
+"Harga",
+p.harga
+);
+
+
+
+let gambarBaru =
+prompt(
+"Gambar",
+p.gambar
+);
+
+
+
+let deskBaru =
+prompt(
+"Deskripsi",
+p.deskripsi
+);
+
+
+
+
+if(namaBaru){
+
+
+await ref.update({
+
+nama:namaBaru,
+
+harga:Number(hargaBaru),
+
+gambar:gambarBaru,
+
+deskripsi:deskBaru
+
+});
+
+
+alert(
+"Produk berhasil diedit"
+);
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+// =========================
+// HAPUS PRODUK
+// =========================
+
+
+
+async function hapusProduk(id){
+
+
+
+if(!confirm(
+"Hapus produk ini?"
+)) return;
+
+
+
+
+await db.collection("products")
+
+.doc(id)
+
+.delete();
+
+
+
+alert(
+"Produk dihapus"
+);
+
+
+
+}
+
+
+
+
+</script>
+<script>
+
+
+// =========================
+// BUAT ORDER USER
+// =========================
+
+
+async function buatOrder(productId){
+
+
+let user =
+auth.currentUser;
+
+
+
+if(!user){
+
+alert("Silahkan login dulu");
+
+return;
+
+}
+
+
+
+
+await db.collection("orders")
+
+.add({
+
+userId:user.uid,
+
+productId:productId,
+
+status:"Pending",
+
+createdAt:Date.now()
+
+});
+
+
+
+alert(
+"Order berhasil dibuat"
+);
+
+
+
+}
+
+
+
+
+
+
+
+
+// =========================
+// LOAD ORDER USER
+// =========================
+
+
+function loadOrderUser(){
+
+
+let user =
+auth.currentUser;
+
+
+if(!user)
+return;
+
+
+
+db.collection("orders")
+
+.where(
+"userId",
+"==",
+user.uid
+)
+
+.orderBy(
+"createdAt",
+"desc"
+)
+
+.onSnapshot(async(snapshot)=>{
+
+
+let html="";
+
+
+
+for(let doc of snapshot.docs){
+
+
+
+let order =
+doc.data();
+
+
+
+let produk =
+await db.collection("products")
+
+.doc(order.productId)
+
+.get();
+
+
+
+let p =
+produk.data();
+
+
+
+html += `
+
+
+<div class="card">
+
+
+<h2>
+${p ? p.nama : "Produk"}
+</h2>
+
+
+
+<p>
+
+Status :
+
+<b>${order.status}</b>
+
+</p>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+}
+
+
+
+document.getElementById(
+"orderList"
+).innerHTML=html;
+
+
+
+});
+
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// LOAD ORDER ADMIN
+// =========================
+
+
+function loadOrderAdmin(){
+
+
+
+db.collection("orders")
+
+.orderBy(
+"createdAt",
+"desc"
+)
+
+.onSnapshot(async(snapshot)=>{
+
+
+
+let html="";
+
+
+
+for(let doc of snapshot.docs){
+
+
+
+let order =
+doc.data();
+
+
+
+let produk =
+await db.collection("products")
+
+.doc(order.productId)
+
+.get();
+
+
+
+let p =
+produk.data();
+
+
+
+html += `
+
+
+<div class="card">
+
+
+<h2>
+${p ? p.nama : "Produk"}
+</h2>
+
+
+
+<p>
+
+Status :
+
+${order.status}
+
+</p>
+
+
+
+<button class="btn"
+
+onclick="accOrder('${doc.id}')">
+
+ACC ORDER
+
+</button>
+
+
+
+
+<button
+
+onclick="tolakOrder('${doc.id}')"
+
+style="
+
+width:100%;
+
+padding:15px;
+
+margin-top:15px;
+
+background:red;
+
+color:white;
+
+border:none;
+
+border-radius:12px;
+
+">
+
+TOLAK
+
+</button>
+
+
+
+</div>
+
+
+
+`;
+
+
+
+}
+
+
+
+
+document.getElementById(
+"adminProductList"
+).innerHTML += html;
+
+
+
+});
+
+
+
+}
+
+
+
+
+
+
+
+
+// =========================
+// ACC ORDER
+// =========================
+
+
+
+async function accOrder(id){
+
+
+
+await db.collection("orders")
+
+.doc(id)
+
+.update({
+
+status:"Selesai",
+
+updatedAt:Date.now()
+
+});
+
+
+
+alert(
+"Order selesai"
+);
+
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// TOLAK ORDER
+// =========================
+
+
+
+async function tolakOrder(id){
+
+
+
+await db.collection("orders")
+
+.doc(id)
+
+.update({
+
+status:"Ditolak",
+
+updatedAt:Date.now()
+
+});
+
+
+
+alert(
+"Order ditolak"
+);
+
+
+
+}
+
+
+
+
+
+
+</script>
+<script>
+
+
+// =========================
+// STATISTIK ADMIN
+// =========================
+
+
+async function loadStatistik(){
+
+
+let produk =
+await db.collection("products")
+.get();
+
+
+
+document.getElementById(
+"jumlahProduk"
+).innerText =
+produk.size;
+
+
+
+
+let order =
+await db.collection("orders")
+.get();
+
+
+
+document.getElementById(
+"jumlahOrder"
+).innerText =
+order.size;
+
+
+
+}
+
+
+
+
+
+// =========================
+// SEARCH PRODUK
+// =========================
+
+
+function searchProduk(){
+
+
+
+let keyword =
+
+document.getElementById(
+"searchProduk"
+).value
+.toLowerCase();
+
+
+
+let items =
+
+document.querySelectorAll(
+".product"
+);
+
+
+
+items.forEach((item)=>{
+
+
+let text =
+item.innerText
+.toLowerCase();
+
+
+
+if(text.includes(keyword)){
+
+
+item.style.display="block";
+
+
+}else{
+
+
+item.style.display="none";
+
+
+}
+
+
+
+});
+
+
+}
+
+
+
+
+
+
+// =========================
+// CEK ADMIN AMAN
+// =========================
+
+
+async function cekAdmin(){
+
+
+
+let user =
+auth.currentUser;
+
+
+
+if(!user)
+return false;
+
+
+
+
+let data =
+
+await db.collection("users")
+
+.doc(user.uid)
+
+.get();
+
+
+
+
+if(
+data.exists &&
+data.data().role=="admin"
+){
+
+
+return true;
+
+
+}
+
+
+return false;
+
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// TAMBAHAN LOAD DASHBOARD
+// =========================
+
+
+auth.onAuthStateChanged(
+async(user)=>{
+
+
+if(user){
+
+
+loadStatistik();
+
+
+
+}
+
+
+});
+
+
+
+</script>
+
+</body>
+
+</html>
