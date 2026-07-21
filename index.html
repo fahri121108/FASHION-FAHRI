@@ -705,52 +705,7 @@ const auth = getAuth(app);
 
 const db = getFirestore(app);
 
-const loginPage =
-document.getElementById("loginPage");
 
-const registerPage =
-document.getElementById("registerPage");
-
-const dashboardPage =
-document.getElementById("dashboardPage");
-
-const adminPage =
-document.getElementById("adminPage");
-
-const vipPage =
-document.getElementById("vipPage");
-
-const userName =
-document.getElementById("userName");
-
-const userRole =
-document.getElementById("userRole");
-
-const sellerButton =
-document.getElementById("sellerButton");
-
-window.onerror = function(
-msg,url,line
-){
-alert(
-"ERROR : " + msg +
-"\nBaris : " + line
-);
-};
-
-function hideAllPages(){
-
-document
-.querySelectorAll(".page")
-.forEach(p=>{
-p.classList.remove("active");
-});
-
-}
-
-hideAllPages();
-
-loginPage.classList.add("active");
 
 
 
