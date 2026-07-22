@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fahri Store - Tempat Beli & Jual Barang Terpercaya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#EC4899',
+                        accent: '#10B981',
+                        dark: '#1F2937',
+                        light: '#F9FAFB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .gradient-border {
+                position: relative;
+                border-radius: 12px;
+            }
+            .gradient-border::before {
+                content: "";
+                position: absolute;
+                inset: -3px;
+                z-index: -1;
+                border-radius: 15px;
+                background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+                background-size: 400%;
+                animation: gradient-rotate 3s linear infinite;
+            }
+            .gradient-border::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                z-index: -1;
+                border-radius: 12px;
+                background: white;
+            }
+            @keyframes gradient-rotate {
+                0% { background-position: 0 0; }
+                50% { background-position: 400% 0; }
+                100% { background-position: 0 0; }
+            }
+            .fade-in {
+                animation: fadeIn 1s ease-out forwards;
+            }
+            .slide-up {
+                animation: slideUp 1s ease-out forwards;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes slideUp {
+                from { 
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to { 
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-dark">
+    <!-- Animasi Pembukaan -->
+    <div id="loading-screen" class="fixed inset-0 z-50 bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+        <div class="text-center text-white fade-in">
+            <h1 class="text-4xl font-bold mb-4">Fahri Store</h1>
+            <div class="w-16 h-1 border-2 border-white rounded-full mx-auto animate-pulse"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky top-0 z-40 opacity-0" id="navbar">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-primary">Fahri Store</a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#beranda" class="font-medium hover:text-primary transition-colors">Beranda</a>
+                <a href="#produk" class="font-medium hover:text-primary transition-colors">Produk</a>
+                <a href="#tentang" class="font-medium hover:text-primary transition-colors">Tentang</a>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button id="btn-login" class="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary/5 transition-colors">Masuk</button>
+                <button id="btn-daftar" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">Daftar</button>
+                <button class="md:hidden text-xl" id="btn-menu">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Menu Mobile -->
+        <div id="menu-mobile" class="hidden md:hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#beranda" class="font-medium py-2 hover:text-primary transition-colors">Beranda</a>
+                <a href="#produk" class="font-medium py-2 hover:text-primary transition-colors">Produk</a>
+                <a href="#tentang" class="font-medium py-2 hover:text-primary transition-colors">Tentang</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Beranda -->
+    <section id="beranda" class="py-16 md:py-24 opacity-0" style="animation-delay: 0.2s;">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16 slide-up">
+                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold mb-4 text-dark">Selamat Datang di Fahri Store</h1>
+                <p class="text-[clamp(1rem,2vw,1.25rem)] text-gray-600 max-w-2xl mx-auto">Tempat terbaik untuk membeli dan menjual barang digital, aset game, dan kebutuhan lainnya dengan aman dan terpercaya</p>
+            </div>
+
+            <!-- Kartu Role -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover slide-up" style="animation-delay: 0.3s;">
+                    <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-primary text-2xl mb-4">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Pembeli / User</h3>
+                    <p class="text-gray-600 mb-4">Temukan berbagai produk digital dan aset game berkualitas dengan harga terjangkau dan proses pembelian yang mudah.</p>
+                    <a href="#" class="text-primary font-medium hover:underline">Lihat Produk <i class="fa fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover slide-up" style="animation-delay: 0.4s;">
+                    <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-accent text-2xl mb-4">
+                        <i class="fa fa-shopping-bag"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Penjual / Seller</h3>
+                    <p class="text-gray-600 mb-4">Mulai jual produkmu sendiri, kelola pesanan, dan terima pembayaran dengan fitur upload QRIS yang praktis.</p>
+                    <a href="#" class="text-accent font-medium hover:underline">Buka Toko <i class="fa fa-arrow-right ml-1"></i></a>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover slide-up" style="animation-delay: 0.5s;">
+                    <div class="w-14 h-14 rounded-full bg-pink-100 flex items-center justify-center text-secondary text-2xl mb-4">
+                        <i class="fa fa-paint-brush"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Pembuat / Creator</h3>
+                    <p class="text-gray-600 mb-4">Bagikan karya kreatifmu seperti logo, desain, aset Roblox, dan lainnya ke ribuan pembeli.</p>
+                    <a href="#" class="text-secondary font-medium hover:underline">Mulai Berkreasi <i class="fa fa-arrow-right ml-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Produk -->
+    <section id="produk" class="py-16 bg-gray-50 opacity-0" style="animation-delay: 0.6s;">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 slide-up">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-3">Produk Unggulan</h2>
+                <p class="text-gray-600">Berikut adalah beberapa produk yang tersedia di toko kami</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Contoh Produk dengan Bingkai Gradasi -->
+                <div class="gradient-border p-[3px] rounded-xl slide-up" style="animation-delay: 0.7s;">
+                    <div class="bg-white rounded-[10px] p-5 h-full">
+                        <img src="https://via.placeholder.com/400x250" alt="Produk 1" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-lg font-bold mb-2">Desain Logo Kustom</h3>
+                        <p class="text-gray-600 text-sm mb-3">Buat logo unik untuk toko atau akun game kamu</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-primary">Rp 25.000</span>
+                            <button class="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-primary/90">Beli</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gradient-border p-[3px] rounded-xl slide-up" style="animation-delay: 0.8s;">
+                    <div class="bg-white rounded-[10px] p-5 h-full">
+                        <img src="https://via.placeholder.com/400x250" alt="Produk 2" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-lg font-bold mb-2">Aset Roblox T-Shirt</h3>
+                        <p class="text-gray-600 text-sm mb-3">Desain baju keren untuk karakter Roblox kamu</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-primary">Rp 15.000</span>
+                            <button class="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-primary/90">Beli</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gradient-border p-[3px] rounded-xl slide-up" style="animation-delay: 0.9s;">
+                    <div class="bg-white rounded-[10px] p-5 h-full">
+                        <img src="https://via.placeholder.com/400x250" alt="Produk 3" class="w-full h-48 object-cover rounded-lg mb-4">
+                        <h3 class="text-lg font-bold mb-2">Template Harga Grow A Garden</h3>
+                        <p class="text-gray-600 text-sm mb-3">Daftar harga siap pakai untuk kebutuhan jualan</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-primary">Rp 10.000</span>
+                            <button class="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-primary/90">Beli</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Halaman Seller (Contoh) -->
+    <section id="seller" class="py-16 bg-white opacity-0" style="animation-delay: 1s;">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto bg-gray-50 rounded-xl shadow p-8 slide-up">
+                <h2 class="text-2xl font-bold mb-6 text-center">Panel Penjual</h2>
+
+                <!-- Form Upload Produk -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4">Tambah Produk Baru</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Produk</label>
+                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Masukkan nama produk">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Foto Produk</label>
+                            <input type="file" accept="image/*" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Harga Produk</label>
+                            <input type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Rp 0">
+                        </div>
+                        <button class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition-colors">Simpan Produk</button>
+                    </div>
+                </div>
+
+                <!-- Form Upload QRIS -->
+                <div class="border-t pt-8">
+                    <h3 class="text-lg font-semibold mb-4">Pengaturan Pembayaran</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Upload QRIS Kamu</label>
+                            <input type="file" id="upload-qris" accept="image/*" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                        </div>
+                        <div id="preview-qris" class="hidden">
+                            <p class="text-sm font-medium text-gray-700 mb-2">Pratinjau QRIS:</p>
+                            <div class="relative inline-block">
+                                <img id="qris-image" src="" alt="QRIS" class="w-48 h-48 object-contain border rounded-lg p-2 bg-white">
+                                <button id="download-qris" class="absolute -top-2 -right-2 bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-green-600">
+                                    <i class="fa fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="w-full bg-accent text-white py-2 rounded-lg hover:bg-accent/90 transition-colors">Simpan QRIS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-8 opacity-0" style="animation-delay: 1.1s;">
+        <div class="container mx-auto px-4 text-center">
+            <p class="font-bold text-xl mb-2">Fahri Store</p>
+            <p class="text-gray-400 text-sm">© 2026 Fahri Store - Semua Hak Dilindungi</p>
+        </div>
+    </footer>
+
+    <script>
+        // Hilangkan layar loading dan tampilkan konten
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loading = document.getElementById('loading-screen');
+                loading.style.opacity = 0;
+                loading.style.transition = 'opacity 0.5s ease-out';
+                
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    // Tampilkan semua elemen dengan animasi
+                    document.querySelectorAll('.opacity-0').forEach(el => {
+                        el.classList.add('fade-in');
+                        el.style.opacity = 1;
+                    });
+                }, 500);
+            }, 1500);
+        });
+
+        // Menu mobile
+        const btnMenu = document.getElementById('btn-menu');
+        const menuMobile = document.getElementById('menu-mobile');
+        btnMenu.addEventListener('click', () => {
+            menuMobile.classList.toggle('hidden');
+        });
+
+        // Fitur Upload QRIS & Download
+        const uploadQris = document.getElementById('upload-qris');
+        const previewQris = document.getElementById('preview-qris');
+        const qrisImage = document.getElementById('qris-image');
+        const downloadQris = document.getElementById('download-qris');
+
+        uploadQris.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    qrisImage.src = event.target.result;
+                    previewQris.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        downloadQris.addEventListener('click', function() {
+            const link = document.createElement('a');
+            link.href = qrisImage.src;
+            link.download = 'QRIS_FahriStore.png';
+            link.click();
+        });
+    </script>
+</body>
+</html>
