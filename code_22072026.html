@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fahri Store - Toko Terpercaya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366F1',
+                        secondary: '#EC4899',
+                        accent: '#10B981',
+                        dark: '#1E293B',
+                        light: '#F8FAFC',
+                        creator: '#8B5CF6',
+                        seller: '#F59E0B',
+                        user: '#3B82F6'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .nav-shadow {
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            }
+            .role-badge {
+                @apply px-3 py-1 rounded-full text-xs font-bold;
+            }
+            .btn-primary {
+                @apply bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary/90 transition-all;
+            }
+            .btn-creator {
+                @apply bg-creator text-white font-semibold py-2 px-4 rounded-lg hover:bg-creator/90 transition-all;
+            }
+            .btn-seller {
+                @apply bg-seller text-white font-semibold py-2 px-4 rounded-lg hover:bg-seller/90 transition-all;
+            }
+            .input-field {
+                @apply w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary;
+            }
+            .card-role {
+                @apply bg-white rounded-xl p-6 shadow-lg border-l-4;
+            }
+            .scroll-hidden::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-dark pb-20">
+    <!-- Notifikasi -->
+    <div id="notification" class="fixed top-4 right-4 z-50 transform translate-x-full transition-transform duration-300">
+        <div class="bg-white rounded-lg shadow-xl p-4 flex items-center gap-3 max-w-xs">
+            <i id="notif-icon" class="fa fa-check-circle text-xl text-accent"></i>
+            <div>
+                <h4 id="notif-title" class="font-bold">Berhasil!</h4>
+                <p id="notif-desc" class="text-sm text-gray-600">Perubahan telah disimpan</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-primary to-secondary text-white p-4 sticky top-0 z-40 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img id="header-logo" src="https://via.placeholder.com/40" alt="Logo Fahri Store" class="w-10 h-10 rounded-full bg-white p-1">
+                <h1 class="text-xl font-bold">Fahri Store</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="current-role" class="role-badge bg-white/20">User</span>
+                <button id="btn-logout" class="bg-white/20 hover:bg-white/30 p-2 rounded-full">
+                    <i class="fa fa-sign-out"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Konten Utama -->
+    <main class="container mx-auto p-4">
+        <!-- Halaman Login -->
+        <div id="page-login" class="max-w-md mx-auto mt-10">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="text-center mb-6">
+                    <img src="https://via.placeholder.com/80" alt="Logo" class="w-20 h-20 rounded-full mx-auto mb-4 bg-primary p-3">
+                    <h2 class="text-2xl font-bold">Masuk ke Fahri Store</h2>
+                    <p class="text-gray-600 mt-1">Beli produk game & kebutuhan lainnya dengan mudah</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Username</label>
+                        <input type="text" id="login-username" class="input-field" placeholder="Masukkan username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Kata Sandi</label>
+                        <input type="password" id="login-password" class="input-field" placeholder="Masukkan kata sandi">
+                    </div>
+                    <button id="btn-login" class="btn-primary w-full">Masuk</button>
+                    <p class="text-center text-sm text-gray-600">Belum punya akun? <a href="#" id="link-register" class="text-primary font-semibold">Daftar</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Daftar -->
+        <div id="page-register" class="max-w-md mx-auto mt-10 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold">Daftar Akun Baru</h2>
+                    <p class="text-gray-600 mt-1">Buat akun untuk mulai berbelanja atau berjualan</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nama Lengkap</label>
+                        <input type="text" id="reg-name" class="input-field" placeholder="Masukkan nama lengkap">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Username</label>
+                        <input type="text" id="reg-username" class="input-field" placeholder="Buat username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Kata Sandi</label>
+                        <input type="password" id="reg-password" class="input-field" placeholder="Buat kata sandi">
+                    </div>
+                    <button id="btn-register" class="btn-primary w-full">Daftar</button>
+                    <p class="text-center text-sm text-gray-600">Sudah punya akun? <a href="#" id="link-login" class="text-primary font-semibold">Masuk</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Beranda -->
+        <div id="page-home" class="hidden">
+            <!-- Kartu Profil -->
+            <div class="card-role mb-6 border-primary">
+                <div class="flex items-center gap-4">
+                    <img id="home-avatar" src="https://via.placeholder.com/60" alt="Foto Profil" class="w-16 h-16 rounded-full object-cover">
+                    <div>
+                        <h3 id="home-name" class="text-xl font-bold">Nama Pengguna</h3>
+                        <p id="home-role" class="text-sm text-gray-600">Role: User</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pengumuman Creator -->
+            <div id="announcement-section" class="bg-creator/10 border border-creator/30 rounded-xl p-4 mb-6 hidden">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fa fa-bullhorn text-creator"></i>
+                    <h3 class="font-bold text-creator">Pengumuman Resmi</h3>
+                </div>
+                <p id="announcement-text" class="text-sm"></p>
+            </div>
+
+            <!-- Peringkat Toko -->
+            <div class="bg-white rounded-xl shadow p-4 mb-6">
+                <h3 class="font-bold mb-3 flex items-center gap-2"><i class="fa fa-star text-yellow-400"></i> Rating Toko Fahri Store</h3>
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl font-bold">4.8</span>
+                    <div>
+                        <div class="text-yellow-400">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                        </div>
+                        <p class="text-xs text-gray-500">124 ulasan</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produk Unggulan -->
+            <h2 class="text-xl font-bold mb-4 text-center">🔥 Produk Tersedia</h2>
+            <div id="product-list" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Produk akan ditambahkan otomatis -->
+            </div>
+        </div>
+
+        <!-- Halaman Produk -->
+        <div id="page-products" class="hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">📦 Semua Produk</h2>
+                <button id="btn-add-product" class="btn-seller hidden">+ Tambah Produk</button>
+            </div>
+            <div id="all-products" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Semua produk -->
+            </div>
+        </div>
+
+        <!-- Halaman Dashboard -->
+        <div id="page-dashboard" class="hidden">
+            <h2 class="text-xl font-bold mb-4">📊 Dashboard</h2>
+            <div id="dashboard-content" class="space-y-6">
+                <!-- Konten berubah sesuai role -->
+            </div>
+        </div>
+
+        <!-- Halaman Profil -->
+        <div id="page-profile" class="hidden">
+            <h2 class="text-xl font-bold mb-4">👤 Profil Saya</h2>
+            <div class="bg-white rounded-xl shadow p-6 mb-6">
+                <div class="flex flex-col items-center mb-6">
+                    <div class="relative">
+                        <img id="profile-avatar" src="https://via.placeholder.com/100" alt="Foto Profil" class="w-24 h-24 rounded-full object-cover border-4 border-primary/20">
+                        <label for="avatar-upload" class="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full cursor-pointer">
+                            <i class="fa fa-camera"></i>
+                        </label>
+                        <input type="file" id="avatar-upload" accept="image/*" class="hidden">
+                    </div>
+                    <h3 id="profile-name" class="text-xl font-bold mt-3">Nama Lengkap</h3>
+                    <span id="profile-role" class="role-badge mt-2">User</span>
+                </div>
+
+                <form id="profile-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Nama Lengkap</label>
+                        <input type="text" id="edit-name" class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Username</label>
+                        <input type="text" id="edit-username" class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Kata Sandi Baru</label>
+                        <input type="password" id="edit-password" class="input-field" placeholder="Kosongkan jika tidak ingin mengubah">
+                    </div>
+                    <button type="submit" class="btn-primary w-full">Simpan Perubahan</button>
+                </form>
+
+                <!-- Menu Tambahan Seller & Creator -->
+                <div id="seller-menu" class="mt-6 space-y-3 hidden">
+                    <h4 class="font-bold text-lg text-seller border-b pb-2">Menu Penjual</h4>
+                    <button id="btn-change-shop-name" class="w-full text-left p-3 bg-seller/10 rounded-lg hover:bg-seller/20 transition-all flex items-center gap-2">
+                        <i class="fa fa-pencil text-seller"></i> Ubah Nama Toko
+                    </button>
+                    <button id="btn-manage-products" class="w-full text-left p-3 bg-seller/10 rounded-lg hover:bg-seller/20 transition-all flex items-center gap-2">
+                        <i class="fa fa-cubes text-seller"></i> Kelola Produk Saya
+                    </button>
+                    <button id="btn-view-orders" class="w-full text-left p-3 bg-seller/10 rounded-lg hover:bg-seller/20 transition-all flex items-center gap-2">
+                        <i class="fa fa-shopping-cart text-seller"></i> Lihat Pesanan Masuk
+                    </button>
+                </div>
+
+                <div id="creator-menu" class="mt-6 space-y-3 hidden">
+                    <h4 class="font-bold text-lg text-creator border-b pb-2">Menu Creator</h4>
+                    <button id="btn-change-logo" class="w-full text-left p-3 bg-creator/10 rounded-lg hover:bg-creator/20 transition-all flex items-center gap-2">
+                        <i class="fa fa-image text-creator"></i> Ubah Logo Web & Toko
+                    </button>
+                    <button id="btn-send-announcement" class="w-full text-left p-3 bg-creator/10 rounded-lg hover:bg-creator/20 transition-all flex items-center gap-2">
+                        <i class="fa fa-bullhorn text-creator"></i> Kirim Pengumuman
+                    </button>
+                    <button id="btn-manage-users" class="w-full text-left p-3 bg-creator/10 rounded-lg hover:bg-creator/20 transition-all flex items-center gap-2">
+                        <i class="fa fa-users text-creator"></i> Kelola Semua Pengguna
+                    </button>
+                    <button id="btn-manage-roles" class="w-full text-left p-3 bg-creator/10 rounded-lg hover:bg-creator/20 transition-all flex items-center gap-2">
+                        <i class="fa fa-user-tag text-creator"></i> Atur Peran Pengguna
+                    </button>
+                    <button id="btn-view-all-trans" class="w-full text-left p-3 bg-creator/10 rounded-lg hover:bg-creator/20 transition-all flex items-center gap-2">
+                        <i class="fa fa-exchange text-creator"></i> Lihat Semua Transaksi
+                    </button>
+                </div>
+            </div>
+
+            <!-- Riwayat Transaksi -->
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="font-bold mb-4">📜 Riwayat Transaksi</h3>
+                <div id="transaction-history" class="space-y-3">
+                    <p class="text-gray-500 text-center py-4">Belum ada transaksi</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Forum -->
+        <div id="page-forum" class="hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">💬 Forum Diskusi</h2>
+                <button id="btn-create-thread" class="btn-primary">+ Buat Topik Baru</button>
+            </div>
+            <div id="forum-list" class="space-y-4">
+                <!-- Daftar topik forum -->
+            </div>
+        </div>
+
+        <!-- Halaman Pembayaran -->
+        <div id="page-payment" class="hidden">
+            <h2 class="text-xl font-bold mb-4">💳 Pembayaran Pesanan</h2>
+            <div class="bg-white rounded-xl shadow p-6 space-y-4">
+                <div class="text-center">
+                    <h3 class="font-bold text-lg">Total Pembayaran: <span id="pay-total" class="text-secondary">Rp 0</span></h3>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Unggah QRIS / Bukti Pembayaran</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                        <label for="qr-upload" class="cursor-pointer">
+                            <i class="fa fa-upload text-3xl text-gray-400 mb-2"></i>
+                            <p class="text-gray-500">Klik untuk memilih foto QR atau bukti</p>
+                            <p class="text-xs text-gray-400 mt-1">Format: JPG, PNG, JPEG</p>
+                        </label>
+                        <input type="file" id="qr-upload" accept="image/*" class="hidden">
+                        <div id="qr-preview" class="mt-4 hidden">
+                            <img id="qr-img" src="" alt="Pratinjau QR" class="max-h-40 mx-auto rounded">
+                        </div>
+                    </div>
+                </div>
+                <button id="btn-confirm-payment" class="btn-primary w-full">Kirim Bukti Pembayaran</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Navigasi Bawah -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white nav-shadow z-50 rounded-t-xl">
+        <div class="flex justify-around py-3">
+            <button class="nav-item flex flex-col items-center text-primary" data-page="home">
+                <i class="fa fa-home text-xl"></i>
+                <span class="text-xs mt-1">Beranda</span>
+            </button>
+            <button class="nav-item flex flex-col items-center text-gray-500" data-page="products">
+                <i class="fa fa-shopping-bag text-xl"></i>
+                <span class="text-xs mt-1">Produk</span>
+            </button>
+            <button class="nav-item flex flex-col items-center text-gray-500" data-page="dashboard">
+                <i class="fa fa-bar-chart text-xl"></i>
+                <span class="text-xs mt-1">Dashboard</span>
+            </button>
+            <button class="nav-item flex flex-col items-center text-gray-500" data-page="forum">
+                <i class="fa fa-comments text-xl"></i>
+                <span class="text-xs mt-1">Forum</span>
+            </button>
+            <button class="nav-item flex flex-col items-center text-gray-500" data-page="profile">
+                <i class="fa fa-user text-xl"></i>
+                <span class="text-xs mt-1">Profil</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modal-title" class="text-lg font-bold"></h3>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data Utama
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('fs_users')) || [
+            { id: 1, nama: 'Admin Fahri', username: 'creator', password: 'creator123', role: 'creator', avatar: 'https://via.placeholder.com/100/8B5CF6/FFFFFF?text=C', namaToko: 'Fahri Store', logoWeb: '', logoToko: '' },
+            { id: 2, nama: 'Penjual Satu', username: 'seller', password: 'seller123', role: 'pending', avatar: 'https://via.placeholder.com/100/F59E0B/FFFFFF?text=S', namaToko: 'Toko Game Satu' },
+            { id: 3, nama: 'Pengguna Biasa', username: 'user', password: 'user123', role: 'user', avatar: 'https://via.placeholder.com/100/3B82F6/FFFFFF?text=U' }
+        ];
+        let products = JSON.parse(localStorage.getItem('fs_products')) || [
+            { id: 1, nama: 'Item Roblox Kustom', harga: 25000, deskripsi: 'Baju/Item Roblox sesuai pesanan', terjual: 45, rating: 4.9, ulasan: 12, idPenjual: 2, gambar: 'https://via.placeholder.com/300x200/6366F1/FFFFFF?text=Roblox' },
+            { id: 2, nama: 'Paket Grow A Garden', harga: 15000, deskripsi: 'Paket bibit & koin Grow A Garden', terjual: 78, rating: 4.7, ulasan: 23, idPenjual: 2, gambar: 'https://via.placeholder.com/300x200/10B981/FFFFFF?text=GrowAGarden' },
+            { id: 3, nama: 'Mata Uang Game Lain', harga: 10000, deskripsi: 'Mata uang berbagai game populer', terjual: 32, rating: 4.5, ulasan: 8, idPenjual: 2, gambar: 'https://via.placeholder.com/300x200/EC4899/FFFFFF?text=MataUang' }
+        ];
+        let orders = JSON.parse(localStorage.getItem('fs_orders')) || [];
+        let forumThreads = JSON.parse(localStorage.getItem('fs_forum')) || [];
+        let transactions = JSON.parse(localStorage.getItem('fs_transactions')) || [];
+        let storeRating = { nilai: 4.8, jumlah: 124 };
+        let announcement = localStorage.getItem('fs_announcement') || 'Selamat datang di Fahri Store! Semua produk terjamin keaslian dan pengiriman cepat.';
+
+        // Inisialisasi Awal
+        document.addEventListener('DOMContentLoaded', () => {
+            cekLogin();
+            initNavigasi();
+            initFormLogin();
+            initFormRegister();
+            initProfil();
+            initUploadFoto();
+            initQRUpload();
+            initProduk();
+            initForum();
+            initPembayaran();
+            initFiturCreatorSeller();
+            tampilkanPengumuman();
+        });
+
+        // Fungsi Umum
+        function simpanData() {
+            localStorage.setItem('fs_users', JSON.stringify(users));
+            localStorage.setItem('fs_products', JSON.stringify(products));
+            localStorage.setItem('fs_orders', JSON.stringify(orders));
+            localStorage.setItem('fs_forum', JSON.stringify(forumThreads));
+            localStorage.setItem('fs_transactions', JSON.stringify(transactions));
+            localStorage.setItem('fs_announcement', announcement);
+        }
+
+        function tampilkanNotif(pesan, tipe = 'sukses') {
+            const notif = document.getElementById('notification');
+            const icon = document.getElementById('notif-icon');
+            const title = document.getElementById('notif-title');
+            const desc = document.getElementById('notif-desc');
+            
+            icon.className = tipe === 'sukses' ? 'fa fa-check-circle text-xl text-accent' : 'fa fa-exclamation-circle text-xl text-red-500';
+            title.textContent = tipe === 'sukses' ? 'Berhasil!' : 'Gagal!';
+            desc.textContent = pesan;
+            
+            notif.classList.remove('translate-x-full');
+            setTimeout(() => notif.classList.add('translate-x-full'), 3000);
+        }
+
+        function tampilkanHalaman(idHalaman) {
+            document.querySelectorAll('main > div').forEach(hal => hal.classList.add('hidden'));
+            document.getElementById(idHalaman).classList.remove('hidden');
+            
+            // Update status navigasi
+            document.querySelectorAll('.nav-item').forEach(item => {
+                const isActive = item.dataset.page === idHalaman.replace('page-', '');
+                item.classList.toggle('text-primary', isActive);
+                item.classList.toggle('text-gray-500', !isActive);
+            });
+        }
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(angka);
+        }
+
+        function tampilkanPengumuman() {
+            if (announcement && currentUser) {
+                document.getElementById('announcement-section').classList.remove('hidden');
+                document.getElementById('announcement-text').textContent = announcement;
+            }
+        }
+
+        // Cek Status Login
+        function cekLogin() {
+            const simpanUser = localStorage.getItem('fs_current_user');
+            if (simpanUser) {
+                currentUser = users.find(u => u.id === parseInt(simpanUser));
+                if (currentUser) {
+                    tampilkanHalaman('page-home');
+                    updateTampilanSesuaiRole();
+                    return;
+                }
+            }
+            tampilkanHalaman('page-login');
+        }
+
+        // Navigasi Bawah
+        function initNavigasi() {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (!currentUser) return;
+                    const halaman = 'page-' + item.dataset.page;
+                    tampilkanHalaman(halaman);
+                    if (halaman === 'page-home') tampilkanProdukUnggulan();
+                    if (halaman === 'page-products') tampilkanSemuaProduk();
+                    if (halaman === 'page-dashboard') tampilkanDashboard();
+                    if (halaman === 'page-profile') tampilkanDataProfil();
+                    if (halaman === 'page-forum') tampilkanForum();
+                });
+            });
+
+            document.getElementById('btn-logout').addEventListener('click', () => {
+                localStorage.removeItem('fs_current_user');
+                currentUser = null;
+                tampilkanHalaman('page-login');
+                tampilkanNotif('Berhasil keluar dari akun');
+            });
+        }
+
+        // Login & Register
+        function initFormLogin() {
+            document.getElementById('btn-login').addEventListener('click', () => {
+                const username = document.getElementById('login-username').value.trim();
+                const password = document.getElementById('login-password').value.trim();
+                
+                const user = users.find(u => u.username === username && u.password === password);
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('fs_current_user', user.id);
+                    tampilkanHalaman('page-home');
+                    updateTampilanSesuaiRole();
+                    tampilkanNotif('Berhasil masuk, selamat datang ' + user.nama);
+                } else {
+                    tampilkanNotif('Username atau kata sandi salah', 'gagal');
+                }
+            });
+
+            document.getElementById('link-register').addEventListener('click', () => {
+                tampilkanHalaman('page-register');
+            });
+        }
+
+        function initFormRegister() {
+            document.getElementById('link-login').addEventListener('click', () => {
+                tampilkanHalaman('page-login');
+            });
+
+            document.getElementById('btn-register').addEventListener('click', () => {
+                const nama = document.getElementById('reg-name').value.trim();
+                const username = document.getElementById('reg-username').value.trim();
+                const password = document.getElementById('reg-password').value.trim();
+                
+                if (!nama || !username || !password) return tampilkanNotif('Semua kolom wajib diisi', 'gagal');
+                if (users.find(u => u.username === username)) return tampilkanNotif('Username sudah digunakan', 'gagal');
+                
+                const userBaru = {
+                    id: users.length + 1,
+                    nama, username, password,
+                    role: 'user',
+                    avatar: 'https://via.placeholder.com/100/3B82F6/FFFFFF?text=' + nama.charAt(0).toUpperCase()
+                };
+                users.push(userBaru);
+                simpanData();
+                
+                tampilkanNotif('Pendaftaran berhasil! Silakan masuk');
+                tampilkanHalaman('page-login');
+                document.getElementById('reg-name').value = '';
+                document.getElementById('reg-username').value = '';
+                document.getElementById('reg-password').value = '';
+            });
+        }
+
+        // Update Tampilan Sesuai Peran
+        function updateTampilanSesuaiRole() {
+            const roleEl = document.getElementById('current-role');
+            roleEl.textContent = currentUser.role.toUpperCase();
+            roleEl.className = 'role-badge ' + (
+                currentUser.role === 'creator' ? 'bg-creator/20 text-creator' :
+                currentUser.role === 'seller' ? 'bg-seller/20 text-seller' :
+                'bg-user/20 text-user'
+            );
+
+            // Tampilkan menu khusus
+            document.getElementById('seller-menu').classList.toggle('hidden', !['seller', 'creator'].includes(currentUser.role));
+            document.getElementById('creator-menu').classList.toggle('hidden', currentUser.role !== 'creator');
+            document.getElementById('btn-add-product').classList.toggle('hidden', !['seller', 'creator'].includes(currentUser.role));
+
+            // Update logo web
+            if (currentUser.logoWeb) {
+                document.getElementById('header-logo').src = currentUser.logoWeb;
+            }
+        }
+
+        // Upload Foto Profil
+        function initUploadFoto() {
+            document.getElementById('avatar-upload').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    currentUser.avatar = event.target.result;
+                    const index = users.findIndex(u => u.id === currentUser.id);
+                    users[index] = currentUser;
+                    simpanData();
+                    
+                    document.getElementById('profile-avatar').src = event.target.result;
+                    document.getElementById('home-avatar').src = event.target.result;
+                    tampilkanNotif('Foto profil berhasil diperbarui');
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Upload QR Langsung Foto
+        function initQRUpload() {
+            const input = document.getElementById('qr-upload');
+            const preview = document.getElementById('qr-preview');
+            const img = document.getElementById('qr-img');
+            
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    img.src = event.target.result;
+                    preview.classList.remove('hidden');
+                    tampilkanNotif('Foto QR berhasil dipilih');
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Fitur Profil Lengkap
+        function initProfil() {
+            document.getElementById('profile-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const nama = document.getElementById('edit-name').value.trim();
+                const username = document.getElementById('edit-username').value.trim();
+                const password = document.getElementById('edit-password').value.trim();
+                
+                if (!nama || !username) return tampilkanNotif('Nama dan username wajib diisi', 'gagal');
+                if (users.find(u => u.username === username && u.id !== currentUser.id)) return tampilkanNotif('Username sudah digunakan orang lain', 'gagal');
+                
+                currentUser.nama = nama;
+                currentUser.username = username;
+                if (password) currentUser.password = password;
+                
+                const index = users.findIndex(u => u.id === currentUser.id);
+                users[index] = currentUser;
+                simpanData();
+                
+                updateTampilanSesuaiRole();
+                tampilkanDataProfil();
+                tampilkanNotif('Profil berhasil diperbarui');
+            });
+        }
+
+        function tampilkanDataProfil() {
+            document.getElementById('profile-avatar').src = currentUser.avatar;
+            document.getElementById('profile-name').textContent = currentUser.nama;
+            document.getElementById('profile-role').textContent = currentUser.role.toUpperCase();
+            document.getElementById('profile-role').className = 'role-badge ' + (
+                currentUser.role === 'creator' ? 'bg-creator text-white' :
+                currentUser.role === 'seller' ? 'bg-seller text-white' :
+                'bg-user text-white'
+            );
+            
+            document.getElementById('edit-name').value = currentUser.nama;
+            document.getElementById('edit-username').value = currentUser.username;
+            document.getElementById('edit-password').value = '';
+            
+            document.getElementById('home-name').textContent = currentUser.nama;
+            document.getElementById('home-role').textContent = 'Peran: ' + currentUser.role;
+            document.getElementById('home-avatar').src = currentUser.avatar;
+
+            tampilkanRiwayatTransaksi();
+        }
+
+        // Fitur Produk
+        function initProduk() {
+            tampilkanProdukUnggulan();
+        }
+
+        function tampilkanProdukUnggulan() {
+            const kontainer = document.getElementById('product-list');
+            kontainer.innerHTML = '';
+            
+            products.forEach(prod => {
+                const penjual = users.find(u => u.id === prod.idPenjual);
+                const bisaBeli = currentUser.role !== 'seller' || prod.idPenjual !== currentUser.id;
+                
+                kontainer.innerHTML += `
+                    <div class="bg-white rounded-xl shadow overflow-hidden card-hover">
+                        <img src="${prod.gambar}" alt="${prod.nama}" class="w-full h-32 object-cover">
+                        <div class="p-3">
+                            <h4 class="font-bold text-sm line-clamp-1">${prod.nama}</h4>
+                            <p class="text-secondary font-bold">${formatRupiah(prod.harga)}</p>
+                            <div class="flex items-center text-xs text-gray-500 mt-1">
+                                <span class="flex items-center gap-1"><i class="fa fa-star text-yellow-400"></i> ${prod.rating}</span>
+                                <span class="mx-2">•</span>
+                                <span>Terjual ${prod.terjual}</span>
+                            </div>
+                            <button onclick="beliProduk(${prod.id})" class="w-full mt-3 py-2 rounded-lg text-sm font-semibold ${bisaBeli ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}" ${!bisaBeli ? 'disabled' : ''}>
+                                ${bisaBeli ? 'Beli Sekarang' : 'Toko Anda Sendiri'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function tampilkanSemuaProduk() {
+            const kontainer = document.getElementById('all-products');
+            kontainer.innerHTML = '';
+            
+            products.forEach(prod => {
+                const penjual = users.find(u => u.id === prod.idPenjual);
+                const bisaBeli = currentUser.role !== 'seller' || prod.idPenjual !== currentUser.id;
+                
+                kontainer.innerHTML += `
+                    <div class="bg-white rounded-xl shadow overflow-hidden card-hover">
+                        <img src="${prod.gambar}" alt="${prod.nama}" class="w-full h-32 object-cover">
+                        <div class="p-3">
+                            <h4 class="font-bold text-sm line-clamp-1">${prod.nama}</h4>
+                            <p class="text-secondary font-bold">${formatRupiah(prod.harga)}</p>
+                            <p class="text-xs text-gray-500 mt-1">Penjual: ${penjual?.namaToko || penjual?.nama || 'Tidak diketahui'}</p>
+                            <div class="flex items-center text-xs text-gray-500 mt-1">
+                                <span class="flex items-center gap-1"><i class="fa fa-star text-yellow-400"></i> ${prod.rating}</span>
+                                <span class="mx-2">•</span>
+                                <span>Terjual ${prod.terjual}</span>
+                            </div>
+                            <button onclick="beliProduk(${prod.id})" class="w-full mt-3 py-2 rounded-lg text-sm font-semibold ${bisaBeli ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}" ${!bisaBeli ? 'disabled' : ''}>
+                                ${bisaBeli ? 'Beli Sekarang' : 'Toko Anda Sendiri'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function beliProduk(idProduk) {
+            const produk = products.find(p => p.id === idProduk);
+            if (!produk) return;
+            
+            document.getElementById('pay-total').textContent = formatRupiah(produk.harga);
+            tampilkanHalaman('page-payment');
+            document.getElementById('qr-preview').classList.add('hidden');
+            document.getElementById('qr-upload').value = '';
+            
+            // Simpan pesanan sementara
+            sessionStorage.setItem('pesanan_sementara', JSON.stringify({
+                idProduk: produk.id,
+                namaProduk: produk.nama,
+                harga: produk.harga,
+                idPenjual: produk.idPenjual
+            }));
+        }
+
+        // Pembayaran
+        function initPembayaran() {
+            document.getElementById('btn-confirm-payment').addEventListener('click', () => {
+                const pesanan = JSON.parse(sessionStorage.getItem('pesanan_sementara'));
+                const qrImg = document.getElementById('qr-img').src;
+                
+                if (!pesanan) return tampilkanNotif('Data pesanan tidak ditemukan', 'gagal');
+                if (!qrImg || qrImg === '') return tampilkanNotif('Silakan unggah foto QR/bukti pembayaran terlebih dahulu', 'gagal');
+                
+                // Tambah pesanan baru (status menunggu konfirmasi)
+                const pesananBaru = {
+                    id: orders.length + 1,
+                    idPembeli: currentUser.id,
+                    idPenjual: pesanan.idPenjual,
+                    idProduk: pesanan.idProduk,
+                    namaProduk: pesanan.namaProduk,
+                    harga: pesanan.harga,
+                    buktiBayar: qrImg,
+                    status: 'menunggu_acc',
+                    tanggal: new Date().toLocaleString('id-ID')
+                };
+                orders.push(pesananBaru);
+                
+                // Tambah transaksi
+                transactions.push({
+                    id: transactions.length + 1,
+                    jenis: 'Pembelian',
+                    keterangan: pesanan.namaProduk,
+                    jumlah: pesanan.harga,
+                    tanggal: pesananBaru.tanggal,
+                    status: 'Menunggu konfirmasi'
+                });
+                
+                simpanData();
+                sessionStorage.removeItem('pesanan_sementara');
+                
+                tampilkanNotif('Bukti pembayaran berhasil dikirim! Silakan tunggu konfirmasi admin');
+                tampilkanHalaman('page-home');
+            });
+        }
+
+        // Fitur Creator & Seller
+        function initFiturCreatorSeller() {
+            // Ubah nama toko
+            document.getElementById('btn-change-shop-name').addEventListener('click', () => {
+                const namaBaru = prompt('Masukkan nama toko baru:', currentUser.namaToko || '');
+                if (!namaBaru || namaBaru.trim() === '') return;
+                
+                currentUser.namaToko = namaBaru.trim();
+                const index = users.findIndex(u => u.id === currentUser.id);
+                users[index] = currentUser;
+                simpanData();
+                tampilkanNotif('Nama toko berhasil diubah menjadi: ' + namaBaru);
+            });
+
+            // Creator ubah logo
+            document.getElementById('btn-change-logo').addEventListener('click', () => {
+                const inputLogo = document.createElement('input');
+                inputLogo.type = 'file';
+                inputLogo.accept = 'image/*';
+                inputLogo.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        currentUser.logoWeb = event.target.result;
+                        currentUser.logoToko = event.target.result;
+                        const index = users.findIndex(u => u.id === currentUser.id);
+                        users[index] = currentUser;
+                        simpanData();
+                        document.getElementById('header-logo').src = event.target.result;
+                        tampilkanNotif('Logo web dan toko berhasil diperbarui');
+                    };
+                    reader.readAsDataURL(file);
+                };
+                inputLogo.click();
+            });
+
+            // Kirim pengumuman
+            document.getElementById('btn-send-announcement').addEventListener('click', () => {
+                const teks = prompt('Tulis pengumuman yang akan dikirim ke semua pengguna:', announcement);
+                if (!teks || teks.trim() === '') return;
+                
+                announcement = teks.trim();
+                simpanData();
+                tampilkanPengumuman();
+                tampilkanNotif('Pengumuman berhasil dikirim ke semua pengguna');
+            });
+
+            // Kelola pengguna (Creator)
+            document.getElementById('btn-manage-users').addEventListener('click', () => {
+                let html = '<div class="space-y-3">';
+                users.forEach(user => {
+                    html += `
+                        <div class="flex items-center justify-between p-2 border rounded-lg">
+                            <div class="flex items-center gap-2">
+                                <img src="${user.avatar}" class="w-8 h-8 rounded-full">
+                                <span>${user.nama} (@${user.username})</span>
+                            </div>
+                            <select onchange="ubahPeranUser(${user.id}, this.value)" class="text-sm p-1 rounded">
+                                <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
+                                <option value="pending" ${user.role === 'pending' ? 'selected' : ''}>Menunggu</option>
+                                <option value="seller" ${user.role === 'seller' ? 'selected' : ''}>Seller</option>
+                                <option value="creator" ${user.role === 'creator' ? 'selected' : ''}>Creator</option>
+                            </select>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                
+                document.getElementById('modal-title').textContent = 'Kelola Peran Pengguna';
+                document.getElementById('modal-content').innerHTML = html;
+                document.getElementById('modal').classList.remove('hidden');
+            });
+
+            // Tutup modal
+            document.getElementById('close-modal').addEventListener('click', () => {
+                document.getElementById('modal').classList.add('hidden');
+            });
+        }
+
+        // Ubah peran pengguna
+        function ubahPeranUser(idUser, peranBaru) {
+            const index = users.findIndex(u => u.id === idUser);
+            if (index === -1) return;
+            
+            users[index].role = peranBaru;
+            simpanData();
+            tampilkanNotif('Peran pengguna berhasil diubah');
+        }
+
+        // Riwayat Transaksi
+        function tampilkanRiwayatTransaksi() {
+            const kontainer = document.getElementById('transaction-history');
+            const transaksiUser = transactions.filter(t => t.idPembeli === currentUser.id || t.idPenjual === currentUser.id || currentUser.role === 'creator');
+            
+            if (transaksiUser.length === 0) {
+                kontainer.innerHTML = '<p class="text-gray-500 text-center py-4">Belum ada riwayat transaksi</p>';
+                return;
+            }
+            
+            kontainer.innerHTML = '';
+            transaksiUser.forEach(trans => {
+                kontainer.innerHTML += `
+                    <div class="border border-gray-200 rounded-lg p-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold">${trans.jenis}</span>
+                            <span class="text-sm ${trans.status === 'Selesai' ? 'text-accent' : 'text-yellow-500'}">${trans.status}</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-1">${trans.keterangan}</p>
+                        <div class="flex justify-between text-xs mt-2">
+                            <span>${trans.tanggal}</span>
+                            <span class="font-bold">${formatRupiah(trans.jumlah)}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Forum Diskusi
+        function initForum() {
+            document.getElementById('btn-create-thread').addEventListener('click', () => {
+                const judul = prompt('Masukkan judul topik baru:');
+                if (!judul || judul.trim() === '') return;
+                const isi = prompt('Tulis isi diskusi:');
+                if (!isi || isi.trim() === '') return;
+                
+                forumThreads.unshift({
+                    id: forumThreads.length + 1,
+                    judul: judul.trim(),
+                    isi: isi.trim(),
+                    pembuat: currentUser.nama,
+                    tanggal: new Date().toLocaleString('id-ID'),
+                    balasan: []
+                });
+                simpanData();
+                tampilkanForum();
+                tampilkanNotif('Topik diskusi berhasil dibuat');
+            });
+        }
+
+        function tampilkanForum() {
+            const kontainer = document.getElementById('forum-list');
+            kontainer.innerHTML = '';
+            
+            if (forumThreads.length === 0) {
+                kontainer.innerHTML = '<p class="text-gray-500 text-center py-8">Belum ada topik diskusi. Jadilah yang pertama membuat!</p>';
+                return;
+            }
+            
+            forumThreads.forEach(thread => {
+                kontainer.innerHTML += `
+                    <div class="bg-white rounded-xl shadow p-4">
+                        <h4 class="font-bold text-lg">${thread.judul}</h4>
+                        <p class="text-sm text-gray-500 mb-3">Dibuat oleh ${thread.pembuat} • ${thread.tanggal}</p>
+                        <p class="mb-4">${thread.isi}</p>
+                        
+                        <div class="border-t pt-3">
+                            <h5 class="font-semibold text-sm mb-2">Balasan (${thread.balasan.length})</h5>
+                            <div class="space-y-2 mb-3">
+                                ${thread.balasan.map(b => `
+                                    <div class="bg-gray-50 p-2 rounded text-sm">
+                                        <span class="font-semibold">${b.pengirim}:</span> ${b.isi}
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button onclick="balasForum(${thread.id})" class="text-primary text-sm font-semibold">+ Balas Diskusi Ini</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function balasForum(idThread) {
+            const isi = prompt('Tulis balasan Anda:');
+            if (!isi || isi.trim() === '') return;
+            
+            const thread = forumThreads.find(t => t.id === idThread);
+            if (!thread) return;
+            
+            thread.balasan.push({
+                pengirim: currentUser.nama,
+                isi: isi.trim(),
+                tanggal: new Date().toLocaleString('id-ID')
+            });
+            simpanData();
+            tampilkanForum();
+            tampilkanNotif('Balasan berhasil dikirim');
+        }
+
+        // Dashboard
+        function tampilkanDashboard() {
+            const kontainer = document.getElementById('dashboard-content');
+            
+            if (currentUser.role === 'creator') {
+                kontainer.innerHTML = `
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-creator/10 p
