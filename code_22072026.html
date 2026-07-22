@@ -1,0 +1,1105 @@
+<html style="margin:0;padding:0;">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script>
+(function(){
+  var s = document.createElement('style');
+  s.textContent = `
+    :root{
+      --bg:#f8fafc;--card:#ffffff;--card-2:#f1f5f9;--text:#0f172a;--muted:#64748b;
+      --accent:#6366f1;--accent-soft:rgba(99,102,241,.1);
+      --accent2:#ec4899;--accent2-soft:rgba(236,72,153,.1);
+      --border:#e2e8f0;
+      --success:#10b981;--danger:#ef4444;--warning:#f59e0b;
+      --rgb-1:#6366f1;--rgb-2:#ec4899;--rgb-3:#8b5cf6;--rgb-4:#06b6d4;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden}
+    
+    @keyframes rgbShift{
+      0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}
+    }
+    @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+    
+    .gradient-bg{background:linear-gradient(135deg,var(--rgb-1),var(--rgb-2),var(--rgb-3),var(--rgb-4));background-size:300% 300%;animation:rgbShift 8s ease infinite}
+    .gradient-text{background:linear-gradient(90deg,var(--rgb-1),var(--rgb-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    
+    @keyframes scrollRight{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .banner-track{display:flex;gap:20px;animation:scrollRight 35s linear infinite;width:max-content}
+    .banner-track:hover{animation-play-state:paused}
+    
+    .card-hover{transition:all .3s ease}
+    .card-hover:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.1)}
+    
+    .btn-primary{background:linear-gradient(135deg,var(--rgb-1),var(--rgb-2));color:#fff;border:none;padding:12px 24px;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s;min-height:44px}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(99,102,241,.35)}
+    .btn-secondary{background:#fff;color:var(--text);border:1.5px solid var(--border);padding:12px 24px;border-radius:12px;font-weight:600;cursor:pointer;transition:all .2s;min-height:44px}
+    .btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+    .btn-success{background:var(--success);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:700;cursor:pointer;min-height:36px}
+    .btn-danger{background:var(--danger);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:700;cursor:pointer;min-height:36px}
+    .btn-warning{background:var(--warning);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:700;cursor:pointer;min-height:36px}
+    .btn-sm{padding:6px 12px;font-size:12px;min-height:32px;border-radius:8px}
+    
+    input,textarea,select{width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-family:inherit;font-size:14px;transition:all .2s;min-height:44px}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+    
+    .nav-link{padding:10px 18px;border-radius:10px;color:var(--muted);cursor:pointer;transition:all .2s;font-weight:500;display:inline-block;min-height:40px}
+    .nav-link:hover,.nav-link.active{color:var(--accent);background:var(--accent-soft)}
+    
+    .product-card{background:#fff;border-radius:16px;overflow:hidden;transition:all .3s;border:1px solid var(--border);position:relative}
+    .product-card:hover{transform:translateY(-6px);box-shadow:0 15px 35px rgba(0,0,0,.1);border-color:var(--accent)}
+    
+    .badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:.3px}
+    .badge-user{background:#dbeafe;color:#1d4ed8}
+    .badge-seller{background:#d1fae5;color:#047857}
+    .badge-creator{background:#fce7f3;color:#be185d}
+    .badge-admin{background:#fef3c7;color:#b45309}
+    .badge-pending{background:#fef3c7;color:#b45309}
+    .badge-approved{background:#d1fae5;color:#047857}
+    .badge-rejected{background:#fee2e2;color:#b91c1c}
+    
+    .seller-tag{position:absolute;top:12px;right:12px;z-index:2;background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(16,185,129,.3)}
+    .admin-tag{position:absolute;top:12px;right:12px;z-index:2;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(245,158,11,.3)}
+    
+    .notification{position:fixed;top:20px;right:20px;z-index:9999;background:#fff;border:1px solid var(--accent);border-radius:12px;padding:14px 20px;box-shadow:0 10px 30px rgba(0,0,0,.15);animation:slideIn .4s ease;max-width:340px}
+    
+    .sidebar{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px}
+    .sidebar-item{padding:12px 16px;border-radius:10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px;margin-bottom:4px;font-weight:600;color:var(--muted)}
+    .sidebar-item:hover,.sidebar-item.active{background:var(--accent-soft);color:var(--accent)}
+    
+    .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(6px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
+    
+    .stat-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;transition:all .3s}
+    .stat-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+    
+    .forum-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;transition:all .2s;cursor:pointer}
+    .forum-card:hover{border-color:var(--accent);box-shadow:0 4px 15px rgba(0,0,0,.05)}
+    
+    .contact-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:24px;transition:all .3s;position:relative;overflow:hidden}
+    .contact-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.08);border-color:var(--accent)}
+    .contact-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--rgb-1),var(--rgb-2))}
+    
+    .profile-header{background:linear-gradient(135deg,var(--rgb-1),var(--rgb-2));border-radius:20px;padding:28px;color:#fff;position:relative;overflow:hidden}
+    
+    .filter-chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+    .filter-chip{padding:8px 18px;border-radius:30px;background:#fff;border:1.5px solid var(--border);cursor:pointer;font-weight:600;font-size:13px;transition:all .2s;color:var(--muted)}
+    .filter-chip:hover,.filter-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    
+    .hero-section{background:linear-gradient(135deg,#6366f1 0%,#ec4899 50%,#8b5cf6 100%);color:#fff;position:relative;overflow:hidden}
+    
+    .payment-proof{max-width:100%;max-height:180px;border-radius:10px;border:2px solid var(--border);object-fit:cover}
+    
+    ::-webkit-scrollbar{width:8px;height:8px}
+    ::-webkit-scrollbar-track{background:#f1f5f9}
+    ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+    ::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+  `;
+  document.head.appendChild(s);
+})();
+</script>
+
+<div style="background:var(--bg);min-height:100vh;">
+  <div id="notif-container"></div>
+
+  <!-- NAVIGASI -->
+  <nav style="position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);">
+    <div class="max-w-7xl mx-auto px-6 py-3" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+      <div style="display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="showPage('home')">
+        <div class="gradient-bg" style="width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:18px;">FS</div>
+        <h2 class="gradient-text" style="font-size:24px;font-weight:900;margin:0;">FAHRI STORE</h2>
+      </div>
+      
+      <div id="nav-links" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+        <span class="nav-link active" onclick="showPage('home')">🏠 Beranda</span>
+        <span class="nav-link" onclick="showPage('products')">🛍️ Produk</span>
+        <span class="nav-link" onclick="showPage('forum')">💬 Forum</span>
+        <span id="nav-dashboard" class="nav-link" style="display:none;" onclick="showPage('dashboard')">⚡ Dashboard</span>
+      </div>
+      
+      <div id="auth-buttons" style="display:flex;gap:10px;">
+        <button class="btn-secondary" onclick="showAuthModal('login')" style="padding:10px 20px;">Login</button>
+        <button class="btn-primary" onclick="showAuthModal('register')" style="padding:10px 20px;">Daftar</button>
+      </div>
+      
+      <div id="user-menu" style="display:none;align-items:center;gap:12px;">
+        <div id="notif-btn" style="position:relative;cursor:pointer;padding:10px;border-radius:10px;background:var(--card-2);border:1px solid var(--border);" onclick="toggleNotifPanel()">
+          🔔 <span id="notif-badge" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;border-radius:50%;width:20px;height:20px;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:700;">0</span>
+        </div>
+        <span id="user-role-badge" class="badge badge-user">User</span>
+        <div style="cursor:pointer;" onclick="showPage('dashboard')">
+          <span id="user-name" style="font-weight:700;"></span>
+        </div>
+        <button class="btn-secondary" onclick="logout()" style="padding:8px 14px;">Keluar</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PANEL NOTIFIKASI -->
+  <div id="notif-panel" style="display:none;position:fixed;top:70px;right:20px;width:360px;max-height:450px;overflow-y:auto;background:#fff;border:1px solid var(--border);border-radius:14px;z-index:999;box-shadow:0 15px 40px rgba(0,0,0,.12);">
+    <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <h4 style="margin:0;font-weight:800;">🔔 Notifikasi</h4>
+      <span style="color:var(--accent);cursor:pointer;font-size:13px;font-weight:600;" onclick="clearNotif()">Bersihkan</span>
+    </div>
+    <div id="notif-list" style="padding:10px;"></div>
+  </div>
+
+  <!-- HALAMAN BERANDA -->
+  <div id="page-home" class="page">
+    <div class="hero-section" style="padding:80px 20px;text-align:center;position:relative;">
+      <div style="position:relative;z-index:1;max-width:800px;margin:0 auto;">
+        <div style="display:inline-block;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);padding:8px 20px;border-radius:30px;font-size:13px;font-weight:700;margin-bottom:24px;border:1px solid rgba(255,255,255,.3);">
+          ✨ PLATFORM PRODUK DIGITAL TERPERCAYA
+        </div>
+        <h1 style="font-size:clamp(32px,6vw,60px);font-weight:900;line-height:1.1;margin:0 0 20px;">
+          Temukan Produk Digital<br>Terbaik di <strong>FAHRI STORE</strong>
+        </h1>
+        <p style="font-size:18px;opacity:.95;margin:0 auto 40px;max-width:600px;line-height:1.6;">
+          Beli produk berkualitas, atau jadilah Seller VIP dan mulai bangun bisnis digital Anda!
+        </p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn-primary" style="background:#fff;color:var(--accent);padding:16px 36px;font-size:16px;" onclick="showPage('products')">🛍️ Belanja Sekarang</button>
+          <button class="btn-secondary" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.5);padding:16px 36px;font-size:16px;" onclick="showAuthModal('register')">🚀 Daftar Gratis</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="overflow:hidden;padding:30px 0;background:var(--card-2);">
+      <div class="banner-track" id="banner-track-1"></div>
+    </div>
+
+    <!-- PILIHAN ROLE DENGAN CARD KONTAK -->
+    <div class="max-w-7xl mx-auto px-6 py-16">
+      <h2 style="text-align:center;font-size:36px;font-weight:900;margin:0 0 50px;">Pilih <span class="gradient-text">Peran Anda</span></h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;">
+        
+        <div class="contact-card card-hover" style="text-align:center;">
+          <div style="width:90px;height:90px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:42px;border:4px solid #bfdbfe;">👤</div>
+          <h3 style="font-size:24px;font-weight:800;margin:0 0 6px;">User</h3>
+          <span class="badge badge-user" style="margin-bottom:14px;">MEMBER</span>
+          <p style="color:var(--muted);margin:0 0 18px;line-height:1.6;">Beli produk premium, ajukan jadi Seller VIP, dan berdiskusi di forum</p>
+          <div style="background:var(--card-2);border-radius:12px;padding:14px;text-align:left;font-size:13px;">
+            <div style="margin-bottom:6px;"><strong>✅</strong> Beli Produk</div>
+            <div style="margin-bottom:6px;"><strong>✅</strong> Forum Diskusi</div>
+            <div><strong>✅</strong> Ajukan Seller VIP</div>
+          </div>
+        </div>
+        
+        <div class="contact-card card-hover" style="text-align:center;border:2px solid var(--accent);cursor:pointer;" onclick="requestVipFromHome()">
+          <div style="width:90px;height:90px;border-radius:50%;background:#d1fae5;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:42px;border:4px solid #a7f3d0;animation:pulse 2s infinite;">💎</div>
+          <h3 style="font-size:24px;font-weight:800;margin:0 0 6px;">Seller VIP</h3>
+          <span class="badge badge-seller" style="margin-bottom:14px;">PREMIUM</span>
+          <p style="color:var(--muted);margin:0 0 18px;line-height:1.6;">Jual produk Anda sendiri, kelola toko, dan dapatkan penghasilan</p>
+          <div style="background:var(--card-2);border-radius:12px;padding:14px;text-align:left;font-size:13px;margin-bottom:16px;">
+            <div style="margin-bottom:6px;"><strong>✅</strong> Tambah/Edit/Hapus Produk</div>
+            <div style="margin-bottom:6px;"><strong>✅</strong> Lihat Order Masuk</div>
+            <div><strong>✅</strong> Dashboard Penjualan</div>
+          </div>
+          <div class="gradient-text" style="font-size:22px;font-weight:900;margin-bottom:12px;">Rp 50.000</div>
+          <button class="btn-primary" style="width:100%;" onclick="event.stopPropagation();requestVipFromHome()">Daftar Sekarang</button>
+        </div>
+        
+        <div class="contact-card card-hover" style="text-align:center;">
+          <div style="width:90px;height:90px;border-radius:50%;background:#fce7f3;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:42px;border:4px solid #fbcfe8;">👑</div>
+          <h3 style="font-size:24px;font-weight:800;margin:0 0 6px;">Creator</h3>
+          <span class="badge badge-creator" style="margin-bottom:14px;">ADMIN</span>
+          <p style="color:var(--muted);margin:0 0 18px;line-height:1.6;">Kontrol penuh sistem, kelola produk, order, banner & user</p>
+          <div style="background:var(--card-2);border-radius:12px;padding:14px;text-align:left;font-size:13px;">
+            <div style="margin-bottom:6px;"><strong>✅</strong> Semua Fitur Seller</div>
+            <div style="margin-bottom:6px;"><strong>✅</strong> Kelola User & Banner</div>
+            <div><strong>✅</strong> Acc/Tolak Order & VIP</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- PRODUK UNGGULAN -->
+    <div class="max-w-7xl mx-auto px-6 py-16" style="background:var(--card-2);border-radius:30px;margin-bottom:40px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;flex-wrap:wrap;gap:16px;">
+        <h2 style="font-size:32px;font-weight:900;margin:0;">🔥 Produk <span class="gradient-text">Unggulan</span></h2>
+        <button class="btn-secondary" onclick="showPage('products')" style="font-weight:700;">Lihat Semua →</button>
+      </div>
+      <div id="featured-products" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;"></div>
+    </div>
+
+    <div style="background:#0f172a;color:#fff;margin-top:40px;">
+      <div class="max-w-7xl mx-auto px-6 py-12 text-center">
+        <div class="gradient-text" style="font-size:32px;font-weight:900;margin-bottom:10px;">FAHRI STORE</div>
+        <p style="color:#94a3b8;margin:0 0 20px;">Platform produk digital terpercaya di Indonesia</p>
+        <p style="color:#64748b;margin:0;font-size:14px;">© 2026 Fahri Store - All Rights Reserved</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HALAMAN PRODUK -->
+  <div id="page-products" class="page" style="display:none;">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <h1 style="font-size:42px;font-weight:900;margin:0 0 10px;">🛍️ Semua Produk</h1>
+      <p style="color:var(--muted);margin:0 0 30px;font-size:16px;">Temukan produk digital terbaik untuk kebutuhan Anda</p>
+      
+      <!-- FILTER LEBIH MUDAH -->
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:30px;">
+        <div style="display:flex;gap:14px;margin-bottom:18px;flex-wrap:wrap;">
+          <input id="search-product" placeholder="🔍 Cari nama produk..." style="max-width:320px;flex:1;min-width:200px;" oninput="renderAllProducts()">
+          <select id="filter-category" onchange="renderAllProducts()" style="max-width:220px;">
+            <option value="">📂 Semua Kategori</option>
+          </select>
+          <select id="filter-owner" onchange="renderAllProducts()" style="max-width:220px;">
+            <option value="">👥 Semua Penjual</option>
+            <option value="admin">👑 Admin</option>
+            <option value="seller">💎 Seller</option>
+          </select>
+        </div>
+        <div class="filter-chips" id="category-chips"></div>
+      </div>
+      
+      <div id="all-products" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;"></div>
+    </div>
+  </div>
+
+  <!-- HALAMAN FORUM -->
+  <div id="page-forum" class="page" style="display:none;">
+    <div class="max-w-4xl mx-auto px-6 py-10">
+      <h1 style="font-size:42px;font-weight:900;margin:0 0 10px;">💬 Forum Diskusi</h1>
+      <p style="color:var(--muted);margin:0 0 30px;font-size:16px;">Berdiskusi dan tanya jawab seputar produk di Fahri Store</p>
+      
+      <div id="forum-post-form" style="display:none;background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;box-shadow:0 2px 10px rgba(0,0,0,.04);">
+        <h3 style="margin:0 0 16px;font-weight:800;">✍️ Buat Diskusi Baru</h3>
+        <input id="forum-title" placeholder="Judul diskusi..." style="margin-bottom:12px;">
+        <textarea id="forum-content" placeholder="Tulis pertanyaan atau diskusi Anda..." rows="4" style="margin-bottom:12px;resize:vertical;"></textarea>
+        <button class="btn-primary" onclick="postForum()">📤 Kirim</button>
+      </div>
+      
+      <div id="forum-login-prompt" style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center;margin-bottom:24px;">
+        <p style="color:var(--muted);margin:0 0 18px;font-size:16px;">🔒 Silakan login untuk berdiskusi di forum</p>
+        <button class="btn-primary" onclick="showAuthModal('login')">Login Sekarang</button>
+      </div>
+      
+      <div id="forum-posts" style="display:flex;flex-direction:column;gap:14px;"></div>
+    </div>
+  </div>
+
+  <!-- HALAMAN DASHBOARD -->
+  <div id="page-dashboard" class="page" style="display:none;">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      
+      <!-- CARD PROFIL DENGAN EDIT -->
+      <div class="profile-header" style="margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:22px;flex-wrap:wrap;position:relative;z-index:1;">
+          <div style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;border:3px solid rgba(255,255,255,.5);">
+            <span id="profile-avatar">U</span>
+          </div>
+          <div style="flex:1;min-width:200px;">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
+              <h2 id="profile-name" style="font-size:26px;font-weight:900;margin:0;"></h2>
+              <span id="profile-role-badge" style="background:rgba(255,255,255,.25);color:#fff;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:700;"></span>
+            </div>
+            <p id="profile-email" style="margin:0 0 4px;opacity:.9;">📧 </p>
+            <p id="profile-uid" style="margin:0;font-size:12px;opacity:.75;font-family:monospace;"></p>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;text-align:center;">
+            <div><div id="stat-products" style="font-size:26px;font-weight:900;">0</div><div style="font-size:12px;opacity:.85;">Produk</div></div>
+            <div><div id="stat-orders" style="font-size:26px;font-weight:900;">0</div><div style="font-size:12px;opacity:.85;">Order</div></div>
+            <div><div id="stat-sales" style="font-size:22px;font-weight:900;">Rp0</div><div style="font-size:12px;opacity:.85;">Penjualan</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:250px 1fr;gap:22px;align-items:start;">
+        <div class="sidebar" id="sidebar-menu"></div>
+        <div id="dashboard-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PEMBAYARAN -->
+  <div id="payment-modal" class="modal-overlay" style="display:none;">
+    <div style="background:#fff;border-radius:20px;padding:32px;max-width:520px;width:100%;margin:20px 0;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+        <h2 id="payment-title" style="font-size:26px;font-weight:900;margin:0;">💳 Pembayaran</h2>
+        <button onclick="closePaymentModal()" style="background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer;">×</button>
+      </div>
+      
+      <div id="payment-product-info" style="background:var(--card-2);border-radius:12px;padding:18px;margin-bottom:22px;"></div>
+      
+      <div style="text-align:center;margin-bottom:22px;">
+        <h4 style="margin:0 0 14px;font-weight:800;">📱 Scan QRIS / Transfer</h4>
+        <div style="background:#fff;padding:16px;border-radius:14px;display:inline-block;margin-bottom:14px;border:2px solid var(--border);">
+          <img id="qris-image" src="" alt="QRIS Pembayaran" style="width:200px;height:200px;object-fit:contain;border-radius:8px;">
+        </div>
+        <div style="background:var(--card-2);padding:12px;border-radius:10px;margin-bottom:8px;">
+          <strong style="color:var(--accent);font-size:17px;">💳 DANA: <span id="dana-number">-</span></strong>
+        </div>
+        <div style="background:var(--card-2);padding:12px;border-radius:10px;">
+          <strong style="color:var(--accent2);font-size:17px;">📞 WA: <span id="wa-number">-</span></strong>
+        </div>
+      </div>
+      
+      <div style="margin-bottom:20px;">
+        <label style="display:block;margin-bottom:8px;font-weight:700;font-size:14px;">📸 Upload Bukti Transfer *</label>
+        <input type="file" id="payment-proof" accept="image/*" style="padding:10px;background:var(--card-2);">
+        <div id="proof-preview" style="margin-top:10px;display:none;">
+          <img id="proof-img" class="payment-proof" alt="Bukti transfer">
+        </div>
+      </div>
+      
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px;margin-bottom:22px;">
+        <p style="margin:0;color:#92400e;font-size:14px;">
+          ⚠️ Setelah transfer dan upload bukti, klik konfirmasi. Order akan diproses setelah Admin menyetujui.
+        </p>
+      </div>
+      
+      <button class="btn-primary" style="width:100%;padding:15px;font-size:16px;" onclick="confirmPayment()">✅ Konfirmasi Pembayaran</button>
+    </div>
+  </div>
+
+  <!-- MODAL AUTH -->
+  <div id="auth-modal" class="modal-overlay" style="display:none;">
+    <div style="background:#fff;border-radius:20px;padding:32px;max-width:440px;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+        <h2 id="auth-title" style="font-size:28px;font-weight:900;margin:0;">Login</h2>
+        <button onclick="closeAuthModal()" style="background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer;">×</button>
+      </div>
+      
+      <div id="auth-role-select" style="display:none;margin-bottom:18px;">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Pilih Role</label>
+        <select id="register-role">
+          <option value="user">👤 User (Gratis)</option>
+          <option value="seller">💎 Seller VIP (Rp 50.000)</option>
+        </select>
+      </div>
+      
+      <div id="auth-name-field" style="display:none;margin-bottom:16px;">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Nama Lengkap *</label>
+        <input id="auth-name" placeholder="Masukkan nama">
+      </div>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">📧 Email *</label>
+        <input id="auth-email" type="email" placeholder="email@contoh.com">
+      </div>
+      
+      <div style="margin-bottom:24px;">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">🔒 Password *</label>
+        <input id="auth-password" type="password" placeholder="•••••••• (min 6 karakter)">
+      </div>
+      
+      <button id="auth-submit" class="btn-primary" style="width:100%;padding:14px;font-size:15px;" onclick="submitAuth()">Login</button>
+      
+      <p style="text-align:center;color:var(--muted);margin:20px 0 0;font-size:14px;">
+        <span id="auth-switch-text">Belum punya akun?</span>
+        <span style="color:var(--accent);cursor:pointer;font-weight:700;" id="auth-switch" onclick="switchAuthMode()"> Daftar</span>
+      </p>
+      
+      <div id="auth-error" style="color:var(--danger);margin-top:12px;font-size:14px;display:none;text-align:center;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL EDIT PROFIL -->
+  <div id="edit-profile-modal" class="modal-overlay" style="display:none;">
+    <div style="background:#fff;border-radius:20px;padding:32px;max-width:440px;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+        <h2 style="font-size:26px;font-weight:900;margin:0;">✏️ Edit Profil</h2>
+        <button onclick="closeEditProfileModal()" style="background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer;">×</button>
+      </div>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Nama Baru</label>
+        <input id="edit-name" placeholder="Nama baru">
+      </div>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Password Baru</label>
+        <input id="edit-password" type="password" placeholder="Password baru (min 6)">
+      </div>
+      
+      <div style="margin-bottom:24px;">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Konfirmasi Password Lama</label>
+        <input id="edit-old-password" type="password" placeholder="Password lama">
+      </div>
+      
+      <button class="btn-primary" style="width:100%;padding:14px;" onclick="saveEditProfile()">💾 Simpan Perubahan</button>
+    </div>
+  </div>
+
+  <!-- MODAL PRODUK -->
+  <div id="product-modal" class="modal-overlay" style="display:none;">
+    <div style="background:#fff;border-radius:20px;padding:32px;max-width:550px;width:100%;margin:20px 0;max-height:90vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+        <h2 id="product-modal-title" style="font-size:26px;font-weight:900;margin:0;">Tambah Produk</h2>
+        <button onclick="closeProductModal()" style="background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer;">×</button>
+      </div>
+      
+      <div style="margin-bottom:16px;"><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">📦 Nama Produk *</label><input id="product-name" placeholder="Nama produk"></div>
+      <div style="margin-bottom:16px;"><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">📝 Deskripsi *</label><textarea id="product-desc" placeholder="Deskripsi produk..." rows="3" style="resize:vertical;"></textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+        <div><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">💰 Harga (Rp) *</label><input id="product-price" type="number" placeholder="0"></div>
+        <div><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">📂 Kategori *</label><input id="product-category" placeholder="Contoh: Digital"></div>
+      </div>
+      <div style="margin-bottom:16px;"><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">🖼️ URL Gambar</label><input id="product-image" placeholder="https://..."></div>
+      <div style="margin-bottom:24px;"><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">🔗 Link Pembelian (WA/Website)</label><input id="product-link" placeholder="https://wa.me/... atau link toko"></div>
+      
+      <button class="btn-primary" style="width:100%;padding:14px;font-size:15px;" onclick="saveProduct()">💾 Simpan Produk</button>
+    </div>
+  </div>
+
+  <!-- MODAL KATALOG -->
+  <div id="catalog-modal" class="modal-overlay" style="display:none;">
+    <div style="background:#fff;border-radius:20px;padding:32px;max-width:480px;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+        <h2 id="catalog-modal-title" style="font-size:26px;font-weight:900;margin:0;">Tambah Katalog</h2>
+        <button onclick="closeCatalogModal()" style="background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer;">×</button>
+      </div>
+      <div style="margin-bottom:16px;"><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Nama Katalog *</label><input id="catalog-name" placeholder="Nama katalog"></div>
+      <div style="margin-bottom:24px;"><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Deskripsi</label><textarea id="catalog-desc" placeholder="Deskripsi..." rows="3" style="resize:vertical;"></textarea></div>
+      <button class="btn-primary" style="width:100%;padding:14px;" onclick="saveCatalog()">💾 Simpan</button>
+    </div>
+  </div>
+
+  <!-- MODAL BANNER -->
+  <div id="banner-modal" class="modal-overlay" style="display:none;">
+    <div style="background:#fff;border-radius:20px;padding:32px;max-width:520px;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+        <h2 style="font-size:26px;font-weight:900;margin:0;">Tambah Banner</h2>
+        <button onclick="closeBannerModal()" style="background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer;">×</button>
+      </div>
+      <div style="margin-bottom:16px;"><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Judul Banner *</label><input id="banner-title" placeholder="Judul"></div>
+      <div style="margin-bottom:16px;"><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Upload Gambar</label><input type="file" id="banner-file" accept="image/*" style="padding:10px;background:var(--card-2);"></div>
+      <div style="margin-bottom:24px;"><label style="display:block;margin-bottom:8px;font-weight:600;font-size:14px;">Atau URL Gambar</label><input id="banner-url" placeholder="https://..."></div>
+      <button class="btn-primary" style="width:100%;padding:14px;" onclick="saveBanner()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 🔥 KONFIGURASI - ISI DATA ANDA DI SINI
+// ============================================================
+const APP_CONFIG = {
+  firebase: {
+    apiKey: "AIzaSyDuQmsUHotG-lW9tm5LKabUyw_ARwt_W2I",
+    authDomain: "fashion-fahri-39262.firebaseapp.com",
+    databaseURL: "https://fashion-fahri-39262-default-rtdb.firebaseio.com",
+    projectId: "fashion-fahri-39262",
+    storageBucket: "fashion-fahri-39262.firebasestorage.app",
+    messagingSenderId: "647011821518",
+    appId: "1:647011821518:web:279811ff7821e75bf32d9f",
+    measurementId: "G-4491S31VK2"
+  },
+  payment: {
+    danaNumber: "081234567890",
+    whatsappNumber: "081234567890",
+    sellerVipPrice: 50000,
+    qrImageUrl: "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=081234567890"
+  },
+  accounts: {
+    creator: { email: "creator@fahri.com", password: "creator123", name: "Admin Fahri" },
+    seller: { email: "seller@fahri.com", password: "seller123", name: "Seller VIP" }
+  }
+};
+
+// ============================================================
+// INISIALISASI
+// ============================================================
+var firebaseReady = false, auth = null, db = null, storage = null;
+try {
+  firebase.initializeApp(APP_CONFIG.firebase);
+  auth = firebase.auth(); db = firebase.firestore(); storage = firebase.storage();
+  firebaseReady = true;
+} catch(e) { console.log("⚠️ Firebase gagal, pakai LocalStorage"); firebaseReady = false; }
+
+var currentUser = null, currentRole = 'user', currentMenu = 'overview';
+var editingProductId = null, editingCatalogId = null, authMode = 'login', pendingPayment = null;
+var notifications = JSON.parse(localStorage.getItem('fahri_notif') || '[]');
+var uploadedProof = null;
+
+function loadData(k, fb){try{var d=localStorage.getItem('fahri_'+k);return d?JSON.parse(d):fb;}catch(e){return fb;}}
+function saveData(k, d){localStorage.setItem('fahri_'+k, JSON.stringify(d));}
+
+var demoProducts = loadData('products', [
+  {id:'1',name:'Template Website Premium',desc:'Template website modern responsive siap pakai',price:150000,category:'Website',image:'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500',ownerId:'creator_default',ownerName:'Admin Fahri',ownerType:'admin',link:''},
+  {id:'2',name:'Logo Design Premium',desc:'Desain logo profesional + revisi unlimited',price:250000,category:'Design',image:'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=500',ownerId:'creator_default',ownerName:'Admin Fahri',ownerType:'admin',link:''},
+  {id:'3',name:'E-book Bisnis Online',desc:'Panduan lengkap memulai bisnis dari nol',price:75000,category:'E-book',image:'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500',ownerId:'seller_default',ownerName:'Seller VIP',ownerType:'seller',link:''},
+  {id:'4',name:'Preset Lightroom RGB',desc:'50+ preset lightroom warna-warni premium',price:50000,category:'Digital',image:'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=500',ownerId:'seller_default',ownerName:'Seller VIP',ownerType:'seller',link:''},
+]);
+var demoBanners = loadData('banners', [
+  {id:'1',title:'🔥 DISKON 50% HARI INI',imageUrl:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=900'},
+  {id:'2',title:'💎 DAFTAR SELLER VIP',imageUrl:'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900'},
+  {id:'3',title:'🎁 PRODUK BARU DATANG',imageUrl:'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=900'},
+  {id:'4',title:'⚡ FLASH SALE TERBATAS',imageUrl:'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=900'},
+]);
+var demoCatalogs = loadData('catalogs', [{id:'1',name:'Produk Digital',desc:'Kumpulan produk digital'},{id:'2',name:'Jasa Design',desc:'Jasa desain profesional'}]);
+var demoForum = loadData('forum', [{id:'1',title:'Bagaimana cara menjadi Seller VIP?',content:'Saya tertarik jadi seller, mohon penjelasannya',author:'User1',date:'2026-07-20',replies:5}]);
+var demoVipRequests = loadData('vipRequests', []);
+var demoOrders = loadData('orders', []);
+var usersData = loadData('users', {});
+var userPasswords = loadData('passwords', {});
+
+document.getElementById('dana-number').textContent = APP_CONFIG.payment.danaNumber;
+document.getElementById('wa-number').textContent = APP_CONFIG.payment.whatsappNumber;
+document.getElementById('qris-image').src = APP_CONFIG.payment.qrImageUrl;
+
+document.getElementById('payment-proof').addEventListener('change', function(e){
+  var file = e.target.files[0];
+  if(file){
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      uploadedProof = ev.target.result;
+      document.getElementById('proof-img').src = uploadedProof;
+      document.getElementById('proof-preview').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// ==================== FUNGSI UTILITAS ====================
+function formatRupiah(a){return 'Rp '+a.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function showNotification(t, m){
+  var n={id:Date.now(),title:t,message:m,time:new Date().toLocaleString('id-ID')};
+  notifications.unshift(n);localStorage.setItem('fahri_notif',JSON.stringify(notifications));updateNotifBadge();
+  var el=document.createElement('div');el.className='notification';
+  el.innerHTML=`<strong style="color:var(--accent)">${t}</strong><br><span style="color:var(--muted);font-size:13px;">${m}</span>`;
+  document.getElementById('notif-container').appendChild(el);setTimeout(()=>el.remove(),5000);
+}
+function updateNotifBadge(){
+  var b=document.getElementById('notif-badge');
+  if(notifications.length>0){b.style.display='flex';b.textContent=notifications.length>9?'9+':notifications.length;}
+  else{b.style.display='none';}
+}
+function toggleNotifPanel(){var p=document.getElementById('notif-panel');p.style.display=p.style.display==='none'?'block':'none';renderNotifList();}
+function renderNotifList(){
+  var l=document.getElementById('notif-list');
+  if(!notifications.length){l.innerHTML='<p style="color:var(--muted);text-align:center;padding:30px;">Tidak ada notifikasi</p>';return;}
+  l.innerHTML=notifications.map(n=>`<div style="padding:12px;border-bottom:1px solid var(--border);border-radius:8px;margin-bottom:6px;background:var(--card-2);"><strong style="font-size:13px;">${n.title}</strong><p style="margin:4px 0 0;color:var(--muted);font-size:12px;">${n.message}</p><span style="color:var(--accent);font-size:11px;">${n.time}</span></div>`).join('');
+}
+function clearNotif(){notifications=[];localStorage.setItem('fahri_notif','[]');updateNotifBadge();renderNotifList();}
+
+function showPage(pid){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.getElementById('page-'+pid).style.display='block';
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  event&&event.target&&event.target.classList.add('active');
+  document.getElementById('notif-panel').style.display='none';
+  if(pid==='dashboard')renderDashboard();
+  else if(pid==='products')renderAllProducts();
+  else if(pid==='forum')renderForum();
+}
+
+// ==================== AUTENTIKASI (VALIDASI KETAT) ====================
+function showAuthModal(m){
+  authMode=m;document.getElementById('auth-modal').style.display='flex';document.getElementById('auth-error').style.display='none';
+  if(m==='login'){
+    document.getElementById('auth-title').textContent='🔐 Login';document.getElementById('auth-submit').textContent='Login';
+    document.getElementById('auth-name-field').style.display='none';document.getElementById('auth-role-select').style.display='none';
+    document.getElementById('auth-switch-text').textContent='Belum punya akun?';document.getElementById('auth-switch').textContent=' Daftar';
+  }else{
+    document.getElementById('auth-title').textContent='✨ Daftar Akun';document.getElementById('auth-submit').textContent='Daftar';
+    document.getElementById('auth-name-field').style.display='block';document.getElementById('auth-role-select').style.display='block';
+    document.getElementById('auth-switch-text').textContent='Sudah punya akun?';document.getElementById('auth-switch').textContent=' Login';
+  }
+  document.getElementById('auth-email').value='';document.getElementById('auth-password').value='';document.getElementById('auth-name').value='';
+}
+function closeAuthModal(){document.getElementById('auth-modal').style.display='none';}
+function switchAuthMode(){showAuthModal(authMode==='login'?'register':'login');}
+
+function submitAuth(){
+  var em=document.getElementById('auth-email').value.trim();
+  var pw=document.getElementById('auth-password').value;
+  var nm=document.getElementById('auth-name').value.trim();
+  var er=document.getElementById('auth-error');
+  
+  // ✅ VALIDASI KETAT - JANGAN MASUK JIKA KOSONG
+  if(!em){er.textContent='⚠️ Email wajib diisi!';er.style.display='block';return;}
+  if(!pw){er.textContent='⚠️ Password wajib diisi!';er.style.display='block';return;}
+  if(pw.length<6){er.textContent='⚠️ Password minimal 6 karakter!';er.style.display='block';return;}
+  
+  if(authMode==='register'){
+    if(!nm){er.textContent='⚠️ Nama wajib diisi!';er.style.display='block';return;}
+  }
+  
+  // Cek akun default
+  if(em.toLowerCase()===APP_CONFIG.accounts.creator.email&&pw===APP_CONFIG.accounts.creator.password){
+    handleAuthSuccess({uid:'creator_default',email:em,displayName:APP_CONFIG.accounts.creator.name},'creator');closeAuthModal();return;}
+  if(em.toLowerCase()===APP_CONFIG.accounts.seller.email&&pw===APP_CONFIG.accounts.seller.password){
+    handleAuthSuccess({uid:'seller_default',email:em,displayName:APP_CONFIG.accounts.seller.name},'seller');closeAuthModal();return;}
+  
+  // Firebase atau fallback
+  if(firebaseReady&&auth){
+    if(authMode==='login'){
+      auth.signInWithEmailAndPassword(em,pw).then(u=>{
+        var r=usersData[u.user.uid]?.role||'user';
+        handleAuthSuccess({uid:u.user.uid,email:u.user.email,displayName:usersData[u.user.uid]?.name||u.user.email.split('@')[0]},r);closeAuthModal();
+      }).catch(e=>{er.textContent='⚠️ '+e.message;er.style.display='block';});
+    }else{
+      var rl=document.getElementById('register-role').value;
+      auth.createUserWithEmailAndPassword(em,pw).then(u=>{
+        usersData[u.user.uid]={name:nm,email:em,role:rl};userPasswords[u.user.uid]=pw;
+        saveData('users',usersData);saveData('passwords',userPasswords);
+        handleAuthSuccess({uid:u.user.uid,email:u.user.email,displayName:nm},rl);closeAuthModal();
+        if(rl==='seller')setTimeout(()=>showPaymentModal(null,true),500);
+      }).catch(e=>{er.textContent='⚠️ '+e.message;er.style.display='block';});
+    }
+  }else{
+    if(authMode==='login'){
+      var uid='user_'+btoa(em.toLowerCase()).replace(/[^a-zA-Z0-9]/g,'').substring(0,10);
+      if(userPasswords[uid]&&userPasswords[uid]!==pw){er.textContent='⚠️ Password salah!';er.style.display='block';return;}
+      if(!usersData[uid]){er.textContent='⚠️ Akun tidak ditemukan, silakan daftar!';er.style.display='block';return;}
+      loginFallback(em,pw);
+    }else{
+      registerFallback(em,pw,nm,document.getElementById('register-role').value);
+    }
+  }
+}
+function loginFallback(em,pw){
+  var uid='user_'+btoa(em.toLowerCase()).replace(/[^a-zA-Z0-9]/g,'').substring(0,10);
+  var ud=usersData[uid],rl=ud?.role||'user',nm=ud?.name||em.split('@')[0];
+  handleAuthSuccess({uid:uid,email:em,displayName:nm},rl);closeAuthModal();
+  showNotification('🔐 Login Berhasil','Halo '+nm+', selamat datang!');
+}
+function registerFallback(em,pw,nm,rl){
+  var uid='user_'+btoa(em.toLowerCase()).replace(/[^a-zA-Z0-9]/g,'').substring(0,10);
+  if(usersData[uid]){document.getElementById('auth-error').textContent='⚠️ Email sudah terdaftar!';document.getElementById('auth-error').style.display='block';return;}
+  usersData[uid]={name:nm,email:em,role:rl};userPasswords[uid]=pw;
+  saveData('users',usersData);saveData('passwords',userPasswords);
+  handleAuthSuccess({uid:uid,email:em,displayName:nm},rl);closeAuthModal();
+  showNotification('✨ Daftar Berhasil','Akun Anda telah dibuat!');
+  if(rl==='seller')setTimeout(()=>showPaymentModal(null,true),500);
+}
+function handleAuthSuccess(u,rl){
+  currentUser=u;currentRole=rl||'user';
+  usersData[u.uid]=usersData[u.uid]||{};usersData[u.uid].role=currentRole;usersData[u.uid].name=u.displayName;usersData[u.uid].email=u.email;saveData('users',usersData);
+  document.getElementById('auth-buttons').style.display='none';document.getElementById('user-menu').style.display='flex';
+  document.getElementById('user-name').textContent=u.displayName||u.email;document.getElementById('nav-dashboard').style.display='inline-block';
+  updateRoleBadge();renderFeaturedProducts();renderBanners();updateNotifBadge();
+  showNotification('🎉 Selamat Datang!','Halo '+u.displayName+'!');
+}
+function logout(){
+  if(firebaseReady&&auth)auth.signOut().catch(()=>{});
+  currentUser=null;currentRole='user';
+  document.getElementById('auth-buttons').style.display='flex';document.getElementById('user-menu').style.display='none';
+  document.getElementById('nav-dashboard').style.display='none';showPage('home');
+  showNotification('👋 Logout','Anda telah keluar');
+}
+function updateRoleBadge(){
+  var b=document.getElementById('user-role-badge');b.className='badge ';
+  if(currentRole==='creator'){b.className+='badge-creator';b.textContent='👑 Creator';}
+  else if(currentRole==='seller'){b.className+='badge-seller';b.textContent='💎 Seller VIP';}
+  else{b.className+='badge-user';b.textContent='👤 User';}
+}
+
+// ==================== EDIT PROFIL ====================
+function showEditProfileModal(){
+  document.getElementById('edit-name').value=currentUser.displayName;
+  document.getElementById('edit-password').value='';
+  document.getElementById('edit-old-password').value='';
+  document.getElementById('edit-profile-modal').style.display='flex';
+}
+function closeEditProfileModal(){document.getElementById('edit-profile-modal').style.display='none';}
+function saveEditProfile(){
+  var nm=document.getElementById('edit-name').value.trim();
+  var pwBaru=document.getElementById('edit-password').value;
+  var pwLama=document.getElementById('edit-old-password').value;
+  
+  if(!nm){alert('⚠️ Nama tidak boleh kosong!');return;}
+  if(pwBaru&&pwBaru.length<6){alert('⚠️ Password baru minimal 6 karakter!');return;}
+  
+  // Verifikasi password lama
+  var pwTersimpan=userPasswords[currentUser.uid];
+  if(pwBaru&&pwLama!==pwTersimpan){alert('⚠️ Password lama salah!');return;}
+  
+  currentUser.displayName=nm;
+  usersData[currentUser.uid].name=nm;
+  if(pwBaru){userPasswords[currentUser.uid]=pwBaru;saveData('passwords',userPasswords);}
+  saveData('users',usersData);
+  
+  document.getElementById('user-name').textContent=nm;
+  closeEditProfileModal();
+  renderDashboard();
+  showNotification('✅ Profil Diperbarui','Data profil Anda berhasil diubah');
+}
+
+// ==================== PRODUK ====================
+function renderFeaturedProducts(){document.getElementById('featured-products').innerHTML=demoProducts.slice(0,6).map(p=>createProductCard(p)).join('');}
+
+function renderAllProducts(){
+  var s=document.getElementById('search-product').value.toLowerCase();
+  var c=document.getElementById('filter-category').value;
+  var o=document.getElementById('filter-owner').value;
+  
+  var f=demoProducts.filter(p=>{
+    var ms=p.name.toLowerCase().includes(s)||p.desc.toLowerCase().includes(s);
+    var mc=!c||p.category===c;
+    var mo=!o||p.ownerType===o;
+    return ms&&mc&&mo;
+  });
+  
+  var cats=[...new Set(demoProducts.map(p=>p.category))];
+  document.getElementById('filter-category').innerHTML='<option value="">📂 Semua Kategori</option>'+cats.map(x=>`<option value="${x}"${c===x?' selected':''}>${x}</option>`).join('');
+  
+  // Chips kategori
+  document.getElementById('category-chips').innerHTML='<span class="filter-chip '+(c==''?'active':'')+'" onclick="document.getElementById(\'filter-category\').value=\'\';renderAllProducts();">Semua</span>'+
+    cats.map(x=>`<span class="filter-chip ${c===x?'active':''}" onclick="document.getElementById('filter-category').value='${x}';renderAllProducts();">${x}</span>`).join('');
+  
+  document.getElementById('all-products').innerHTML=f.length?f.map(p=>createProductCard(p)).join(''):'<p style="color:var(--muted);grid-column:1/-1;text-align:center;padding:60px;">😢 Tidak ada produk ditemukan</p>';
+}
+
+function createProductCard(p){
+  // ✅ TAG ADMIN ATAU SELLER
+  var tag=p.ownerType==='admin'?'<span class="admin-tag">👑 ADMIN</span>':'<span class="seller-tag">💎 SELLER</span>';
+  
+  return `<div class="product-card card-hover">
+    ${tag}
+    <div style="aspect-ratio:4/3;overflow:hidden;background:var(--card-2);display:flex;align-items:center;justify-content:center;position:relative;">
+      <img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+      <span class="badge badge-user" style="position:absolute;top:12px;left:12px;">${p.category}</span>
+    </div>
+    <div style="padding:20px;">
+      <h3 style="font-size:18px;font-weight:800;margin:0 0 6px;">${p.name}</h3>
+      <p style="color:var(--muted);font-size:12px;margin:0 0 10px;">👤 ${p.ownerName}</p>
+      <p style="color:var(--muted);font-size:13px;margin:0 0 14px;line-height:1.5;height:40px;overflow:hidden;">${p.desc}</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span class="gradient-text" style="font-size:22px;font-weight:900;">${formatRupiah(p.price)}</span>
+      </div>
+      <button class="btn-primary" style="width:100%;padding:12px;font-size:14px;font-weight:800;" onclick="buyProduct('${p.id}')">🛒 Beli Sekarang</button>
+    </div>
+  </div>`;
+}
+
+function buyProduct(pid){
+  // ✅ WAJIB LOGIN DULU
+  if(!currentUser){showNotification('🔒 Login Dulu','Silakan login untuk membeli produk');showAuthModal('login');return;}
+  var p=demoProducts.find(x=>x.id===pid);
+  if(p.link&&p.link.trim()){
+    showNotification('🔗 Mengarahkan...','Anda akan diarahkan ke halaman pembelian');
+    setTimeout(()=>window.open(p.link,'_blank'),400);return;
+  }
+  pendingPayment={type:'product',product:p};
+  showPaymentModal(p);
+}
+function requestVipFromHome(){
+  if(!currentUser){showNotification('🔒 Login Dulu','Silakan login untuk mendaftar Seller VIP');showAuthModal('login');return;}
+  if(currentRole==='seller'||currentRole==='creator'){showNotification('ℹ️ Info','Anda sudah menjadi '+currentRole);return;}
+  showPaymentModal(null,true);
+}
+
+// ==================== PEMBAYARAN ====================
+function showPaymentModal(item,isVip){
+  pendingPayment=isVip?{type:'vip',price:APP_CONFIG.payment.sellerVipPrice}:{type:'product',product:item};
+  uploadedProof=null;document.getElementById('payment-proof').value='';document.getElementById('proof-preview').style.display='none';
+  var t=isVip?'💎 Upgrade Seller VIP':'💳 Pembayaran Produk';
+  var i=isVip?`<h3 style="margin:0 0 8px;font-size:20px;font-weight:800;">Seller VIP - Lifetime</h3><p style="color:var(--muted);margin:0 0 10px;">Jual produk sendiri di Fahri Store</p><div class="gradient-text" style="font-size:30px;font-weight:900;">${formatRupiah(APP_CONFIG.payment.sellerVipPrice)}</div>`:`<h3 style="margin:0 0 8px;font-size:20px;font-weight:800;">${item.name}</h3><p style="color:var(--muted);margin:0 0 10px;">${item.desc}</p><div class="gradient-text" style="font-size:30px;font-weight:900;">${formatRupiah(item.price)}</div>`;
+  document.getElementById('payment-title').textContent=t;
+  document.getElementById('payment-product-info').innerHTML=i;
+  document.getElementById('payment-modal').style.display='flex';
+}
+function closePaymentModal(){document.getElementById('payment-modal').style.display='none';pendingPayment=null;uploadedProof=null;}
+
+function confirmPayment(){
+  if(!pendingPayment)return;
+  if(!uploadedProof){alert('⚠️ Mohon upload bukti transfer terlebih dahulu!');return;}
+  
+  if(pendingPayment.type==='vip'){
+    var ex=demoVipRequests.find(r=>r.userId===currentUser.uid);
+    if(ex){showNotification('⏳ Sudah Diajukan','Permintaan VIP sedang diproses');closePaymentModal();return;}
+    demoVipRequests.push({id:'vip_'+Date.now(),userId:currentUser.uid,userName:currentUser.displayName,email:currentUser.email,date:new Date().toISOString().split('T')[0],status:'pending',price:APP_CONFIG.payment.sellerVipPrice,proof:uploadedProof});
+    saveData('vipRequests',demoVipRequests);
+    showNotification('✅ Permintaan Dikirim!','VIP sedang diproses, tunggu persetujuan Admin');
+  }else{
+    demoOrders.push({id:'order_'+Date.now(),product:pendingPayment.product,buyerId:currentUser.uid,buyerName:currentUser.displayName,buyerEmail:currentUser.email,status:'pending',date:new Date().toISOString().split('T')[0],ownerId:pendingPayment.product.ownerId,ownerType:pendingPayment.product.ownerType,proof:uploadedProof});
+    saveData('orders',demoOrders);
+    showNotification('✅ Order Berhasil!','Order menunggu konfirmasi Admin');
+  }
+  closePaymentModal();
+}
+
+// ==================== DASHBOARD ====================
+function renderDashboard(){
+  document.getElementById('profile-name').textContent=currentUser.displayName;
+  document.getElementById('profile-email').textContent='📧 '+currentUser.email;
+  document.getElementById('profile-uid').textContent='🆔 '+currentUser.uid;
+  document.getElementById('profile-avatar').textContent=currentUser.displayName.charAt(0).toUpperCase();
+  var rb=document.getElementById('profile-role-badge');
+  rb.textContent=currentRole==='creator'?'👑 Creator':currentRole==='seller'?'💎 Seller VIP':'👤 User';
+  
+  var mp=currentRole==='creator'?demoProducts:demoProducts.filter(p=>p.ownerId===currentUser.uid);
+  var mo=currentRole==='creator'?demoOrders:demoOrders.filter(o=>o.product.ownerId===currentUser.uid);
+  var ts=mo.filter(o=>o.status==='approved').reduce((s,o)=>s+o.product.price,0);
+  document.getElementById('stat-products').textContent=mp.length;
+  document.getElementById('stat-orders').textContent=mo.length;
+  document.getElementById('stat-sales').textContent=formatRupiah(ts);
+  
+  renderSidebar();currentMenu='overview';renderDashboardContent();
+}
+function renderSidebar(){
+  var sb=document.getElementById('sidebar-menu');var m=[];
+  if(currentRole==='creator')m=[
+    {id:'overview',icon:'📊',label:'Dashboard'},
+    {id:'products',icon:'📦',label:'Kelola Produk'},
+    {id:'catalogs',icon:'📂',label:'Kelola Katalog'},
+    {id:'orders',icon:'🛒',label:'Kelola Order'},
+    {id:'vip',icon:'💎',label:'Permintaan VIP'},
+    {id:'users',icon:'👥',label:'Kelola User'},
+    {id:'banners',icon:'🖼️',label:'Kelola Banner'},
+    {id:'profile',icon:'⚙️',label:'Edit Profil'},
+    {id:'forum',icon:'💬',label:'Forum'},
+  ];
+  else if(currentRole==='seller')m=[
+    {id:'overview',icon:'📊',label:'Dashboard'},
+    {id:'products',icon:'📦',label:'Produk Saya'},
+    {id:'orders',icon:'🛒',label:'Order Masuk'},
+    {id:'profile',icon:'⚙️',label:'Edit Profil'},
+  ];
+  else m=[
+    {id:'overview',icon:'📊',label:'Dashboard'},
+    {id:'myorders',icon:'🛒',label:'Order Saya'},
+    {id:'vip',icon:'💎',label:'Upgrade VIP'},
+    {id:'profile',icon:'⚙️',label:'Edit Profil'},
+  ];
+  sb.innerHTML=m.map(x=>`<div class="sidebar-item ${currentMenu===x.id?'active':''}" onclick="switchMenu('${x.id}')"><span>${x.icon}</span><span>${x.label}</span></div>`).join('');
+}
+function switchMenu(mid){
+  if(mid==='profile'){showEditProfileModal();return;}
+  currentMenu=mid;renderSidebar();renderDashboardContent();
+}
+function renderDashboardContent(){
+  var c=document.getElementById('dashboard-content');
+  switch(currentMenu){
+    case 'overview':c.innerHTML=renderOverview();break;
+    case 'products':c.innerHTML=renderProductsContent();break;
+    case 'catalogs':c.innerHTML=renderCatalogsContent();break;
+    case 'orders':c.innerHTML=renderOrdersContent();break;
+    case 'vip':c.innerHTML=currentRole==='creator'?renderVipAdminContent():renderVipUserContent();break;
+    case 'users':c.innerHTML=renderUsersContent();break;
+    case 'banners':c.innerHTML=renderBannersContent();break;
+    case 'forum':showPage('forum');break;
+    case 'myorders':c.innerHTML=renderMyOrdersContent();break;
+  }
+}
+
+function renderOverview(){
+  var mp=currentRole==='creator'?demoProducts:demoProducts.filter(p=>p.ownerId===currentUser.uid);
+  var mo=currentRole==='creator'?demoOrders:demoOrders.filter(o=>o.product.ownerId===currentUser.uid);
+  var po=mo.filter(o=>o.status==='pending').length;
+  var ts=mo.filter(o=>o.status==='approved').reduce((s,o)=>s+o.product.price,0);
+  return `<h2 style="font-size:26px;font-weight:900;margin:0 0 22px;">📊 Dashboard</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:26px;">
+      <div class="stat-card"><div style="color:var(--muted);font-size:13px;margin-bottom:6px;">📦 Produk</div><div class="gradient-text" style="font-size:32px;font-weight:900;">${mp.length}</div></div>
+      <div class="stat-card"><div style="color:var(--muted);font-size:13px;margin-bottom:6px;">🛒 Order</div><div class="gradient-text" style="font-size:32px;font-weight:900;">${mo.length}</div></div>
+      <div class="stat-card"><div style="color:var(--muted);font-size:13px;margin-bottom:6px;">⏳ Pending</div><div style="font-size:32px;font-weight:900;color:var(--warning);">${po}</div></div>
+      <div class="stat-card"><div style="color:var(--muted);font-size:13px;margin-bottom:6px;">💰 Penjualan</div><div class="gradient-text" style="font-size:24px;font-weight:900;">${formatRupiah(ts)}</div></div>
+    </div>
+    <div class="contact-card" style="padding:26px;"><h3 style="margin:0 0 12px;font-weight:800;">👋 Selamat datang, ${currentUser.displayName}!</h3>
+    <p style="color:var(--muted);margin:0;line-height:1.7;">${currentRole==='creator'?'Anda memiliki akses penuh mengelola seluruh sistem Fahri Store. Gunakan menu sebelah kiri untuk mengelola produk, order, user, dan banner.':currentRole==='seller'?'Kelola produk Anda dan pantau order masuk di menu sebelah kiri. Semangat berjualan!':'Gunakan menu sebelah kiri untuk melihat order, upgrade ke Seller VIP, atau mengedit profil Anda.'}</p></div>`;
+}
+
+function renderProductsContent(){
+  var mp=currentRole==='creator'?demoProducts:demoProducts.filter(p=>p.ownerId===currentUser.uid);
+  var pl=mp.length?mp.map(p=>`<div class="product-card">
+    <div style="aspect-ratio:4/3;overflow:hidden;position:relative;">
+      <img src="${p.image}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+      ${p.ownerType==='admin'?'<span class="admin-tag">👑 ADMIN</span>':'<span class="seller-tag">💎 SELLER</span>'}
+    </div>
+    <div style="padding:18px;">
+      <span class="badge badge-user" style="margin-bottom:8px;">${p.category}</span>
+      <h3 style="font-size:17px;font-weight:800;margin:0 0 6px;">${p.name}</h3>
+      <p style="color:var(--muted);font-size:13px;margin:0 0 10px;">${formatRupiah(p.price)}</p>
+      <p style="color:var(--accent);font-size:11px;margin:0 0 14px;word-break:break-all;">🔗 ${p.link||'(tidak ada link)'}</p>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-secondary btn-sm" style="flex:1;" onclick="editProduct('${p.id}')">✏️ Edit</button>
+        <button class="btn-danger btn-sm" style="flex:1;" onclick="deleteProduct('${p.id}')">🗑️ Hapus</button>
+      </div>
+    </div>
+  </div>`).join(''):'<p style="color:var(--muted);grid-column:1/-1;text-align:center;padding:50px;">Belum ada produk. Klik tombol di atas untuk menambah!</p>';
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:14px;">
+    <h2 style="font-size:26px;font-weight:900;margin:0;">📦 Kelola Produk</h2>
+    <button class="btn-primary" onclick="showProductModal()">➕ Tambah Produk</button>
+  </div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;">${pl}</div>`;
+}
+
+function renderCatalogsContent(){
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:14px;">
+    <h2 style="font-size:26px;font-weight:900;margin:0;">📂 Kelola Katalog</h2>
+    <button class="btn-primary" onclick="showCatalogModal()">➕ Tambah Katalog</button>
+  </div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;">
+    ${demoCatalogs.map(c=>`<div class="contact-card card-hover">
+      <div class="gradient-bg" style="aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:#fff;font-size:40px;border-radius:12px;">📂</div>
+      <div style="padding-top:18px;">
+        <h3 style="font-size:19px;font-weight:800;margin:0 0 8px;">${c.name}</h3>
+        <p style="color:var(--muted);font-size:13px;margin:0 0 16px;line-height:1.5;">${c.desc}</p>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-secondary btn-sm" style="flex:1;" onclick="editCatalog('${c.id}')">✏️ Edit</button>
+          <button class="btn-danger btn-sm" style="flex:1;" onclick="deleteCatalog('${c.id}')">🗑️ Hapus</button>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderOrdersContent(){
+  var mo=currentRole==='creator'?demoOrders:demoOrders.filter(o=>o.product.ownerId===currentUser.uid);
+  var ol=mo.length?mo.map(o=>`<div class="contact-card" style="padding:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <div style="flex:1;min-width:200px;">
+      <h4 style="margin:0 0 6px;font-size:17px;font-weight:800;">${o.product.name}</h4>
+      <p style="color:var(--muted);margin:0 0 4px;font-size:13px;">👤 ${o.buyerName} • 📧 ${o.buyerEmail}</p>
+      <p style="color:var(--muted);margin:0 0 8px;font-size:12px;">📅 ${o.date}</p>
+      <div class="gradient-text" style="font-size:20px;font-weight:900;">${formatRupiah(o.product.price)}</div>
+      ${o.proof?`<div style="margin-top:10px;"><p style="font-size:12px;font-weight:700;margin:0 0 6px;">📸 Bukti Transfer:</p><img src="${o.proof}" class="payment-proof" style="max-height:120px;"></div>`:''}
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <span class="badge badge-${o.status}">${o.status.toUpperCase()}</span>
+      ${o.status==='pending'?`<button class="btn-success btn-sm" onclick="updateOrderStatus('${o.id}','approved')">✅ Terima</button><button class="btn-danger btn-sm" onclick="updateOrderStatus('${o.id}','rejected')">❌ Tolak</button>`:''}
+    </div>
+  </div>`).join(''):'<p style="color:var(--muted);text-align:center;padding:50px;background:#fff;border-radius:14px;border:1px solid var(--border);">📭 Belum ada order</p>';
+  return `<h2 style="font-size:26px;font-weight:900;margin:0 0 22px;">🛒 Kelola Order</h2><div style="display:flex;flex-direction:column;gap:14px;">${ol}</div>`;
+}
+
+function renderVipAdminContent(){
+  var l=demoVipRequests.length?demoVipRequests.map(r=>`<div class="contact-card" style="padding:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <div>
+      <h4 style="margin:0 0 6px;font-size:17px;font-weight:800;">💎 ${r.userName}</h4>
+      <p style="color:var(--muted);margin:0 0 4px;font-size:13px;">📧 ${r.email}</p>
+      <p style="color:var(--muted);margin:0 0 8px;font-size:12px;">📅 ${r.date} • ${formatRupiah(r.price)}</p>
+      ${r.proof?`<div><p style="font-size:12px;font-weight:700;margin:0 0 6px;">📸 Bukti:</p><img src="${r.proof}" class="payment-proof" style="max-height:120px;"></div>`:''}
+    </div>
+    <div style="display:flex;gap:8px;"><button class="btn-success btn-sm" onclick="approveVip('${r.id}')">✅ Setujui</button><button class="btn-danger btn-sm" onclick="rejectVip('${r.id}')">❌ Tolak</button></div>
+  </div>`).join(''):'<p style="color:var(--muted);text-align:center;padding:50px;background:#fff;border-radius:14px;border:1px solid var(--border);">💎 Tidak ada permintaan VIP</p>';
+  return `<h2 style="font-size:26px;font-weight:900;margin:0 0 22px;">💎 Permintaan Seller VIP</h2><div style="display:flex;flex-direction:column;gap:14px;">${l}</div>`;
+}
+
+// ✅ FITUR KELOLA USER (HANYA CREATOR)
+function renderUsersContent(){
+  var userList=Object.keys(usersData).map(uid=>({uid,...usersData[uid]})).filter(u=>u.uid!=='creator_default');
+  var ul=userList.length?userList.map(u=>`<div class="contact-card" style="padding:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:50px;height:50px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--accent);">${u.name?u.name.charAt(0).toUpperCase():'?'}</div>
+      <div>
+        <h4 style="margin:0 0 4px;font-weight:800;">${u.name||'-'}</h4>
+        <p style="color:var(--muted);margin:0 0 4px;font-size:13px;">📧 ${u.email||'-'}</p>
+        <span class="badge badge-${u.role==='creator'?'creator':u.role==='seller'?'seller':'user'}">${u.role?.toUpperCase()||'USER'}</span>
+      </div>
+    </div>
+    ${u.uid!=='seller_default'?`<div style="display:flex;gap:8px;align-items:center;">
+      <select onchange="changeUserRole('${u.uid}',this.value)" style="max-width:140px;padding:8px;font-size:12px;">
+        <option value="user" ${u.role==='user'?'selected':''}>User</option>
+        <option value="seller" ${u.role==='seller'?'selected':''}>Seller</option>
+      </select>
+      <button class="btn-danger btn-sm" onclick="deleteUser('${u.uid}')">🗑️ Hapus</button>
+    </div>`:''}
+  </div>`).join(''):'<p style="color:var(--muted);text-align:center;padding:50px;background:#fff;border-radius:14px;border:1px solid var(--border);">👥 Belum ada user terdaftar</p>';
+  return `<h2 style="font-size:26px;font-weight:900;margin:0 0 22px;">👥 Kelola User</h2><div style="display:flex;flex-direction:column;gap:14px;">${ul}</div>`;
+}
+function changeUserRole(uid,role){
+  usersData[uid].role=role;saveData('users',usersData);
+  showNotification('✅ Role Diubah','Role user berhasil diubah menjadi '+role.toUpperCase());
+  renderDashboardContent();
+}
+function deleteUser(uid){
+  if(confirm('❓ Yakin hapus user ini?')){
+    delete usersData[uid];delete userPasswords[uid];
+    saveData('users',usersData);saveData('passwords',userPasswords);
+    showNotification('🗑️ User Dihapus','User berhasil dihapus');
+    renderDashboardContent();
+  }
+}
+
+function renderVipUserContent(){
+  var er=demoVipRequests.find(r=>r.userId===currentUser.uid);
+  if(currentRole==='seller'||currentRole==='creator')return `<div class="contact-card" style="padding:44px;text-align:center;"><div style="font-size:56px;margin-bottom:18px;">✅</div><h3 style="margin:0 0 10px;font-size:24px;font-weight:900;">Anda Sudah ${currentRole==='creator'?'Creator':'Seller VIP'}!</h3><p style="color:var(--muted);margin:0;font-size:15px;">Nikmati semua fitur premium.</p></div>`;
+  if(er)return `<div class="contact-card" style="padding:44px;text-align:center;"><div style="font-size:56px;margin-bottom:18px;">⏳</div><h3 style="margin:0 0 10px;font-size:24px;font-weight:900;">Permintaan Sedang Diproses</h3><p style="color:var(--muted);margin:0;font-size:15px;">Menunggu persetujuan Admin.</p></div>`;
+  return `<div class="contact-card" style="padding:40px;text-align:center;border:2px solid var(--accent);">
+    <div style="font-size:56px;margin-bottom:18px;">💎</div>
+    <h3 style="margin:0 0 10px;font-size:28px;font-weight:900;">Upgrade ke Seller VIP</h3>
+    <p style="color:var(--muted);margin:0 0 22px;font-size:15px;line-height:1.7;">Jual produk Anda sendiri di Fahri Store dan dapatkan penghasilan!</p>
+    <div class="gradient-text" style="font-size:40px;font-weight:900;margin-bottom:26px;">${formatRupiah(APP_CONFIG.payment.sellerVipPrice)}</div>
+    <button class="btn-primary" style="padding:14px 44px;font-size:16px;font-weight:800;" onclick="showPaymentModal(null,true)">🚀 Order Sekarang</button>
+  </div>`;
+}
+
+function renderBannersContent(){
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:14px;">
+    <h2 style="font-size:26px;font-weight:900;margin:0;">🖼️ Kelola Banner</h2>
+    <button class="btn-primary" onclick="showBannerModal()">➕ Tambah Banner</button>
+  </div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
+    ${demoBanners.map(b=>`<div class="product-card">
+      <div style="aspect-ratio:16/9;overflow:hidden;"><img src="${b.imageUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"></div>
+      <div style="padding:16px;display:flex;justify-content:space-between;align-items:center;">
+        <h4 style="margin:0;font-weight:800;">${b.title}</h4>
+        <button class="btn-danger btn-sm" onclick="deleteBanner('${b.id}')">🗑️ Hapus</button>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderMyOrdersContent(){
+  var mo=currentUser?demoOrders.filter(o=>o.buyerId===currentUser.uid):[];
+  var l=mo.length?mo.map(o=>`<div class="contact-card" style="padding:22px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+      <h4 style="margin:0;font-size:17px;font-weight:800;">${o.product.name}</h4>
+      <span class="badge badge-${o.status}">${o.status.toUpperCase()}</span>
+    </div>
+    <p style="color:var(--muted);margin:0 0 8px;font-size:13px;">📅 ${o.date}</p>
+    <div class="gradient-text" style="font-size:22px;font-weight:900;">${formatRupiah(o.product.price)}</div>
+    ${o.proof?`<div style="margin-top:12px;"><p style="font-size:12px;font-weight:700;margin:0 0 6px;">📸 Bukti Transfer:</p><img src="${o.proof}" class="payment-proof" style="max-height:120px;"></div>`:''}
+  </div>`).join(''):'<p style="color:var(--muted);text-align:center;padding:50px;background:#fff;border-radius:14px;border:1px solid var(--border);">🛒 Anda belum memiliki order</p>';
+  return `<h2 style="font-size:26px;font-weight:900;margin:0 0 22px;">🛒 Order Saya</h2><div style="display:flex;flex-direction:column;gap:14px;">${l}</div>`;
+}
+
+// ==================== CRUD ====================
+function showProductModal(p){editingProductId=p?p.id:null;document.getElementById('product-modal-title').textContent=p?'✏️ Edit Produk':'➕ Tambah Produk';document.getElementById('product-name').value=p?p.name:'';document.getElementById('product-desc').value=p?p.desc:'';document.getElementById('product-price').value=p?p.price:'';document.getElementById('product-category').value=p?p.category:'';document.getElementById('product-image').value=p?p.image:'';document.getElementById('product-link').value=p?p.link||'':'';document.getElementById('product-modal').style.display='flex';}
+function closeProductModal(){document.getElementById('product-modal').style.display='none';}
+function editProduct(id){showProductModal(demoProducts.find(p=>p.id===id));}
+function saveProduct(){
+  var n=document.getElementById('product-name').value.trim(),d=document.getElementById('product-desc').value.trim(),pr=parseInt(document.getElementById('product-price').value),c=document.getElementById('product-category').value.trim(),i=document.getElementById('product-image').value.trim()||'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500',l=document.getElementById('product-link').value.trim();
+  if(!n||!pr||!d||!c){alert('⚠️ Semua field bertanda * wajib diisi!');return;}
+  var ownerType=currentRole==='creator'?'admin':'seller';
+  if(editingProductId){var x=demoProducts.findIndex(p=>p.id===editingProductId);demoProducts[x]={...demoProducts[x],name:n,desc:d,price:pr,category:c,image:i,link:l};}
+  else{demoProducts.push({id:'prod_'+Date.now(),name:n,desc:d,price:pr,category:c,image:i,link:l,ownerId:currentUser.uid,ownerName:currentUser.displayName,ownerType:ownerType});}
+  saveData('products',demoProducts);closeProductModal();renderDashboardContent();renderFeaturedProducts();
+  showNotification('💾 Berhasil','Produk berhasil '+(editingProductId?'diperbarui':'ditambahkan'));
+}
+function deleteProduct(id){if(confirm('❓ Yakin hapus produk ini?')){demoProducts=demoProducts.filter(p=>p.id!==id);saveData('products',demoProducts);renderDashboardContent();renderFeaturedProducts();showNotification('🗑️ Dihapus','Produk berhasil dihapus');}}
+
+function showCatalogModal(c){editingCatalogId=c?c.id:null;document.getElementById('catalog-modal-title').textContent=c?'✏️ Edit Katalog':'➕ Tambah Katalog';document.getElementById('catalog-name').value=c?c.name:'';document.getElementById('catalog-desc').value=c?c.desc:'';document.getElementById('catalog-modal').style.display='flex';}
+function closeCatalogModal(){document.getElementById('catalog-modal').style.display='none';}
+function editCatalog(id){showCatalogModal(demoCatalogs.find(c=>c.id===id));}
+function saveCatalog(){var n=document.getElementById('catalog-name').value.trim(),d=document.getElementById('catalog-desc').value.trim();if(!n){alert('⚠️ Nama katalog wajib diisi!');return;}if(editingCatalogId){var x=demoCatalogs.findIndex(c=>c.id===editingCatalogId);demoCatalogs[x]={...demoCatalogs[x],name:n,desc:d};}else{demoCatalogs.push({id:'cat_'+Date.now(),name:n,desc:d});}saveData('catalogs',demoCatalogs);closeCatalogModal();renderDashboardContent();}
+function deleteCatalog(id){if(confirm('❓ Yakin hapus?')){demoCatalogs=demoCatalogs.filter(c=>c.id!==id);saveData('catalogs',demoCatalogs);renderDashboardContent();}}
+
+function updateOrderStatus(id,s){demoOrders.find(o=>o.id===id).status=s;saveData('orders',demoOrders);renderDashboardContent();if(s==='approved')showNotification('✅ Order Diterima','Order telah disetujui');}
+function approveVip(id){var r=demoVipRequests.find(x=>x.id===id);if(r){usersData[r.userId]=usersData[r.userId]||{};usersData[r.userId].role='seller';usersData[r.userId].name=r.userName;usersData[r.userId].email=r.email;saveData('users',usersData);demoVipRequests=demoVipRequests.filter(x=>x.id!==id);saveData('vipRequests',demoVipRequests);showNotification('🎉 VIP Disetujui',r.userName+' sekarang Seller VIP!');renderDashboardContent();}}
+function rejectVip(id){demoVipRequests=demoVipRequests.filter(r=>r.id!==id);saveData('vipRequests',demoVipRequests);showNotification('❌ Ditolak','Permintaan VIP ditolak');renderDashboardContent();}
+
+function renderBanners(){var h=demoBanners.map(b=>`<div style="flex-shrink:0;width:420px;height:180px;border-radius:14px;overflow:hidden;position:relative;cursor:pointer;" class="card-hover"><img src="${b.imageUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"><div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.8));display:flex;align-items:flex-end;padding:20px;"><h3 style="color:#fff;font-size:22px;font-weight:900;margin:0;">${b.title}</h3></div></div>`).join('');document.getElementById('banner-track-1').innerHTML=h+h;}
+function showBannerModal(){document.getElementById('banner-title').value='';document.getElementById('banner-file').value='';document.getElementById('banner-url').value='';document.getElementById('banner-modal').style.display='flex';}
+function closeBannerModal(){document.getElementById('banner-modal').style.display='none';}
+function saveBanner(){var t=document.getElementById('banner-title').value.trim(),u=document.getElementById('banner-url').value.trim();if(!t){alert('⚠️ Judul wajib diisi!');return;}var iu=u||'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=900';demoBanners.push({id:'ban_'+Date.now(),title:t,imageUrl:iu});saveData('banners',demoBanners);closeBannerModal();renderBanners();renderDashboardContent();showNotification('🖼️ Banner Ditambahkan',t+' berhasil ditambahkan');}
+function deleteBanner(id){if(confirm('❓ Yakin hapus banner?')){demoBanners=demoBanners.filter(b=>b.id!==id);saveData('banners',demoBanners);renderBanners();renderDashboardContent();}}
+
+function renderForum(){
+  document.getElementById('forum-post-form').style.display=currentUser?'block':'none';
+  document.getElementById('forum-login-prompt').style.display=currentUser?'none':'block';
+  document.getElementById('forum-posts').innerHTML=demoForum.map(f=>`<div class="forum-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+      <h3 style="margin:0;font-size:20px;font-weight:800;">${f.title}</h3>
+      <span style="color:var(--muted);font-size:12px;">📅 ${f.date}</span>
+    </div>
+    <p style="color:var(--muted);margin:0 0 16px;line-height:1.7;font-size:14px;">${f.content}</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--border);">
+      <span style="color:var(--accent);font-weight:700;font-size:14px;">👤 ${f.author}</span>
+      <span style="color:var(--muted);font-size:13px;">💬 ${f.replies} balasan</span>
+    </div>
+  </div>`).join('');
+}
+function postForum(){var t=document.getElementById('forum-title').value.trim(),c=document.getElementById('forum-content').value.trim();if(!t||!c){alert('⚠️ Judul dan konten wajib diisi!');return;}demoForum.unshift({id:'forum_'+Date.now(),title:t,content:c,author:currentUser.displayName,date:new Date().toISOString().split('T')[0],replies:0});saveData('forum',demoForum);document.getElementById('forum-title').value='';document.getElementById('forum-content').value='';renderForum();showNotification('💬 Diposting','Diskusi berhasil dikirim');}
+
+// ==================== INIT ====================
+renderFeaturedProducts();renderBanners();renderAllProducts();renderForum();updateNotifBadge();
+document.addEventListener('click',function(e){var p=document.getElementById('notif-panel'),b=document.getElementById('notif-btn');if(p&&b&&!p.contains(e.target)&&!b.contains(e.target))p.style.display='none';});
+</script>
+</html>
